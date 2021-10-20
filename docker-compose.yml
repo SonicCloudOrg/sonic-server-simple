@@ -25,7 +25,7 @@ services:
     ports:
       - "8094:8094"
   sonic-client-web:
-    image: "zhouyixun/sonic-client-web:v1.0.2"
+    image: "zhouyixun/sonic-client-web:v1.0.3"
     networks:
       - sonic-network
     ports:
