@@ -1,0 +1,39 @@
+version: '3'
+services:
+  sonic-server-simple:
+    image: "zhouyixun/sonic-server-simple:v1.0.0"
+    environment:
+      - REDIS_DATABASE=0
+      - REDIS_HOST=192.168.0.4
+      - REDIS_PORT=6379
+      - RABBIT_HOST=192.168.0.4
+      - RABBIT_PORT=5672
+      - RABBIT_USERNAME=sonic
+      - RABBIT_PASSWORD=sonic
+      - RABBIT_VHOST=sonic
+      - MYSQL_HOST=192.168.0.4
+      - MYSQL_DATABASE=sonic
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=Sonic!@#123
+    networks:
+      - sonic-network
+    volumes:
+      - files:/keepFiles/
+      - files:/imageFiles/
+      - files:/recordFiles/
+      - files:/logs/
+    ports:
+      - "8094:8094"
+  sonic-client-web:
+    image: "zhouyixun/sonic-client-web:v1.0.2"
+    networks:
+      - sonic-network
+    ports:
+      - "3000:80"
+
+volumes:
+  files:
+
+networks:
+  sonic-network:
+    driver: bridge

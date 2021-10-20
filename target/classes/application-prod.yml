@@ -1,0 +1,99 @@
+server:
+  port: 8094
+
+spring:
+  application:
+    name: sonic-server-simple
+    des: "Sonic云真机测试平台 - 单机版"
+  servlet:
+    multipart:
+      maxFileSize: -1
+      maxRequestSize: -1
+  data:
+    redis:
+      repositories:
+        enabled: false
+  redis:
+    database: ${REDIS_DATABASE:0}
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT}
+  rabbitmq:
+    listener:
+      simple:
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+          max-attempts: 5
+          max-interval: 10000
+          initial-interval: 10000
+          default-requeue-rejected: true
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    host: ${RABBIT_HOST:localhost}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USERNAME:sonic}
+    password: ${RABBIT_PASSWORD:sonic}
+    virtual-host: ${RABBIT_VHOST:sonic}
+  quartz:
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: SonicQuartz
+            instanceId: AUTO
+          jobStore:
+            isClustered: true
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+  datasource:
+    initialization-mode: always
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE:sonic}?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&autoReconnect=true&serverTimezone=GMT%2b8
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:Sonic!@#123}
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+#knife4j:
+#  enable: true
+#  setting:
+#    enableHost: true
+#    enableHostText: "http://localhost:8094"
+#    enableFooter: false
+#    enableFooterCustom: true
+#    footerCustomContent: MIT License | Copyright 2021 - [ZhouYiXun/sonic-server](https://github.com/ZhouYixun/sonic-server/blob/main/LICENSE)
+
+logging:
+  file:
+    name: logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      clean-history-on-start: true
+      max-history: 3
+
+robot:
+  client:
+    host: ${CLIENT_HOST:http://localhost:3000}
+  img:
+    success: ""
+    warning: ""
+    error: ""
+
+gateway:
+  host: "http://localhost:8094"
+
+filter:
+  resetToken: true
+
+sonic:
+  jobs:
+    fileCron: ${FILE_CRON:0 0 12 * * ?}
+    resultCron: ${RESULT_CRON:0 0 12 * * ?}
+    dayReportCron: ${DAY_CRON:0 0 10 * * ?}
+    weekReportCron: ${WEEK_CRON:0 0 10 ? * Mon}
+    filesKeepDay: ${FILE_KEEP_DAY:60}
+    resultsKeepDay: ${RESULT_KEEP_DAY:60}
