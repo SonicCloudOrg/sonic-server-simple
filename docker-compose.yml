@@ -34,7 +34,8 @@ services:
 #  sonic-mysql:
 #    image: "mysql:5.7"
 #    hostname: sonic-mysql
-#    environment: MYSQL_ROOT_PASSWORD=Sonic!@#123
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=Sonic!@#123
 #    volumes:
 #      - files:/etc/mysql
 #      - files:/var/log/mysql
