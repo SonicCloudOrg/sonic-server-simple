@@ -30,16 +30,12 @@ services:
       - sonic-network
     ports:
       - "3000:80"
-#如果本地没有部署mysql、redis、rabbitmq，可以放开以下注释
+#如果本地没有部署mysql、redis、rabbitmq，可以放开以下注释，但是数据重启后就会丢失，需要持久化的话自己挂载目录即可
 #  sonic-mysql:
 #    image: "mysql:5.7"
 #    hostname: sonic-mysql
 #    environment:
 #      - MYSQL_ROOT_PASSWORD=Sonic!@#123
-#    volumes:
-#      - files:/etc/mysql
-#      - files:/var/log/mysql
-#      - files:/var/lib/mysql
 #    ports:
 #      - "3307:3306"
 #    networks:
@@ -47,8 +43,6 @@ services:
 #  sonic-redis:
 #    image: "redis:latest"
 #    hostname: sonic-redis
-#    volumes:
-#      - files:/data
 #    ports:
 #      - "6380:6379"
 #    networks:
@@ -56,8 +50,6 @@ services:
 #  sonic-rabbitmq:
 #    image: "rabbitmq:3.8.16-management"
 #    hostname: sonic-rabbitmq
-#    volumes:
-#      - files:/var/lib/rabbitmq
 #    ports:
 #      - 15673:15672
 #      - 5673:5672
