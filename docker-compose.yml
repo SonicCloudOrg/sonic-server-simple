@@ -4,14 +4,14 @@ services:
     image: "zhouyixun/sonic-server-simple:v1.0.0"
     environment:
       - REDIS_DATABASE=0
-      - REDIS_HOST=192.168.0.4
+      - REDIS_HOST=sonic-redis
       - REDIS_PORT=6379
-      - RABBIT_HOST=192.168.0.4
+      - RABBIT_HOST=sonic-rabbitmq
       - RABBIT_PORT=5672
-      - RABBIT_USERNAME=sonic
-      - RABBIT_PASSWORD=sonic
-      - RABBIT_VHOST=sonic
-      - MYSQL_HOST=192.168.0.4
+      - RABBIT_USERNAME=guest
+      - RABBIT_PASSWORD=guest
+      - RABBIT_VHOST=/
+      - MYSQL_HOST=sonic-mysql
       - MYSQL_DATABASE=sonic
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=Sonic!@#123
@@ -30,6 +30,38 @@ services:
       - sonic-network
     ports:
       - "3000:80"
+#如果本地没有部署mysql、redis、rabbitmq，可以放开以下注释
+#  sonic-mysql:
+#    image: "mysql:5.7"
+#    hostname: sonic-mysql
+#    environment: MYSQL_ROOT_PASSWORD=Sonic!@#123
+#    volumes:
+#      - files:/etc/mysql
+#      - files:/var/log/mysql
+#      - files:/var/lib/mysql
+#    ports:
+#      - "3307:3306"
+#    networks:
+#      - sonic-network
+#  sonic-redis:
+#    image: "redis:latest"
+#    hostname: sonic-redis
+#    volumes:
+#      - files:/data
+#    ports:
+#      - "6380:6379"
+#    networks:
+#      - sonic-network
+#  sonic-rabbitmq:
+#    image: "rabbitmq:3.8.16-management"
+#    hostname: sonic-rabbitmq
+#    volumes:
+#      - files:/var/lib/rabbitmq
+#    ports:
+#      - 15673:15672
+#      - 5673:5672
+#    networks:
+#      - sonic-network
 
 volumes:
   files:
