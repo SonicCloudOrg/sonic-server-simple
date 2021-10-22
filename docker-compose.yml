@@ -1,16 +1,17 @@
 version: '3'
 services:
   sonic-server-simple:
-    image: "zhouyixun/sonic-server-simple:v1.0.0"
+    image: "zhouyixun/sonic-server-simple:v1.0.1"
     environment:
+      #以下均为默认配置，如果更换为自己的数据源才改
       - REDIS_DATABASE=0
       - REDIS_HOST=sonic-redis
       - REDIS_PORT=6379
-      - RABBIT_HOST=sonic-rabbitmq
-      - RABBIT_PORT=5672
-      - RABBIT_USERNAME=guest
-      - RABBIT_PASSWORD=guest
-      - RABBIT_VHOST=/
+      - RABBITMQ_HOST=sonic-rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - RABBITMQ_VHOST=/
       - MYSQL_HOST=sonic-mysql
       - MYSQL_DATABASE=sonic
       - MYSQL_USERNAME=root
@@ -25,39 +26,55 @@ services:
     ports:
       - "8094:8094"
   sonic-client-web:
-    image: "zhouyixun/sonic-client-web:v1.0.3"
+    image: "zhouyixun/sonic-client-web:v1.0.4"
+    environment:
+      #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
+      - SONIC_API_HOST=localhost
+      - SONIC_API_PORT=8094
+    command: /replace.sh
     networks:
       - sonic-network
     ports:
       - "3000:80"
-#如果本地没有部署mysql、redis、rabbitmq，可以放开以下注释，但是数据重启后就会丢失，需要持久化的话自己挂载目录即可
-#  sonic-mysql:
-#    image: "mysql:5.7"
-#    hostname: sonic-mysql
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=Sonic!@#123
-#    ports:
-#      - "3307:3306"
-#    networks:
-#      - sonic-network
-#  sonic-redis:
-#    image: "redis:latest"
-#    hostname: sonic-redis
-#    ports:
-#      - "6380:6379"
-#    networks:
-#      - sonic-network
-#  sonic-rabbitmq:
-#    image: "rabbitmq:3.8.16-management"
-#    hostname: sonic-rabbitmq
-#    ports:
-#      - 15673:15672
-#      - 5673:5672
-#    networks:
-#      - sonic-network
+  #如果本地没有部署mysql、redis、rabbitmq，可以放开以下注释（mysql建议用自己的，docker版mysql无法持久挂载数据）
+  sonic-mysql:
+    image: "mysql:5.7"
+    hostname: sonic-mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=Sonic!@#123
+      - MYSQL_DATABASE=sonic
+    ports:
+      - "3307:3306"
+    networks:
+      - sonic-network
+  sonic-redis:
+    image: "redis:latest"
+    hostname: sonic-redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis:/etc/redis/redis.conf
+      - redis:/data
+    networks:
+      - sonic-network
+  sonic-rabbitmq:
+    image: "rabbitmq:3.8.16-management"
+    hostname: sonic-rabbitmq
+    volumes:
+      - rabbitmq:/etc/rabbitmq
+      - rabbitmq:/var/lib/rabbitmq
+      - rabbitmq:/var/log/rabbitmq
+    ports:
+      - 15673:15672
+      - 5673:5672
+    networks:
+      - sonic-network
 
 volumes:
   files:
+  redis:
+  rabbitmq:
 
 networks:
   sonic-network:

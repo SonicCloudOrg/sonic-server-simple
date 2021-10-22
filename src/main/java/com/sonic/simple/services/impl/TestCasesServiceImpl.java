@@ -8,6 +8,7 @@ import com.sonic.simple.models.*;
 import com.sonic.simple.services.PublicStepsService;
 import com.sonic.simple.services.StepsService;
 import com.sonic.simple.services.TestCasesService;
+import com.sonic.simple.services.TestSuitesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,8 @@ import java.util.*;
 public class TestCasesServiceImpl implements TestCasesService {
     @Autowired
     private TestCasesRepository testCasesRepository;
+    @Autowired
+    private TestSuitesService testSuitesService;
     @Autowired
     private StepsService stepsService;
     @Autowired
@@ -67,9 +70,10 @@ public class TestCasesServiceImpl implements TestCasesService {
     public boolean delete(int id) {
         if (testCasesRepository.existsById(id)) {
             TestCases testCases = testCasesRepository.findById(id).get();
-            Set<TestSuites> testSuitesSet = testCases.getTestSuites();
+            List<TestSuites> testSuitesSet = testCases.getTestSuites();
             for (TestSuites testSuites : testSuitesSet) {
                 testSuites.getTestCases().remove(testCases);
+                testSuitesService.save(testSuites);
             }
             List<Steps> stepsList = stepsService.findByCaseIdOrderBySort(id);
             for (Steps steps : stepsList) {

@@ -27,28 +27,14 @@ import java.util.List;
 @EnableSwagger2WebMvc
 public class APIDocumentConfig {
     //从配置文档获取接口文档信息
-//    @Value("${spring.application.name}")
-//    private String name;
-//    @Value("${spring.application.des}")
-//    private String title;
-//    @Value("${spring.version}")
-//    private String version;
-//    @Value("${knife4j.setting.enableHostText}")
-//    private String host;
-
-//    private final OpenApiExtensionResolver openApiExtensionResolver;
-
-    /**
-     * @param openApiExtensionResolver
-     * @return 开启knife4j接口插件
-     * @author ZhouYiXun
-     * @des
-     * @date 2021/8/15 23:22
-     */
-//    @Autowired
-//    public APIDocumentConfig(OpenApiExtensionResolver openApiExtensionResolver) {
-//        this.openApiExtensionResolver = openApiExtensionResolver;
-//    }
+    @Value("${spring.application.name}")
+    private String name;
+    @Value("${spring.application.des}")
+    private String title;
+    @Value("${spring.version}")
+    private String version;
+    @Value("${knife4j.setting.enableHostText}")
+    private String host;
 
     /**
      * @return springfox.documentation.spring.web.plugins.Docket
@@ -59,13 +45,12 @@ public class APIDocumentConfig {
     @Bean
     public Docket createRestAPIDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
-//                .host(host)
+                .host(host)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
-//                .extensions(openApiExtensionResolver.buildSettingExtensions())
                 .useDefaultResponseMessages(false)
                 .securitySchemes(Arrays.asList(
                         new ApiKey("SonicToken", "SonicToken", "header")))
@@ -109,11 +94,11 @@ public class APIDocumentConfig {
      */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Sonic-Server单机版 Open API")
+                .title(name + " Open API")
                 .termsOfServiceUrl("Please visit: https://github.com/ZhouYixun/sonic-server")
                 .contact(new Contact("ZhouYiXun  email: zyx291028775@qq.com", "", ""))
-                .version("v")
-                .description("服务开放API，注意不要频繁请求。")
+                .version(version)
+                .description(title + "服务开放API，注意不要频繁请求。")
                 .build();
     }
 }

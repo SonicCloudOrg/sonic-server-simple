@@ -156,6 +156,7 @@ public class TestSuitesServiceImpl implements TestSuitesService {
                     String key = agentsService.findKeyById(devices.getAgentId());
                     suite.put("key", key);
                     suite.put("wait", 0);
+                    suite.put("msg", "suite");
                     rabbitTemplate.convertAndSend("MsgDirectExchange", suite.getString("key"), suite);
                 }
             }
