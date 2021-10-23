@@ -16,6 +16,21 @@ services:
       - MYSQL_DATABASE=sonic
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=Sonic!@#123
+      #前端页面访问地址，不填默认为http://localhost:3000
+      - CLIENT_HOST=http://localhost:3000
+      #文件保留天数（指测试过程产生的文件，包括图片、录像等等）
+      - FILE_KEEP_DAY=60
+      #测试结果保留天数
+      - RESULT_KEEP_DAY=60
+      #以下均为Cron表达式
+      #清理文件定时任务
+      - FILE_CRON=0 0 12 * * ?
+      #清理测试结果定时任务
+      - RESULT_CRON=0 0 12 * * ?
+      #发送日报定时任务
+      - DAY_CRON=0 0 10 * * ?
+      #发送周报定时任务
+      - WEEK_CRON=0 0 10 ? * Mon
     networks:
       - sonic-network
     volumes:
