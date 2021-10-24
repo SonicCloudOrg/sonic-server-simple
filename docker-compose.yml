@@ -51,7 +51,7 @@ services:
       - sonic-network
     ports:
       - "3000:80"
-  #如果本地没有部署mysql、redis、rabbitmq，可以放开以下注释（mysql建议用自己的，docker版mysql无法持久挂载数据）
+  #以下是三个中间件，如果本地有部署mysql、redis、rabbitmq，可以注释下方对应的容器（mysql建议用自己的，docker版mysql无法持久挂载数据）
   sonic-mysql:
     image: "mysql:5.7"
     hostname: sonic-mysql
