@@ -62,7 +62,7 @@ knife4j:
   enable: true
   setting:
     enableHost: true
-    enableHostText: "http://localhost:8094"
+    enableHostText: http://${SONIC_API_HOST:localhost}:${SONIC_API_PORT:8094}
     enableFooter: false
     enableFooterCustom: true
     footerCustomContent: MIT License | Copyright 2021 - [ZhouYiXun/sonic-server](https://github.com/ZhouYixun/sonic-server/blob/main/LICENSE)
@@ -84,7 +84,7 @@ robot:
     error: ""
 
 gateway:
-  host: "http://localhost:8094"
+  host: http://${SONIC_API_HOST:localhost}:${SONIC_API_PORT:8094}
 
 filter:
   resetToken: true
