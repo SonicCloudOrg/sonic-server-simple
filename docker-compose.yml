@@ -46,7 +46,6 @@ services:
       #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
       - SONIC_API_HOST=localhost
       - SONIC_API_PORT=8094
-    command: /replace.sh
     networks:
       - sonic-network
     ports:
