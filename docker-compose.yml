@@ -41,7 +41,7 @@ services:
     ports:
       - "8094:8094"
   sonic-client-web:
-    image: "zhouyixun/sonic-client-web:v1.0.4"
+    image: "zhouyixun/sonic-client-web:v1.0.5"
     environment:
       #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
       - SONIC_API_HOST=localhost
