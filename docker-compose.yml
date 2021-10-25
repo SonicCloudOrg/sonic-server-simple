@@ -13,6 +13,7 @@ services:
       - RABBITMQ_PASSWORD=guest
       - RABBITMQ_VHOST=/
       - MYSQL_HOST=sonic-mysql
+      - MYSQL_PORT=3306
       - MYSQL_DATABASE=sonic
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=Sonic!@#123
