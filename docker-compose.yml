@@ -1,7 +1,7 @@
 version: '3'
 services:
   sonic-server-simple:
-    image: "zhouyixun/sonic-server-simple:v1.0.1"
+    image: "zhouyixun/sonic-server-simple:v1.0.2"
     environment:
       #以下均为默认配置，如果更换为自己的数据源才改
       - REDIS_DATABASE=0
@@ -13,9 +13,13 @@ services:
       - RABBITMQ_PASSWORD=guest
       - RABBITMQ_VHOST=/
       - MYSQL_HOST=sonic-mysql
+      - MYSQL_PORT=3306
       - MYSQL_DATABASE=sonic
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=Sonic!@#123
+      #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
+      - SONIC_API_HOST=localhost
+      - SONIC_API_PORT=8094
       #前端页面访问地址，不填默认为http://localhost:3000
       - CLIENT_HOST=http://localhost:3000
       #文件保留天数（指测试过程产生的文件，包括图片、录像等等）
