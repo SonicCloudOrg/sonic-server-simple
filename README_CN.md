@@ -10,7 +10,7 @@
 </p>
 <p align="center">
   <a href="#">  
-    <img src="https://img.shields.io/badge/release-v1.0.1-orange">
+    <img src="https://img.shields.io/badge/release-v1.1.0-orange">
   </a>
   <a href="https://hub.docker.com/repository/docker/zhouyixun/sonic-server-simple">  
     <img src="https://img.shields.io/docker/pulls/zhouyixun/sonic-server-simple">

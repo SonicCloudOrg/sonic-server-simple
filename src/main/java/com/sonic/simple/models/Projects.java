@@ -24,11 +24,13 @@ public class Projects {
     @NotNull
     @ApiModelProperty(value = "项目描述", required = true, example = "Sonic项目描述")
     String projectDes;
+    @ApiModelProperty(value = "机器人类型", required = true, example = "1")
+    int robotType;
     @NotNull
-    @ApiModelProperty(value = "钉钉机器人token", required = true, example = "http://dingTalk.com?token=*****")
+    @ApiModelProperty(value = "机器人token", required = true, example = "http://dingTalk.com?token=*****")
     String robotToken;
     @NotNull
-    @ApiModelProperty(value = "钉钉机器人加签密钥", required = true, example = "qwe***")
+    @ApiModelProperty(value = "机器人加签密钥", required = true, example = "qwe***")
     String robotSecret;
     @NotNull
     @ApiModelProperty(value = "项目图标", required = true, example = "http://img.jpg")
@@ -97,12 +99,21 @@ public class Projects {
         this.editTime = editTime;
     }
 
+    public int getRobotType() {
+        return robotType;
+    }
+
+    public void setRobotType(int robotType) {
+        this.robotType = robotType;
+    }
+
     @Override
     public String toString() {
         return "Projects{" +
                 "id=" + id +
                 ", projectName='" + projectName + '\'' +
                 ", projectDes='" + projectDes + '\'' +
+                ", robotType=" + robotType +
                 ", robotToken='" + robotToken + '\'' +
                 ", robotSecret='" + robotSecret + '\'' +
                 ", projectImg='" + projectImg + '\'' +

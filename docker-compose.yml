@@ -1,7 +1,7 @@
 version: '3'
 services:
   sonic-server-simple:
-    image: "zhouyixun/sonic-server-simple:v1.0.2"
+    image: "zhouyixun/sonic-server-simple:v1.1.0"
     environment:
       #以下均为默认配置，如果更换为自己的数据源才改
       - REDIS_DATABASE=0
@@ -45,7 +45,7 @@ services:
     ports:
       - "8094:8094"
   sonic-client-web:
-    image: "zhouyixun/sonic-client-web:v1.0.5"
+    image: "zhouyixun/sonic-client-web:v1.1.0"
     environment:
       #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
       - SONIC_API_HOST=localhost
