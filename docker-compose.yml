@@ -41,6 +41,7 @@ services:
       - files:/keepFiles/
       - files:/imageFiles/
       - files:/recordFiles/
+      - files:/packageFiles/
       - files:/logs/
     ports:
       - "8094:8094"
