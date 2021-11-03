@@ -56,7 +56,7 @@ public class QuartzJob extends QuartzJobBean implements Job {
             case JobType.TEST_JOB: {
                 Jobs jobs = jobsService.findById(dataMap.getInt("id"));
                 if (jobs != null) {
-                    RespModel r = testSuitesService.runSuite(jobs.getSuiteId(),"SYSTEM");
+                    RespModel r = testSuitesService.runSuite(jobs.getSuiteId(), "SYSTEM");
                     if (r.getCode() == 3001) {
                         logger.info("测试套件" + jobs.getSuiteId() + " 已删除" + r);
                         jobsService.delete(dataMap.getInt("id"));
@@ -71,7 +71,7 @@ public class QuartzJob extends QuartzJobBean implements Job {
             case JobType.CLEAN_FILE_JOB: {
                 long timeMillis = Calendar.getInstance().getTimeInMillis();
                 SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
-                List<String> fileList = Arrays.asList("imageFiles", "recordFiles", "logFiles");
+                List<String> fileList = Arrays.asList("imageFiles", "recordFiles", "logFiles", "packageFiles");
                 cachedThreadPool.execute(() -> {
                     for (String fileType : fileList) {
                         File[] t = new File(fileType).listFiles();

@@ -3,6 +3,7 @@ package com.sonic.simple.services.impl;
 import com.sonic.simple.dao.StepsRepository;
 import com.sonic.simple.models.PublicSteps;
 import com.sonic.simple.models.Steps;
+import com.sonic.simple.models.TestSuites;
 import com.sonic.simple.models.http.StepSort;
 import com.sonic.simple.services.PublicStepsService;
 import com.sonic.simple.services.StepsService;
@@ -45,6 +46,11 @@ public class StepsServiceImpl implements StepsService {
     @Override
     public boolean delete(int id) {
         if (stepsRepository.existsById(id)) {
+            Steps steps = stepsRepository.findById(id).get();
+            for (PublicSteps publicSteps : steps.getPublicSteps()) {
+                publicSteps.getSteps().remove(steps);
+                publicStepsService.save(publicSteps);
+            }
             stepsRepository.deleteById(id);
             return true;
         } else {

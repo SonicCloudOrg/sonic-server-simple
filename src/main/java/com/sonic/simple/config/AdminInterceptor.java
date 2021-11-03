@@ -24,6 +24,12 @@ public class AdminInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (request.getRequestURI().equals("/doc.html")
+                || request.getRequestURI().equals("/favicon.ico")
+                || request.getRequestURI().contains("css")
+                || request.getRequestURI().contains("js")) {
+            return true;
+        }
         String token = request.getHeader("SonicToken");
         if (token == null) {
             sendJson(response);
@@ -38,26 +44,26 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (redisTokenObject == null) {
             sendJson(response);
             return false;
-        } else  {
+        } else {
             RedisTool.expire("sonic:user:" + token, 7);
         }
         return true;
     }
 
-    public void sendJson(HttpServletResponse response){
+    public void sendJson(HttpServletResponse response) {
         PrintWriter writer = null;
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
-        try{
+        try {
             writer = response.getWriter();
             writer.print(JSONObject.toJSON(new RespModel(RespEnum.UNAUTHORIZED)));
-        }catch (Exception e){
+        } catch (Exception e) {
 
-        }finally {
-            if(writer!=null){
+        } finally {
+            if (writer != null) {
                 writer.close();
             }
         }
     }
-    
+
 }

@@ -16,7 +16,7 @@ public class LoginConfig extends WebMvcConfigurationSupport {
         registration.addPathPatterns("/**");
         registration.excludePathPatterns("/**/users/login","/**/users/register","/**/swagger-resources"
                 ,"/**/v2/api-docs","/**/folder/upload","/**/folder/recordFiles/**","/**/keepFiles/**","/**/imageFiles/**"
-                ,"/**/recordFiles/**","/**/logFiles/**","/doc.html");
+                ,"/**/recordFiles/**","/**/logFiles/**","/**/packageFiles/**");
         super.addInterceptors(registry);
     }
 
@@ -36,6 +36,8 @@ public class LoginConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("file:///" + System.getProperty("user.dir") + "/recordFiles/");
         registry.addResourceHandler("/api/folder/logFiles/**")
                 .addResourceLocations("file:///" + System.getProperty("user.dir") + "/logFiles/");
+        registry.addResourceHandler("/api/folder/packageFiles/**")
+                .addResourceLocations("file:///" + System.getProperty("user.dir") + "/packageFiles/");
         super.addResourceHandlers(registry);
     }
 }
