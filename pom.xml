@@ -6,7 +6,7 @@
 
     <groupId>com.sonic</groupId>
     <artifactId>sonic-server-simple</artifactId>
-    <version>1.1.0</version>
+    <version>v1.2.0-beta1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -126,7 +126,8 @@
                             <goal>build</goal>
                         </goals>
                         <configuration>
-                            <imageName>zhouyixun/${project.artifactId}:v${project.version}</imageName>
+                            <pushImageTag>true</pushImageTag>
+                            <imageName>zhouyixun/${project.artifactId}:${project.version}</imageName>
                             <baseImage>adoptopenjdk/openjdk15:alpine AS builder</baseImage>
                             <runs>
                                 <run>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</run>
@@ -134,6 +135,9 @@
                             <entryPoint>
                                 ["java","-server","-Xmx800M","-Xms800M","-Xmn300M","-Xss256K","-XX:-UseGCOverheadLimit","-XX:+DisableExplicitGC","-XX:SurvivorRatio=1","-XX:LargePageSizeInBytes=128M","-XX:SoftRefLRUPolicyMSPerMB=0","-Djava.security.egd=file:/dev/./urandom","-jar","/${project.build.finalName}.jar"]
                             </entryPoint>
+                            <imageTags>
+                                <imageTag>latest</imageTag>
+                            </imageTags>
                             <resources>
                                 <resource>
                                     <targetPath>/</targetPath>

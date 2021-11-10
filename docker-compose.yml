@@ -1,12 +1,13 @@
 version: '3'
 services:
   sonic-server-simple:
-    image: "zhouyixun/sonic-server-simple:v1.1.0"
+    image: "zhouyixun/sonic-server-simple:v1.2.0-beta1"
     environment:
       #以下均为默认配置，如果更换为自己的数据源才改
       - REDIS_DATABASE=0
       - REDIS_HOST=sonic-redis
       - REDIS_PORT=6379
+      - REDIS_PASSWORD=""
       - RABBITMQ_HOST=sonic-rabbitmq
       - RABBITMQ_PORT=5672
       - RABBITMQ_USERNAME=guest
@@ -46,7 +47,7 @@ services:
     ports:
       - "8094:8094"
   sonic-client-web:
-    image: "zhouyixun/sonic-client-web:v1.1.1"
+    image: "zhouyixun/sonic-client-web:v1.2.0-beta1"
     environment:
       #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
       - SONIC_API_HOST=localhost
