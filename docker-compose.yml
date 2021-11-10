@@ -7,6 +7,7 @@ services:
       - REDIS_DATABASE=0
       - REDIS_HOST=sonic-redis
       - REDIS_PORT=6379
+      - REDIS_PASSWORD=""
       - RABBITMQ_HOST=sonic-rabbitmq
       - RABBITMQ_PORT=5672
       - RABBITMQ_USERNAME=guest
