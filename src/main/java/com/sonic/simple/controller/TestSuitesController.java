@@ -6,7 +6,7 @@ import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.models.TestSuites;
 import com.sonic.simple.models.Users;
 import com.sonic.simple.services.TestSuitesService;
-import com.sonic.simple.tools.RedisTool;
+import com.sonic.simple.tools.JWTTokenTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +26,8 @@ import java.util.List;
 public class TestSuitesController {
     @Autowired
     private TestSuitesService testSuitesService;
+    @Autowired
+    private JWTTokenTool jwtTokenTool;
 
     @WebAspect
     @ApiOperation(value = "运行测试套件", notes = "运行指定项目的指定测试套件")
@@ -36,9 +38,9 @@ public class TestSuitesController {
         String strike = "SYSTEM";
         if (request.getHeader("SonicToken") != null) {
             String token = request.getHeader("SonicToken");
-            Object t = RedisTool.get("sonic:user:" + token);
-            if (t != null) {
-                strike = ((Users) t).getUserName();
+            String userName = jwtTokenTool.getUserName(token);
+            if (userName != null) {
+                strike = userName;
             }
         }
         return testSuitesService.runSuite(id, strike);

@@ -17,6 +17,8 @@ public interface AgentsService {
 
     void save(JSONObject agents);
 
+    void save(Agents agents);
+
     boolean offLine(int id);
 
     int auth(String key);

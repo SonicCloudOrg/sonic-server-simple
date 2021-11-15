@@ -87,9 +87,6 @@ robot:
 gateway:
   host: http://${SONIC_API_HOST:localhost}:${SONIC_API_PORT:8094}
 
-filter:
-  resetToken: true
-
 sonic:
   jobs:
     fileCron: ${FILE_CRON:0 0 12 * * ?}
