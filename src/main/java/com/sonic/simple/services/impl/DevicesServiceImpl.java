@@ -206,6 +206,7 @@ public class DevicesServiceImpl implements DevicesService {
             newDevices.setAgentId(jsonMsg.getInteger("agentId"));
             newDevices.setStatus(jsonMsg.getString("status"));
             newDevices.setPassword("");
+            newDevices.setImgUrl("");
             save(newDevices);
         } else {
             devices.setAgentId(jsonMsg.getInteger("agentId"));

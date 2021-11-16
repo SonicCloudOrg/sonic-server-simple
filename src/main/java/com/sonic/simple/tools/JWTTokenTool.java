@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -16,7 +17,7 @@ import java.util.UUID;
  * @des Token加解密工具类
  * @date 2021/8/15 18:26
  */
-@Component
+@Configuration
 public class JWTTokenTool {
     @Value("${gateway.secret}")
     private String TOKEN_SECRET;
