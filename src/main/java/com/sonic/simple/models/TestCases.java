@@ -45,6 +45,8 @@ public class TestCases {
     @NotNull
     @ApiModelProperty(value = "用例设计人", required = true, example = "YiXunZhou")
     String designer;
+
+    // TODO 在 put http://localhost:8094/api/controller/testSuites/ 接口的入参中 editTime 精度留了
     @ApiModelProperty(value = "最后修改日期", required = true, example = "2021-08-15 11:10:00")
     @LastModifiedDate
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
