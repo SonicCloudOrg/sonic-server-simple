@@ -10,8 +10,8 @@ import com.sonic.simple.models.*;
 import com.sonic.simple.models.interfaces.CoverType;
 import com.sonic.simple.models.interfaces.DeviceStatus;
 import com.sonic.simple.models.interfaces.ResultStatus;
+import com.sonic.simple.netty.NettyServer;
 import com.sonic.simple.services.*;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,8 +41,6 @@ public class TestSuitesServiceImpl implements TestSuitesService {
     private AgentsService agentsService;
     @Autowired
     private GlobalParamsRepository globalParamsRepository;
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
 
     @Override
     public RespModel runSuite(int suiteId, String strike) {
@@ -122,11 +120,9 @@ public class TestSuitesServiceImpl implements TestSuitesService {
                 }
                 suite.put("gp", gp);
                 suite.put("rid", results.getId());
-                String key = agentsService.findKeyById(devices.getAgentId());
-                suite.put("key", key);
                 suite.put("wait", 0);
                 suite.put("msg", "suite");
-                rabbitTemplate.convertAndSend("MsgDirectExchange", suite.getString("key"), suite);
+                NettyServer.getMap().get(devices.getAgentId()).writeAndFlush(suite.toJSONString());
             }
         }
         if (testSuites.getCover() == CoverType.DEVICE) {
@@ -153,11 +149,9 @@ public class TestSuitesServiceImpl implements TestSuitesService {
                     }
                     suite.put("gp", gp);
                     suite.put("rid", results.getId());
-                    String key = agentsService.findKeyById(devices.getAgentId());
-                    suite.put("key", key);
                     suite.put("wait", 0);
                     suite.put("msg", "suite");
-                    rabbitTemplate.convertAndSend("MsgDirectExchange", suite.getString("key"), suite);
+                    NettyServer.getMap().get(devices.getAgentId()).writeAndFlush(suite.toJSONString());
                 }
             }
         }

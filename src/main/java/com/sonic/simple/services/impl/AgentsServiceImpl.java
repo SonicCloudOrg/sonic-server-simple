@@ -75,6 +75,11 @@ public class AgentsServiceImpl implements AgentsService {
     }
 
     @Override
+    public void save(Agents agents) {
+        agentsRepository.save(agents);
+    }
+
+    @Override
     public boolean offLine(int id) {
         if (agentsRepository.existsById(id)) {
             Agents agentOffLine = agentsRepository.findById(id).get();
@@ -99,7 +104,6 @@ public class AgentsServiceImpl implements AgentsService {
     }
 
     @Override
-    @Cacheable(value = "sonic:agentKey", key = "#id", unless = "#result == null")
     public String findKeyById(int id) {
         if (agentsRepository.existsById(id)) {
             return agentsRepository.findById(id).get().getSecretKey();
