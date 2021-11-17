@@ -6,10 +6,9 @@ import com.sonic.simple.models.Agents;
 import com.sonic.simple.models.Devices;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
+import com.sonic.simple.netty.NettyServer;
 import com.sonic.simple.services.AgentsService;
 import com.sonic.simple.services.DevicesService;
-import org.aspectj.weaver.loadtime.Agent;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/transport/exchange")
 public class ExchangeController {
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
     @Autowired
     private DevicesService devicesService;
     @Autowired
@@ -37,7 +34,7 @@ public class ExchangeController {
                 jsonObject.put("msg", "reboot");
                 jsonObject.put("udId", device.getUdId());
                 jsonObject.put("platform", device.getPlatform());
-                rabbitTemplate.convertAndSend("MsgDirectExchange", agent.getSecretKey(), jsonObject);
+                NettyServer.getMap().get(agent.getId()).writeAndFlush(jsonObject.toJSONString());
                 return new RespModel(2000, "发送成功！");
             } else {
                 return new RespModel(RespEnum.ID_NOT_FOUND);

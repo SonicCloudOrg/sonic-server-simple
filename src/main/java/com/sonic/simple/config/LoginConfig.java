@@ -1,6 +1,7 @@
 package com.sonic.simple.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
@@ -9,10 +10,15 @@ import java.util.List;
 @Configuration
 public class LoginConfig extends WebMvcConfigurationSupport {
 
+    @Bean
+    public AdminInterceptor getAdminInterceptor() {
+        return new AdminInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //注册TestInterceptor拦截器
-        InterceptorRegistration registration = registry.addInterceptor(new AdminInterceptor());
+        InterceptorRegistration registration = registry.addInterceptor(getAdminInterceptor());
         registration.addPathPatterns("/**");
         registration.excludePathPatterns("/**/users/login","/**/users/register","/**/swagger-resources"
                 ,"/**/v2/api-docs","/**/folder/upload","/**/folder/recordFiles/**","/**/keepFiles/**","/**/imageFiles/**"

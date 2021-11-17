@@ -1,19 +1,10 @@
 version: '3'
 services:
   sonic-server-simple:
-    image: "zhouyixun/sonic-server-simple:v1.2.0-beta1"
+    image: "zhouyixun/sonic-server-simple:v1.2.0-beta2"
     environment:
-      #以下均为默认配置，如果更换为自己的数据源才改
-      - REDIS_DATABASE=0
-      - REDIS_HOST=sonic-redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=
-      - RABBITMQ_HOST=sonic-rabbitmq
-      - RABBITMQ_PORT=5672
-      - RABBITMQ_USERNAME=guest
-      - RABBITMQ_PASSWORD=guest
-      - RABBITMQ_VHOST=/
-      - MYSQL_HOST=sonic-mysql
+      #以下为MySql配置，localhost请替换为自己MySql服务的ipv4地址
+      - MYSQL_HOST=localhost
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=sonic
       - MYSQL_USERNAME=root
@@ -21,6 +12,11 @@ services:
       #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
       - SONIC_API_HOST=localhost
       - SONIC_API_PORT=8094
+      - SONIC_NETTY_PORT=8095
+      #token加密的key值
+      - SECRET_KEY=sonic
+      #身份验证token有效天数
+      - EXPIRE_DAY=14
       #前端页面访问地址，不填默认为http://localhost:3000
       - CLIENT_HOST=http://localhost:3000
       #文件保留天数（指测试过程产生的文件，包括图片、录像等等）
@@ -46,8 +42,9 @@ services:
       - files:/logs/
     ports:
       - "8094:8094"
+      - "8095:8095"
   sonic-client-web:
-    image: "zhouyixun/sonic-client-web:v1.2.0-beta1"
+    image: "zhouyixun/sonic-client-web:v1.2.0-beta2"
     environment:
       #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
       - SONIC_API_HOST=localhost
@@ -56,45 +53,9 @@ services:
       - sonic-network
     ports:
       - "3000:80"
-  #以下是三个中间件，如果本地有部署mysql、redis、rabbitmq，可以注释下方对应的容器（mysql建议用自己的，docker版mysql无法持久挂载数据）
-  sonic-mysql:
-    image: "mysql:5.7"
-    hostname: sonic-mysql
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    environment:
-      - MYSQL_ROOT_PASSWORD=Sonic!@#123
-      - MYSQL_DATABASE=sonic
-    ports:
-      - "3307:3306"
-    networks:
-      - sonic-network
-  sonic-redis:
-    image: "redis:latest"
-    hostname: sonic-redis
-    ports:
-      - "6380:6379"
-    volumes:
-      - redis:/etc/redis/redis.conf
-      - redis:/data
-    networks:
-      - sonic-network
-  sonic-rabbitmq:
-    image: "rabbitmq:3.8.16-management"
-    hostname: sonic-rabbitmq
-    volumes:
-      - rabbitmq:/etc/rabbitmq
-      - rabbitmq:/var/lib/rabbitmq
-      - rabbitmq:/var/log/rabbitmq
-    ports:
-      - 15673:15672
-      - 5673:5672
-    networks:
-      - sonic-network
 
 volumes:
   files:
-  redis:
-  rabbitmq:
 
 networks:
   sonic-network:
