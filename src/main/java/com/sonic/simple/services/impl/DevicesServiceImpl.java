@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.sonic.simple.dao.DevicesRepository;
 import com.sonic.simple.models.Devices;
 import com.sonic.simple.models.http.DevicePwdChange;
+import com.sonic.simple.models.http.UpdateDeviceImg;
 import com.sonic.simple.models.interfaces.DeviceStatus;
 import com.sonic.simple.models.interfaces.PlatformType;
 import com.sonic.simple.services.DevicesService;
@@ -38,6 +39,15 @@ public class DevicesServiceImpl implements DevicesService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void updateImg(UpdateDeviceImg updateDeviceImg) {
+        if (devicesRepository.existsById(updateDeviceImg.getId())) {
+            Devices devices = devicesRepository.findById(updateDeviceImg.getId()).get();
+            devices.setImgUrl(updateDeviceImg.getImgUrl());
+            devicesRepository.save(devices);
         }
     }
 

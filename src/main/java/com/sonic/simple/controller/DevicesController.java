@@ -6,6 +6,7 @@ import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.models.Devices;
 import com.sonic.simple.models.http.DevicePwdChange;
+import com.sonic.simple.models.http.UpdateDeviceImg;
 import com.sonic.simple.services.DevicesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,6 +37,14 @@ public class DevicesController {
         } else {
             return new RespModel(3000, "保存异常！");
         }
+    }
+
+    @WebAspect
+    @ApiOperation(value = "修改设备图片", notes = "修改对应设备id的图片")
+    @PutMapping("/updateImg")
+    public RespModel updateImg(@Validated @RequestBody UpdateDeviceImg updateDeviceImg) {
+        devicesService.updateImg(updateDeviceImg);
+        return new RespModel(RespEnum.UPDATE_OK);
     }
 
     @WebAspect
