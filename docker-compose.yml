@@ -1,7 +1,7 @@
 version: '3'
 services:
   sonic-server-simple:
-    image: "zhouyixun/sonic-server-simple:v1.2.0-beta2"
+    image: "zhouyixun/sonic-server-simple:v1.2.0-beta3"
     environment:
       #以下为MySql配置，localhost请替换为自己MySql服务的ipv4地址
       - MYSQL_HOST=localhost
@@ -44,7 +44,7 @@ services:
       - "8094:8094"
       - "8095:8095"
   sonic-client-web:
-    image: "zhouyixun/sonic-client-web:v1.2.0-beta2"
+    image: "zhouyixun/sonic-client-web:v1.2.0-beta3"
     environment:
       #在服务器部署的话，localhost改为服务器ip，port更改为sonic-server-simple暴露的port（一般不变）
       - SONIC_API_HOST=localhost
