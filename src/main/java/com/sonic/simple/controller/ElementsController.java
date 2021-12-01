@@ -42,7 +42,6 @@ public class ElementsController {
                                              @RequestParam(name = "name", required = false) String name,
                                              @RequestParam(name = "page") int page,
                                              @RequestParam(name = "pageSize") int pageSize) {
-
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         return new RespModel(RespEnum.SEARCH_OK, elementsService.findAll(projectId, type, eleTypes, name, pageable));
     }

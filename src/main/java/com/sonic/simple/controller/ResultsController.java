@@ -60,7 +60,6 @@ public class ResultsController {
         return new RespModel(RespEnum.SEARCH_OK, resultsService.findById(id));
     }
 
-    // todo 应该是delete类型的请求
     @WebAspect
     @GetMapping("/clean")
     public RespModel clean(@RequestParam(name = "day") int day) {
