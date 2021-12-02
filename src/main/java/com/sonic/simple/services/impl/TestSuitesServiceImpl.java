@@ -201,7 +201,6 @@ public class TestSuitesServiceImpl implements TestSuitesService {
         if (testSuites.getCover() == CoverType.DEVICE) {
             results.setSendMsgCount(testSuites.getTestCases().size() * testSuites.getDevices().size());
         }
-        results.setReceiveMsgCount(0);
         results.setProjectId(testSuites.getProjectId());
         resultsService.save(results);
 
