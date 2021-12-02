@@ -225,7 +225,7 @@ public class TestSuitesServiceImpl implements TestSuitesService {
                 suiteDetail.add(suite);
             }
             JSONObject result = new JSONObject();
-            result.put("msg", "force_stop_suite");
+            result.put("msg", "forceStopSuite");
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
                 NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
@@ -245,7 +245,7 @@ public class TestSuitesServiceImpl implements TestSuitesService {
                 suiteDetail.add(suite);
             }
             JSONObject result = new JSONObject();
-            result.put("msg", "force_stop_suite");
+            result.put("msg", "forceStopSuite");
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
                 NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
