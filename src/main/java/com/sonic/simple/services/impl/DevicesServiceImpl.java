@@ -208,6 +208,8 @@ public class DevicesServiceImpl implements DevicesService {
             if (jsonMsg.getString("model") != null) {
                 newDevices.setName(jsonMsg.getString("model"));
             }
+            newDevices.setNickName("");
+            newDevices.setUser("");
             newDevices.setPlatform(jsonMsg.getInteger("platform"));
             newDevices.setVersion(jsonMsg.getString("version"));
             newDevices.setCpu(jsonMsg.getString("cpu"));
