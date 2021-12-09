@@ -51,6 +51,8 @@ public class TestSuitesServiceImpl implements TestSuitesService {
         } else {
             return new RespModel(3001, "测试套件已删除！");
         }
+        Set<TestCases> testCasesSet = new HashSet<>(testSuites.getTestCases());
+        testSuites.setTestCases(new ArrayList<>(testCasesSet));
         if (testSuites.getTestCases().size() == 0) {
             return new RespModel(3002, "该测试套件内无测试用例！");
         }
@@ -130,7 +132,9 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             result.put("msg", "suite");
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
-                NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                if(NettyServer.getMap().get(id)!=null) {
+                    NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                }
             }
         }
         if (testSuites.getCover() == CoverType.DEVICE) {
@@ -167,7 +171,9 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             result.put("msg", "suite");
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
-                NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                if(NettyServer.getMap().get(id)!=null) {
+                    NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                }
             }
         }
         return new RespModel(RespEnum.HANDLE_OK);
@@ -188,6 +194,8 @@ public class TestSuitesServiceImpl implements TestSuitesService {
         } else {
             return new RespModel<>(3001, "测试套件已删除！");
         }
+        Set<TestCases> testCasesSet = new HashSet<>(testSuites.getTestCases());
+        testSuites.setTestCases(new ArrayList<>(testCasesSet));
         if (testSuites.getTestCases().size() == 0) {
             return new RespModel<>(3002, "该测试套件内无测试用例！");
         }
@@ -227,7 +235,9 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             result.put("msg", "forceStopSuite");
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
-                NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                if(NettyServer.getMap().get(id)!=null) {
+                    NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                }
             }
         }
         if (testSuites.getCover() == CoverType.DEVICE) {
@@ -247,7 +257,9 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             result.put("msg", "forceStopSuite");
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
-                NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                if(NettyServer.getMap().get(id)!=null) {
+                    NettyServer.getMap().get(id).writeAndFlush(result.toJSONString());
+                }
             }
         }
         return new RespModel(RespEnum.HANDLE_OK);

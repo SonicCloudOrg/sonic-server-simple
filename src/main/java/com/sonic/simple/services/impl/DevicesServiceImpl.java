@@ -3,7 +3,7 @@ package com.sonic.simple.services.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.sonic.simple.dao.DevicesRepository;
 import com.sonic.simple.models.Devices;
-import com.sonic.simple.models.http.DevicePwdChange;
+import com.sonic.simple.models.http.DeviceDetailChange;
 import com.sonic.simple.models.http.UpdateDeviceImg;
 import com.sonic.simple.models.interfaces.DeviceStatus;
 import com.sonic.simple.models.interfaces.PlatformType;
@@ -31,10 +31,11 @@ public class DevicesServiceImpl implements DevicesService {
     private DevicesRepository devicesRepository;
 
     @Override
-    public boolean savePwd(DevicePwdChange devicePwdChange) {
-        if (devicesRepository.existsById(devicePwdChange.getId())) {
-            Devices devices = devicesRepository.findById(devicePwdChange.getId()).get();
-            devices.setPassword(devicePwdChange.getPassword());
+    public boolean saveDetail(DeviceDetailChange deviceDetailChange) {
+        if (devicesRepository.existsById(deviceDetailChange.getId())) {
+            Devices devices = devicesRepository.findById(deviceDetailChange.getId()).get();
+            devices.setNickName(deviceDetailChange.getNickName());
+            devices.setPassword(deviceDetailChange.getPassword());
             devicesRepository.save(devices);
             return true;
         } else {
