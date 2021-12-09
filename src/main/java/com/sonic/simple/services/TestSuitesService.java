@@ -16,6 +16,8 @@ import java.util.List;
 public interface TestSuitesService {
     RespModel runSuite(int id, String strike);
 
+    RespModel<String> forceStopSuite(int id, String strike);
+
     TestSuites findById(int id);
 
     boolean delete(int id);

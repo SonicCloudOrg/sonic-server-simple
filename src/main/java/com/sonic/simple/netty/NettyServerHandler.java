@@ -3,8 +3,11 @@ package com.sonic.simple.netty;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sonic.simple.models.Agents;
+import com.sonic.simple.models.Devices;
+import com.sonic.simple.models.Users;
 import com.sonic.simple.models.interfaces.AgentStatus;
 import com.sonic.simple.services.*;
+import com.sonic.simple.tools.JWTTokenTool;
 import com.sonic.simple.tools.SpringTool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -25,6 +28,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private ResultsService resultsService = SpringTool.getBean(ResultsService.class);
     private TestCasesService testCasesService = SpringTool.getBean(TestCasesService.class);
     private ResultDetailService resultDetailService = SpringTool.getBean(ResultDetailService.class);
+    private UsersService usersService = SpringTool.getBean(UsersService.class);
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -36,6 +40,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         JSONObject jsonMsg = JSON.parseObject((String) msg);
         logger.info("服务器收到Agent: {} 消息: {}", ctx.channel().remoteAddress(), jsonMsg);
         switch (jsonMsg.getString("msg")) {
+            case "debugUser":
+                Users users = usersService.getUserInfo(jsonMsg.getString("token"));
+                Devices devices = devicesService.findByAgentIdAndUdId(jsonMsg.getInteger("agentId"),
+                        jsonMsg.getString("udId"));
+                devices.setUser(users.getUserName());
+                devicesService.save(devices);
+                break;
             case "heartBeat":
                 Agents agentsOnline = agentsService.findById(jsonMsg.getInteger("agentId"));
                 if (agentsOnline.getStatus() != (AgentStatus.ONLINE)) {

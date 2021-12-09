@@ -31,7 +31,7 @@ spring:
     open-in-view: true
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true
 
 gateway:
   host: "http://localhost:8094"

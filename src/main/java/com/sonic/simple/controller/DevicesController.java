@@ -5,7 +5,7 @@ import com.sonic.simple.config.WebAspect;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.models.Devices;
-import com.sonic.simple.models.http.DevicePwdChange;
+import com.sonic.simple.models.http.DeviceDetailChange;
 import com.sonic.simple.models.http.UpdateDeviceImg;
 import com.sonic.simple.services.DevicesService;
 import io.swagger.annotations.Api;
@@ -30,9 +30,9 @@ public class DevicesController {
 
     @WebAspect
     @ApiOperation(value = "修改设备安装密码", notes = "修改对应设备id的安装密码")
-    @PutMapping("/savePwd")
-    public RespModel savePwd(@Validated @RequestBody DevicePwdChange devicePwdChange) {
-        if (devicesService.savePwd(devicePwdChange)) {
+    @PutMapping("/saveDetail")
+    public RespModel saveDetail(@Validated @RequestBody DeviceDetailChange deviceDetailChange) {
+        if (devicesService.saveDetail(deviceDetailChange)) {
             return new RespModel(RespEnum.UPDATE_OK);
         } else {
             return new RespModel(3000, "保存异常！");
