@@ -1,27 +1,27 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ZhouYixun/sonic-server/main/logo.png">
+  <img src="https://raw.githubusercontent.com/SonicCloudOrg/sonic-server/main/logo.png">
 </p>
 <p align="center">🎉Sonic Cloud Real Machine Testing Platform</p>
 <p align="center">
   <span>English |</span>
-  <a href="https://github.com/ZhouYixun/sonic-server/blob/main/README_CN.md">  
+  <a href="https://github.com/SonicCloudOrg/sonic-server/blob/main/README_CN.md">  
      简体中文
   </a>
 </p>
 <p align="center">
   <a href="#">  
-    <img src="https://img.shields.io/badge/release-v1.1.0-orange">
+    <img src="https://img.shields.io/badge/release-v1.2.0-orange">
   </a>
-  <a href="https://hub.docker.com/repository/docker/zhouyixun/sonic-server-simple">  
-    <img src="https://img.shields.io/docker/pulls/zhouyixun/sonic-server-simple">
+  <a href="https://hub.docker.com/repository/docker/sonicorg/sonic-server-simple">  
+    <img src="https://img.shields.io/docker/pulls/sonicorg/sonic-server-simple">
   </a>
-  <a href="https://github.com/ZhouYixun/sonic-server/blob/main/LICENSE">  
-    <img src="https://img.shields.io/github/license/ZhouYiXun/sonic-server?color=green&label=license&logo=license&logoColor=green">
+  <a href="https://github.com/SonicCloudOrg/sonic-server/blob/main/LICENSE">  
+    <img src="https://img.shields.io/github/license/SonicCloudOrg/sonic-server?color=green&label=license&logo=license&logoColor=green">
   </a>
 </p>
 
 ### Official Website
-[Sonic Official Website](http://zhouyixun.gitee.io/sonic-official-website)
+[Sonic Official Website](http://sonic-cloud.gitee.io)
 ## Background
 
 #### What is sonic ?
@@ -57,20 +57,7 @@ mvn package
 ```
 docker-compose up -d
 ```
-|  ENV Name   | Description  |
-|  ----  | ----  |
-| RABBIT_HOST  | RabbitMQ service host,default **localhost** |
-| RABBIT_PORT  | RabbitMQ service port,default **5672** |
-| RABBIT_USERNAME  | RabbitMQ service username,default **sonic** |
-| RABBIT_PASSWORD  | RabbitMQ service password,default **sonic** |
-| RABBIT_VHOST  | RabbitMQ service virtual-host,default **sonic** |
-| REDIS_DATABASE  | redis database,default **0** |
-| REDIS_HOST  | redis host,default **localhost** |
-| REDIS_PORT  | redis port,default **6379** |
-| MYSQL_HOST  | mysql host,default **localhost** |
-| MYSQL_DATABASE  | mysql database,default **sonic** |
-| MYSQL_USERNAME  | mysql username,default **root** |
-| MYSQL_PASSWORD  | mysql password,default **Sonic!@#123** |
+
 ## LICENSE
 
 [MIT License](LICENSE)
