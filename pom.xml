@@ -6,7 +6,7 @@
 
     <groupId>com.sonic</groupId>
     <artifactId>sonic-server-simple</artifactId>
-    <version>v1.2.0-rc</version>
+    <version>v1.2.0-release</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -134,7 +134,7 @@
                         </goals>
                         <configuration>
                             <pushImage>true</pushImage>
-                            <imageName>SonicCloudOrg/${project.artifactId}:${project.version}</imageName>
+                            <imageName>sonicorg/${project.artifactId}:${project.version}</imageName>
                             <baseImage>adoptopenjdk/openjdk15:alpine AS builder</baseImage>
                             <runs>
                                 <run>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</run>
