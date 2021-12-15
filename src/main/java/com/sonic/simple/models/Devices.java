@@ -49,6 +49,8 @@ public class Devices {
     Set<TestSuites> testSuites;
     @ApiModelProperty(value = "设备占用者")
     String user;
+    @ApiModelProperty(value = "设备温度", example = "33")
+    String temperature;
 
     public Devices() {
     }
@@ -181,6 +183,14 @@ public class Devices {
         this.user = user;
     }
 
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
+    }
+
     @Override
     public String toString() {
         return "Devices{" +
@@ -199,6 +209,7 @@ public class Devices {
                 ", password='" + password + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 ", user='" + user + '\'' +
+                ", temperature='" + temperature + '\'' +
                 '}';
     }
 }
