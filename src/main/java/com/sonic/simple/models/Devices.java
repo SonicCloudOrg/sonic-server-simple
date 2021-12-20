@@ -19,6 +19,8 @@ public class Devices {
     int id;
     @ApiModelProperty(value = "设备名称", example = "My HUAWEI")
     String name;
+    @ApiModelProperty(value = "中文设备", example = "荣耀全网通")
+    String chiName;
     @ApiModelProperty(value = "设备备注", example = "My HUAWEI")
     String nickName;
     @ApiModelProperty(value = "型号", example = "HUAWEI MATE 40")
@@ -69,6 +71,14 @@ public class Devices {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getChiName() {
+        return chiName;
+    }
+
+    public void setChiName(String chiName) {
+        this.chiName = chiName;
     }
 
     public String getNickName() {
@@ -196,6 +206,7 @@ public class Devices {
         return "Devices{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", chiName='" + chiName + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", model='" + model + '\'' +
                 ", udId='" + udId + '\'' +
