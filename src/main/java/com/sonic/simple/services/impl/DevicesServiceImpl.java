@@ -1,5 +1,6 @@
 package com.sonic.simple.services.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sonic.simple.dao.DevicesRepository;
 import com.sonic.simple.models.Devices;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,6 +197,19 @@ public class DevicesServiceImpl implements DevicesService {
         }
         jsonObject.put("size", sizeList);
         return jsonObject;
+    }
+
+    public String getName(String model) throws IOException {
+        InputStream config = getClass().getResourceAsStream("/result.json");
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = JSON.parseObject(config, JSONObject.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            config.close();
+        }
+        return jsonObject.getString(model) == null ? "" : jsonObject.getString(model);
     }
 
     @Override
