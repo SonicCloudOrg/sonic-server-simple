@@ -199,15 +199,19 @@ public class DevicesServiceImpl implements DevicesService {
         return jsonObject;
     }
 
-    public String getName(String model) throws IOException {
+    public String getName(String model) {
         InputStream config = getClass().getResourceAsStream("/result.json");
         JSONObject jsonObject = null;
         try {
             jsonObject = JSON.parseObject(config, JSONObject.class);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally{
-            config.close();
+        } finally {
+            try {
+                config.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return jsonObject.getString(model) == null ? "" : jsonObject.getString(model);
     }
@@ -224,6 +228,7 @@ public class DevicesServiceImpl implements DevicesService {
             }
             if (jsonMsg.getString("model") != null) {
                 newDevices.setName(jsonMsg.getString("model"));
+                newDevices.setChiName(getName(jsonMsg.getString("model")));
             }
             newDevices.setNickName("");
             newDevices.setUser("");
@@ -247,6 +252,7 @@ public class DevicesServiceImpl implements DevicesService {
             if (jsonMsg.getString("model") != null) {
                 if (!jsonMsg.getString("model").equals("未知")) {
                     devices.setModel(jsonMsg.getString("model"));
+                    devices.setChiName(getName(jsonMsg.getString("model")));
                 }
             }
             if (jsonMsg.getString("version") != null) {
@@ -264,7 +270,9 @@ public class DevicesServiceImpl implements DevicesService {
             if (jsonMsg.getString("manufacturer") != null) {
                 devices.setManufacturer(jsonMsg.getString("manufacturer"));
             }
-            devices.setStatus(jsonMsg.getString("status"));
+            if (jsonMsg.getString("status") != null) {
+                devices.setStatus(jsonMsg.getString("status"));
+            }
             save(devices);
         }
     }
