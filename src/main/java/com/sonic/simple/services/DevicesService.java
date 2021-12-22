@@ -36,4 +36,6 @@ public interface DevicesService {
     void deviceStatus(JSONObject jsonObject);
 
     Devices findById(int id);
+
+    void refreshDevicesTemper(JSONObject jsonObject);
 }

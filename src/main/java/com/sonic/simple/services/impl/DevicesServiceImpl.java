@@ -241,6 +241,7 @@ public class DevicesServiceImpl implements DevicesService {
             newDevices.setStatus(jsonMsg.getString("status"));
             newDevices.setPassword("");
             newDevices.setImgUrl("");
+            newDevices.setTemperature(0);
             save(newDevices);
         } else {
             devices.setAgentId(jsonMsg.getInteger("agentId"));
@@ -283,6 +284,19 @@ public class DevicesServiceImpl implements DevicesService {
             return devicesRepository.findById(id).get();
         } else {
             return null;
+        }
+    }
+
+    @Override
+    public void refreshDevicesTemper(JSONObject jsonObject) {
+        int agentId = jsonObject.getInteger("agentId");
+        List<JSONObject> deviceTemList = jsonObject.getJSONArray("detail").toJavaList(JSONObject.class);
+        for (JSONObject d : deviceTemList) {
+            Devices devices = findByAgentIdAndUdId(agentId, d.getString("udId"));
+            if (devices != null) {
+                devices.setTemperature(d.getInteger("tem"));
+                devicesRepository.save(devices);
+            }
         }
     }
 }

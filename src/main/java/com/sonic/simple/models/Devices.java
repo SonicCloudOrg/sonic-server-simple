@@ -51,8 +51,9 @@ public class Devices {
     Set<TestSuites> testSuites;
     @ApiModelProperty(value = "设备占用者")
     String user;
+    @Column(columnDefinition="int default 0")
     @ApiModelProperty(value = "设备温度", example = "33")
-    String temperature;
+    Integer temperature;
 
     public Devices() {
     }
@@ -193,11 +194,11 @@ public class Devices {
         this.user = user;
     }
 
-    public String getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(Integer temperature) {
         this.temperature = temperature;
     }
 
