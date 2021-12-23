@@ -37,5 +37,7 @@ public interface DevicesService {
 
     Devices findById(int id);
 
+    Integer findTemper();
+
     void refreshDevicesTemper(JSONObject jsonObject);
 }

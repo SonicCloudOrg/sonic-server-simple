@@ -1,11 +1,13 @@
 package com.sonic.simple.dao;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sonic.simple.models.Devices;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ZhouYiXun
@@ -20,6 +22,10 @@ public interface DevicesRepository extends JpaRepository<Devices, Integer>, JpaS
     List<Devices> findByIdIn(List<Integer> ids);
 
     List<Devices> findByPlatformOrderByIdDesc(int platform);
+
+    @Query(value = "select avg(temperature) as avg from devices " +
+            "where temperature <> 0 and status in (?1)", nativeQuery = true)
+    Integer findTemper(List<String> ids);
 
     @Query(value = "select cpu from devices group by cpu", nativeQuery = true)
     List<String> findCpuList();

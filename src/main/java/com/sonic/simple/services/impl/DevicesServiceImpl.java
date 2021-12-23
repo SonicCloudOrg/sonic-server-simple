@@ -21,6 +21,7 @@ import javax.persistence.criteria.Predicate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -286,6 +287,12 @@ public class DevicesServiceImpl implements DevicesService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Integer findTemper() {
+        return devicesRepository.findTemper(Arrays.asList(DeviceStatus.ONLINE
+                ,DeviceStatus.DEBUGGING,DeviceStatus.TESTING));
     }
 
     @Override
