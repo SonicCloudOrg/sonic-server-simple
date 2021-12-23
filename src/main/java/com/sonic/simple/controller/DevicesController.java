@@ -103,6 +103,13 @@ public class DevicesController {
         return new RespModel(RespEnum.SEARCH_OK, devicesService.getFilterOption());
     }
 
+    @WebAspect
+    @ApiOperation(value = "获取温度概况", notes = "获取现有温度概况")
+    @GetMapping("/findTemper")
+    public RespModel<Integer> findTemper() {
+        return new RespModel(RespEnum.SEARCH_OK, devicesService.findTemper());
+    }
+
 //    @WebAspect
 //    @ApiOperation(value = "查询单个设备信息", notes = "获取单个设备的详细信息")
 //    @ApiImplicitParam(name = "udId", value = "设备序列号", dataTypeClass = String.class)

@@ -130,6 +130,7 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             }
             JSONObject result = new JSONObject();
             result.put("msg", "suite");
+            result.put("pf",testSuites.getPlatform());
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
                 if(NettyServer.getMap().get(id)!=null) {
@@ -169,6 +170,7 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             }
             JSONObject result = new JSONObject();
             result.put("msg", "suite");
+            result.put("pf",testSuites.getPlatform());
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
                 if(NettyServer.getMap().get(id)!=null) {
@@ -233,6 +235,7 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             }
             JSONObject result = new JSONObject();
             result.put("msg", "forceStopSuite");
+            result.put("pf",testSuites.getPlatform());
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
                 if(NettyServer.getMap().get(id)!=null) {
@@ -255,6 +258,7 @@ public class TestSuitesServiceImpl implements TestSuitesService {
             }
             JSONObject result = new JSONObject();
             result.put("msg", "forceStopSuite");
+            result.put("pf",testSuites.getPlatform());
             result.put("cases", suiteDetail);
             for (Integer id : agentIds) {
                 if(NettyServer.getMap().get(id)!=null) {

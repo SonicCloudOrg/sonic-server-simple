@@ -40,6 +40,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         JSONObject jsonMsg = JSON.parseObject((String) msg);
         logger.info("服务器收到Agent: {} 消息: {}", ctx.channel().remoteAddress(), jsonMsg);
         switch (jsonMsg.getString("msg")) {
+            case "temperature": {
+                devicesService.refreshDevicesTemper(jsonMsg);
+                break;
+            }
             case "debugUser":
                 Users users = usersService.getUserInfo(jsonMsg.getString("token"));
                 Devices devices = devicesService.findByAgentIdAndUdId(jsonMsg.getInteger("agentId"),
