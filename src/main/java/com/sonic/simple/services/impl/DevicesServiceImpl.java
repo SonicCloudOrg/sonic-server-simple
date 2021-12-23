@@ -149,9 +149,10 @@ public class DevicesServiceImpl implements DevicesService {
                 predicateList.add(cb.and(in));
             }
             if (deviceInfo != null) {
-                //因为是型号或者udId，所以两个条件为or
+                //因为是型号或者udId或者中文，所以三个条件为or
                 List<Predicate> modelOrUdId = new ArrayList<>();
                 modelOrUdId.add(cb.like(root.get("model"), "%" + deviceInfo + "%"));
+                modelOrUdId.add(cb.like(root.get("chiName"), "%" + deviceInfo + "%"));
                 modelOrUdId.add(cb.like(root.get("udId"), "%" + deviceInfo + "%"));
                 Predicate[] result = new Predicate[modelOrUdId.size()];
                 predicateList.add(cb.or(modelOrUdId.toArray(result)));
