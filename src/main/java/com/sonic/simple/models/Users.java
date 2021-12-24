@@ -1,5 +1,6 @@
 package com.sonic.simple.models;
 
+import com.sonic.simple.models.interfaces.UserLoginType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -24,6 +25,9 @@ public class Users {
     @Positive
     @ApiModelProperty(value = "角色", required = true, example = "1")
     int role;
+    @NotNull
+    @ApiModelProperty(value = "用户来源", required = true, example = "local")
+    String source = UserLoginType.LOCAL;
 
     public Users() {
     }
@@ -60,6 +64,14 @@ public class Users {
         this.role = role;
     }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     @Override
     public String toString() {
         return "Users{" +
@@ -67,6 +79,7 @@ public class Users {
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
+                ", source='" + source + '\'' +
                 '}';
     }
 }

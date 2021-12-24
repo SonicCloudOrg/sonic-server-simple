@@ -32,6 +32,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+  ldap:
+    base: ${LDAP_BASE:ou=system}
+    username: ${LDAP_USERNAME:uid=admin,ou=system}
+    password: ${LDAP_PASSWORD:Sonic!@#123}
+    urls: ${LDAP_URL:ldap://127.0.0.1:10389}
 
 gateway:
   host: http://${SONIC_API_HOST:localhost}:${SONIC_API_PORT:8094}
@@ -48,6 +53,10 @@ sonic:
     weekReportCron: ${WEEK_CRON:0 0 10 ? * Mon}
     filesKeepDay: ${FILE_KEEP_DAY:60}
     resultsKeepDay: ${RESULT_KEEP_DAY:60}
+  ldap:
+    enable: ${LDAP_ENABLE:false}
+    userId: ${LDAP_USER_ID:cn}
+    userBaseDN: ${LDAP_BASE_DN:ou=users}
 
 robot:
   client:

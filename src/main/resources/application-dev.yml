@@ -32,6 +32,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  ldap:
+    base: ou=system
+    username: 'uid=admin,ou=system'
+    password: 'password'
+    urls: ldap://127.0.0.1:10389
 
 gateway:
   host: "http://localhost:8094"
@@ -48,6 +53,10 @@ sonic:
     weekReportCron: 0 0 10 ? * Mon
     filesKeepDay: 60
     resultsKeepDay: 60
+  ldap:
+    enable: false
+    userId: cn
+    userBaseDN: ou=users
 
 robot:
   client:
