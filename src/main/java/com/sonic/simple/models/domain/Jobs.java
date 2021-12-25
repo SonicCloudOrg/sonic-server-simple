@@ -48,7 +48,6 @@ public class Jobs implements Serializable, TypeConverter<Jobs, JobsDTO> {
 
     @TableField
     @Column(isNull = false, comment = "任务名称")
-    @Unique(value = "UNI_NAME", columns = "name")
     private String name;
 
     @TableField

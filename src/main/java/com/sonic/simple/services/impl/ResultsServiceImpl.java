@@ -59,7 +59,7 @@ public class ResultsServiceImpl extends SonicServiceImpl<ResultsMapper, Results>
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(int id) {
         int count = resultsMapper.deleteById(id);
         resultDetailService.deleteByResultId(id);
@@ -282,6 +282,7 @@ public class ResultsServiceImpl extends SonicServiceImpl<ResultsMapper, Results>
         return betweenList;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void setStatus(Results results) {
         List<ResultDetail> resultDetailList = resultDetailService.findAll(results.getId(), 0, "status", 0);
         int failCount = 0;

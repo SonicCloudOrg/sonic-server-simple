@@ -48,7 +48,6 @@ public class TestSuites implements Serializable, TypeConverter<TestSuites, TestS
 
     @TableField
     @Column(isNull = false, comment = "测试套件名字")
-    @Unique(value = "UNI_NAME", columns = {"name"})
     private String name;
 
     @TableField

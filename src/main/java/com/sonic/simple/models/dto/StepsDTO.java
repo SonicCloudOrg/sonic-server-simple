@@ -47,11 +47,9 @@ public class StepsDTO implements Serializable, TypeConverter<StepsDTO, Steps> {
     @ApiModelProperty(value = "步骤类型", required = true, example = "click")
     String stepType;
 
-    @NotBlank
     @ApiModelProperty(value = "输入文本", required = true, example = "123")
     String content;
 
-    @NotBlank
     @ApiModelProperty(value = "其他信息", required = true, example = "456")
     String text;
 

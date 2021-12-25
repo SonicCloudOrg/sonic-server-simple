@@ -44,7 +44,6 @@ public class GlobalParams implements Serializable, TypeConverter<GlobalParams, G
 
     @TableField
     @Column(value = "params_key", isNull = false, comment = "参数key")
-    @Unique(value = "UNI_PARAMS_KEY", columns = {"params_key"})
     private String paramsKey;
 
     @TableField

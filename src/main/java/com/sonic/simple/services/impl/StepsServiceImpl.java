@@ -62,7 +62,7 @@ public class StepsServiceImpl extends SonicServiceImpl<StepsMapper, Steps> imple
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(int id) {
         if (existsById(id)) {
             Steps steps = baseMapper.selectById(id);
@@ -75,28 +75,32 @@ public class StepsServiceImpl extends SonicServiceImpl<StepsMapper, Steps> imple
     }
 
     @Override
-    @Transactional
-    public void saveStep(StepsDTO steps) {
-        if (steps.getStepType().equals("publicStep")) {
-            PublicSteps publicSteps = publicStepsMapper.selectById(Integer.parseInt(steps.getText()));
+    @Transactional(rollbackFor = Exception.class)
+    public void saveStep(StepsDTO stepsDTO) {
+        if (stepsDTO.getStepType().equals("publicStep")) {
+            PublicSteps publicSteps = publicStepsMapper.selectById(Integer.parseInt(stepsDTO.getText()));
             if (publicSteps != null) {
-                steps.setContent(publicSteps.getName());
+                stepsDTO.setContent(publicSteps.getName());
             } else {
-                steps.setContent("未知");
+                stepsDTO.setContent("未知");
             }
         }
 
         // 设置排序为最后
-        if (!existsById(steps.getId())) {
-            steps.setSort(stepsMapper.findMaxSort() + 1);
+        if (!existsById(stepsDTO.getId())) {
+            stepsDTO.setSort(stepsMapper.findMaxSort() + 1);
         }
+        Steps steps = stepsDTO.convertTo();
+        save(steps);
+
+        // 删除旧关系
+        stepsElementsMapper.delete(new LambdaQueryWrapper<StepsElements>().eq(StepsElements::getStepsId, steps.getId()));
 
         // 保存element映射关系
-        List<ElementsDTO> elements = steps.getElements();
+        List<ElementsDTO> elements = stepsDTO.getElements();
         for (ElementsDTO element : elements) {
             stepsElementsMapper.insert(new StepsElements().setElementsId(element.getId()).setStepsId(steps.getId()));
         }
-        save(steps.convertTo());
     }
 
     @Transactional
@@ -109,6 +113,7 @@ public class StepsServiceImpl extends SonicServiceImpl<StepsMapper, Steps> imple
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void sortSteps(StepSort stepSort) {
 
         List<Steps> stepsList = lambdaQuery().eq(Steps::getCaseId, stepSort.getCaseId())
@@ -131,7 +136,7 @@ public class StepsServiceImpl extends SonicServiceImpl<StepsMapper, Steps> imple
                 stepsList.get(stepsList.size() - 1 - i).setSort(temp);
             }
         }
-        saveBatch(stepsList);
+        saveOrUpdateBatch(stepsList);
     }
 
     @Override

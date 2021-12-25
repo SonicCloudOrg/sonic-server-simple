@@ -34,7 +34,7 @@ public class UsersServiceImpl extends SonicServiceImpl<UsersMapper, Users> imple
     private UsersMapper usersMapper;
 
     @Override
-    @Transactional(rollbackFor = SonicException.class)
+    @Transactional(rollbackFor = Exception.class)
     public void register(Users users) throws SonicException {
         try {
             users.setPassword(DigestUtils.md5DigestAsHex(users.getPassword().getBytes()));

@@ -25,7 +25,6 @@ public class ElementsController {
     @Autowired
     private ElementsService elementsService;
 
-    // todo 需要重点验证下
     @WebAspect
     @ApiOperation(value = "查找控件元素列表1", notes = "查找对应项目id的控件元素列表")
     @ApiImplicitParams(value = {

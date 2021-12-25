@@ -45,7 +45,6 @@ public class Elements implements Serializable, TypeConverter<Elements, ElementsD
 
     @TableField
     @Column(value = "ele_name", isNull = false, comment = "控件名称")
-    @Unique(value = "UNI_ELE_NAME", columns = {"ele_name"})
     private String eleName;
 
     @TableField

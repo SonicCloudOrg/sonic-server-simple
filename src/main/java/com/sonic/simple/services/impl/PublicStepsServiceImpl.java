@@ -99,7 +99,7 @@ public class PublicStepsServiceImpl extends SonicServiceImpl<PublicStepsMapper, 
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(int id) {
         publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
                 .eq(PublicStepsSteps::getPublicStepsId, id));
@@ -127,7 +127,7 @@ public class PublicStepsServiceImpl extends SonicServiceImpl<PublicStepsMapper, 
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteByProjectId(int projectId) {
         PublicSteps publicSteps = lambdaQuery().eq(PublicSteps::getProjectId, projectId).one();
         publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()

@@ -30,7 +30,7 @@ public class JobsServiceImpl extends SonicServiceImpl<JobsMapper, Jobs> implemen
     private JobsMapper jobsMapper;
 
     @Override
-    @Transactional(rollbackFor = SonicException.class)
+    @Transactional(rollbackFor = Exception.class)
     public RespModel<String> saveJobs(Jobs jobs) throws SonicException {
         jobs.setStatus(JobStatus.ENABLE);
         save(jobs);
@@ -79,7 +79,7 @@ public class JobsServiceImpl extends SonicServiceImpl<JobsMapper, Jobs> implemen
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public RespModel<String> delete(int id) {
         Jobs jobs = baseMapper.selectById(id);

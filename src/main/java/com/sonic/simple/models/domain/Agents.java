@@ -48,7 +48,6 @@ public class Agents implements Serializable, TypeConverter<Agents, AgentsDTO> {
 
     @TableField
     @Column(isNull = false, comment = "agent name")
-    @Unique(value = "UNI_NAME", columns = {"name"})
     private String name;
 
     @TableField

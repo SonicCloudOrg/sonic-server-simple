@@ -62,13 +62,13 @@ public class TestCasesServiceImpl extends SonicServiceImpl<TestCasesMapper, Test
                 .list();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean delete(int id) {
         if (existsById(id)) {
             // 删除suite映射关系
             testSuitesTestCasesMapper.delete(
-                    new LambdaQueryChainWrapper<>(testSuitesTestCasesMapper)
+                    new LambdaQueryWrapper<TestSuitesTestCases>()
                             .eq(TestSuitesTestCases::getTestCasesId, id)
             );
 
@@ -89,6 +89,7 @@ public class TestCasesServiceImpl extends SonicServiceImpl<TestCasesMapper, Test
         return baseMapper.selectById(id);
     }
 
+    @Transactional
     @Override
     public JSONObject findSteps(int id) {
 

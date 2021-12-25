@@ -57,7 +57,6 @@ public class Projects implements Serializable, TypeConverter<Projects, ProjectsD
 
     @TableField
     @Column(value = "project_name", isNull = false, comment = "项目名")
-    @Unique(value = "uni_project_name", columns = {"project_name"})
     private String projectName;
 
     @TableField

@@ -21,6 +21,7 @@ import com.sonic.simple.services.impl.base.SonicServiceImpl;
 import com.sonic.simple.tools.BeanTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.*;
@@ -45,6 +46,7 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
     @Autowired private TestSuitesDevicesMapper testSuitesDevicesMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public RespModel<String> runSuite(int suiteId, String strike) {
         TestSuitesDTO testSuitesDTO;
         if (existsById(suiteId)) {
@@ -76,7 +78,7 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
         }
         results.setReceiveMsgCount(0);
         results.setProjectId(testSuitesDTO.getProjectId());
-        resultsService.updateById(results);
+        resultsService.save(results);
 
         //组装全局参数为json对象
         List<GlobalParams> globalParamsList = globalParamsService.findAll(testSuitesDTO.getProjectId());
@@ -182,6 +184,7 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public RespModel<String> forceStopSuite(int resultId, String strike) {
 
         Results results = resultsService.findById(resultId);
@@ -220,7 +223,7 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
             results.setSendMsgCount(testSuitesDTO.getTestCases().size() * testSuitesDTO.getDevices().size());
         }
         results.setProjectId(testSuitesDTO.getProjectId());
-        resultsService.updateById(results);
+        resultsService.save(results);
 
 
         int deviceIndex = 0;
@@ -278,6 +281,7 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
     }
 
     @Override
+    @Transactional
     public TestSuitesDTO findById(int id) {
         if (existsById(id)) {
             TestSuitesDTO testSuitesDTO = baseMapper.selectById(id).convertTo();
@@ -306,7 +310,8 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
      * @des 递归获取步骤
      * @date 2021/8/20 17:50
      */
-    private JSONObject getStep(StepsDTO steps) {
+    @Transactional
+    public JSONObject getStep(StepsDTO steps) {
         JSONObject step = new JSONObject();
         if (steps.getStepType().equals("publicStep")) {
             PublicStepsDTO publicStepsDTO = publicStepsService.findById(Integer.parseInt(steps.getText()));
@@ -328,10 +333,24 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveTestSuites(TestSuitesDTO testSuitesDTO) {
-        int suiteId = testSuitesDTO.getId();
+        TestSuites testSuites = testSuitesDTO.convertTo();
+        save(testSuites);
+
+        Integer suiteId = testSuites.getId();
+        testSuitesDTO.setId(suiteId);
+
         List<TestCasesDTO> testCases = testSuitesDTO.getTestCases();
         List<DevicesDTO> devices = testSuitesDTO.getDevices();
+
+        // 删除旧数据
+        testSuitesDevicesMapper.delete(new LambdaQueryWrapper<TestSuitesDevices>()
+                .eq(TestSuitesDevices::getTestSuitesId, suiteId)
+        );
+        testSuitesTestCasesMapper.delete(new LambdaQueryWrapper<TestSuitesTestCases>()
+                .eq(TestSuitesTestCases::getTestSuitesId, suiteId)
+        );
 
         // 保存testcase映射
         for (TestCasesDTO testCase : testCases) {
@@ -349,6 +368,7 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
     }
 
     @Override
+    @Transactional
     public CommentPage<TestSuitesDTO> findByProjectId(int projectId, String name, Page<TestSuites> pageable) {
 
         LambdaQueryChainWrapper<TestSuites> lambdaQuery = lambdaQuery();

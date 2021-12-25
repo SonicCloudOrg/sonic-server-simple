@@ -13,6 +13,7 @@ import com.sonic.simple.services.StepsService;
 import com.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class ElementsServiceImpl extends SonicServiceImpl<ElementsMapper, Elemen
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public RespModel<String> delete(int id) {
         if (existsById(id)) {
             try {

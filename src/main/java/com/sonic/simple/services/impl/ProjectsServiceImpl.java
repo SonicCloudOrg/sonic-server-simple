@@ -42,7 +42,7 @@ public class ProjectsServiceImpl extends SonicServiceImpl<ProjectsMapper, Projec
     }
 
     @Override
-    @Transactional(rollbackFor = SonicException.class)
+    @Transactional(rollbackFor = Exception.class)
     public void delete(int id) throws SonicException {
         try {
             testSuitesService.deleteByProjectId(id);
