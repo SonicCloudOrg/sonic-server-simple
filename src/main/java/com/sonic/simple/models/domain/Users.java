@@ -34,7 +34,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("users")
 @TableComment("用户表")
-@TableCharset(MySqlCharsetConstant.UTF8)
+@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Users implements Serializable, TypeConverter<Users, UsersDTO> {
 

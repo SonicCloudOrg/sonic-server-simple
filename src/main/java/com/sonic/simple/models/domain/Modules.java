@@ -34,7 +34,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("modules")
 @TableComment("模块表")
-@TableCharset(MySqlCharsetConstant.UTF8)
+@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Modules implements Serializable, TypeConverter<Modules, ModulesDTO> {
 

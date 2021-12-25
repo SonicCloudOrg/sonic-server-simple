@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @TableName("versions")
 @TableComment("版本表")
-@TableCharset(MySqlCharsetConstant.UTF8)
+@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Versions implements Serializable, TypeConverter<Versions, VersionsDTO> {
 

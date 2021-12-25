@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @TableName("projects")
 @TableComment("项目表")
-@TableCharset(MySqlCharsetConstant.UTF8)
+@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Projects implements Serializable, TypeConverter<Projects, ProjectsDTO> {
 

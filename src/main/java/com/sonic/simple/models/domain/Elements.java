@@ -35,7 +35,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("elements")
 @TableComment("控件元素表")
-@TableCharset(MySqlCharsetConstant.UTF8)
+@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Elements implements Serializable, TypeConverter<Elements, ElementsDTO> {
 

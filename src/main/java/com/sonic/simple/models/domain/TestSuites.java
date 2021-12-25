@@ -34,7 +34,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("test_suites")
 @TableComment("测试套件表")
-@TableCharset(MySqlCharsetConstant.UTF8)
+@TableCharset(MySqlCharsetConstant.UTF8MB4)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class TestSuites implements Serializable, TypeConverter<TestSuites, TestSuitesDTO> {
 
