@@ -35,7 +35,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @TableName("results")
 @TableComment("测试结果表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
+@TableCharset(MySqlCharsetConstant.DEFAULT)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Results implements Serializable, TypeConverter<Results, ResultsDTO> {
 

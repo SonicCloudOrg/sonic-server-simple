@@ -34,7 +34,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("public_steps")
 @TableComment("公共步骤表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
+@TableCharset(MySqlCharsetConstant.DEFAULT)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class PublicSteps implements Serializable, TypeConverter<PublicSteps, PublicStepsDTO> {
 

@@ -34,7 +34,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("devices")
 @TableComment("设备表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
+@TableCharset(MySqlCharsetConstant.DEFAULT)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Devices implements Serializable, TypeConverter<Devices, DevicesDTO> {
 

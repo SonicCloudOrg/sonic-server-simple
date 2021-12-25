@@ -35,7 +35,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("steps")
 @TableComment("测试步骤表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
+@TableCharset(MySqlCharsetConstant.DEFAULT)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Steps implements Serializable, TypeConverter<Steps, StepsDTO> {
 
