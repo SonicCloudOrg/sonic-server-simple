@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonic.simple.config.WebAspect;
 import com.sonic.simple.models.base.CommentPage;
 import com.sonic.simple.models.domain.Elements;
+import com.sonic.simple.models.dto.ElementsDTO;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.services.ElementsService;
@@ -75,8 +76,8 @@ public class ElementsController {
     @WebAspect
     @ApiOperation(value = "更新控件元素", notes = "新增或更新控件元素信息，id为0时新增，否则为更新对应id的信息")
     @PutMapping
-    public RespModel<String> save(@Validated @RequestBody Elements elements) {
-        if (elementsService.save(elements)) {
+    public RespModel<String> save(@Validated @RequestBody ElementsDTO elementsDTO) {
+        if (elementsService.save(elementsDTO.convertTo())) {
             return new RespModel<>(RespEnum.UPDATE_OK);
         } else {
             return new RespModel<>(-1, "操作失败！请检查控件元素值是否过长！");

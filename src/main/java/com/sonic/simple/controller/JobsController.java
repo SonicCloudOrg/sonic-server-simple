@@ -5,6 +5,7 @@ import com.sonic.simple.config.WebAspect;
 import com.sonic.simple.exception.SonicException;
 import com.sonic.simple.models.base.CommentPage;
 import com.sonic.simple.models.domain.Jobs;
+import com.sonic.simple.models.dto.JobsDTO;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.services.JobsService;
@@ -32,8 +33,8 @@ public class JobsController {
     @WebAspect
     @ApiOperation(value = "更新定时任务信息", notes = "新增或更新定时任务的信息")
     @PutMapping
-    public RespModel<String> save(@Validated @RequestBody Jobs jobs) throws SonicException {
-        return jobsService.saveJobs(jobs);
+    public RespModel<String> save(@Validated @RequestBody JobsDTO jobsDTO) throws SonicException {
+        return jobsService.saveJobs(jobsDTO.convertTo());
     }
 
     @WebAspect

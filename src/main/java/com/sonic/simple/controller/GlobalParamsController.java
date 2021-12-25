@@ -2,6 +2,7 @@ package com.sonic.simple.controller;
 
 import com.sonic.simple.config.WebAspect;
 import com.sonic.simple.models.domain.GlobalParams;
+import com.sonic.simple.models.dto.GlobalParamsDTO;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.services.GlobalParamsService;
@@ -25,8 +26,8 @@ public class GlobalParamsController {
     @WebAspect
     @ApiOperation(value = "更新公共参数", notes = "新增或更新对应的公共参数")
     @PutMapping
-    public RespModel<String> save(@Validated @RequestBody GlobalParams globalParams) {
-        globalParamsService.save(globalParams);
+    public RespModel<String> save(@Validated @RequestBody GlobalParamsDTO globalParamsDTO) {
+        globalParamsService.save(globalParamsDTO.convertTo());
         return new RespModel<>(RespEnum.UPDATE_OK);
     }
 

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonic.simple.config.WebAspect;
 import com.sonic.simple.models.base.CommentPage;
 import com.sonic.simple.models.domain.TestCases;
+import com.sonic.simple.models.dto.TestCasesDTO;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.services.TestCasesService;
@@ -79,15 +80,15 @@ public class TestCasesController {
     @WebAspect
     @ApiOperation(value = "更新测试用例信息", notes = "新增或更改测试用例信息")
     @PutMapping
-    public RespModel<String> save(@Validated @RequestBody TestCases testCases, HttpServletRequest request) {
+    public RespModel<String> save(@Validated @RequestBody TestCasesDTO testCasesDTO, HttpServletRequest request) {
         if (request.getHeader("SonicToken") != null) {
             String token = request.getHeader("SonicToken");
             String userName = jwtTokenTool.getUserName(token);
             if (userName != null) {
-                testCases.setDesigner(userName);
+                testCasesDTO.setDesigner(userName);
             }
         }
-        testCasesService.save(testCases);
+        testCasesService.save(testCasesDTO.convertTo());
         return new RespModel<>(RespEnum.UPDATE_OK);
     }
 
