@@ -45,7 +45,6 @@ public class PublicStepsController {
         );
     }
 
-    // todo 需要重点验证下
     @WebAspect
     @ApiOperation(value = "查询公共步骤列表2", notes = "查找对应项目id下的公共步骤列表（不分页，只查询id和name）")
     @ApiImplicitParams(value = {
