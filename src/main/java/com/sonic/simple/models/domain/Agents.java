@@ -55,7 +55,7 @@ public class Agents implements Serializable, TypeConverter<Agents, AgentsDTO> {
     private Integer port;
 
     @TableField
-    @Column(value = "secret_key", comment = "agent的秘钥")
+    @Column(value = "secret_key", comment = "agent的秘钥", defaultValue = "")
     private String secretKey;
 
     @TableField
@@ -67,6 +67,6 @@ public class Agents implements Serializable, TypeConverter<Agents, AgentsDTO> {
     private String systemType;
 
     @TableField
-    @Column(isNull = false, comment = "agent端代码版本")
+    @Column(isNull = false, comment = "agent端代码版本", defaultValue = "")
     private String version;
 }

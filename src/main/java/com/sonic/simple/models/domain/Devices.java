@@ -47,27 +47,27 @@ public class Devices implements Serializable, TypeConverter<Devices, DevicesDTO>
     private Integer agentId;
 
     @TableField
-    @Column(comment = "cpu架构")
+    @Column(comment = "cpu架构", defaultValue = "")
     private String cpu;
 
     @TableField
-    @Column(value = "img_url", comment = "手机封面")
+    @Column(value = "img_url", comment = "手机封面", defaultValue = "")
     private String imgUrl;
 
     @TableField
-    @Column(comment = "制造商")
+    @Column(comment = "制造商", defaultValue = "")
     private String manufacturer;
 
     @TableField
-    @Column(comment = "手机型号")
+    @Column(comment = "手机型号", defaultValue = "")
     private String model;
 
     @TableField
-    @Column(comment = "设备名称")
+    @Column(comment = "设备名称", defaultValue = "")
     private String name;
 
     @TableField
-    @Column(comment = "设备安装app的密码")
+    @Column(comment = "设备安装app的密码", defaultValue = "")
     private String password;
 
     @TableField
@@ -75,32 +75,32 @@ public class Devices implements Serializable, TypeConverter<Devices, DevicesDTO>
     private Integer platform;
 
     @TableField
-    @Column(comment = "设备分辨率")
+    @Column(comment = "设备分辨率", defaultValue = "")
     private String size;
 
     @TableField
-    @Column(comment = "设备状态")
+    @Column(comment = "设备状态", defaultValue = "")
     private String status;
 
     @TableField
-    @Column(value = "ud_id", comment = "设备序列号")
+    @Column(value = "ud_id", comment = "设备序列号", defaultValue = "")
     @Index(value = "IDX_UD_ID", columns = {"ud_id"})
     private String udId;
 
     @TableField
-    @Column(comment = "设备系统版本")
+    @Column(comment = "设备系统版本", defaultValue = "")
     private String version;
 
     @TableField
-    @Column(value = "nick_name", comment = "设备备注")
+    @Column(value = "nick_name", comment = "设备备注", defaultValue = "")
     private String nickName;
 
     @TableField
-    @Column(comment = "设备当前占用者")
+    @Column(comment = "设备当前占用者", defaultValue = "")
     private String user;
 
     @TableField
-    @Column(value = "chi_name", comment = "中文设备")
+    @Column(value = "chi_name", comment = "中文设备", defaultValue = "")
     String chiName;
 
     @TableField

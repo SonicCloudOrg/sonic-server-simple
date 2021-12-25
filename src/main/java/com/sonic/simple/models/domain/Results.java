@@ -73,7 +73,7 @@ public class Results implements Serializable, TypeConverter<Results, ResultsDTO>
     private Integer status;
 
     @TableField
-    @Column(comment = "触发者")
+    @Column(comment = "触发者", defaultValue = "")
     private String strike;
 
     @TableField
@@ -81,6 +81,6 @@ public class Results implements Serializable, TypeConverter<Results, ResultsDTO>
     private Integer suiteId;
 
     @TableField
-    @Column(value = "suite_name", comment = "测试套件名字")
+    @Column(value = "suite_name", comment = "测试套件名字", defaultValue = "")
     private String suiteName;
 }

@@ -51,7 +51,7 @@ public class ResultDetail implements Serializable, TypeConverter<ResultDetail, R
     private Integer caseId;
 
     @TableField
-    @Column(comment = "描述")
+    @Column(comment = "描述", defaultValue = "")
     private String des;
 
     @TableField
@@ -82,7 +82,7 @@ public class ResultDetail implements Serializable, TypeConverter<ResultDetail, R
     private LocalDateTime time;
 
     @TableField
-    @Column(comment = "测试结果详情类型")
+    @Column(comment = "测试结果详情类型", defaultValue = "")
     @Index(value = "IDX_TYPE", columns = {"type"})
     private String type;
 }
