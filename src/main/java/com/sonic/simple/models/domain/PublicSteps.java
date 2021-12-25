@@ -44,6 +44,7 @@ public class PublicSteps implements Serializable, TypeConverter<PublicSteps, Pub
 
     @TableField
     @Column(value = "name", isNull = false, comment = "公共步骤名称")
+    @Unique(value = "UNI_NAME", columns = {"name"})
     private String name;
 
     @TableField

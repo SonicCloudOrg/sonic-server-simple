@@ -52,6 +52,6 @@ public class Users implements Serializable, TypeConverter<Users, UsersDTO> {
 
     @TableField
     @Column(value = "user_name", isNull = false, comment = "用户名")
-    @Unique(value = "uni_user_name", columns = "user_name")
+    @Unique(value = "UNI_USER_NAME", columns = "user_name")
     private String userName;
 }

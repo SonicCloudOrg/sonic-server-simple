@@ -63,6 +63,7 @@ public class TestCases implements Serializable, TypeConverter<TestCases, TestCas
 
     @TableField
     @Column(isNull = false, comment = "用例名称")
+    @Unique(value = "UNI_NAME", columns = {"name"})
     private String name;
 
     @TableField

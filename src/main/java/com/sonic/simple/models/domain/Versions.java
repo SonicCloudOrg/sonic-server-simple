@@ -55,5 +55,6 @@ public class Versions implements Serializable, TypeConverter<Versions, VersionsD
 
     @TableField
     @Column(value = "version_name", isNull = false, comment = "迭代名称")
+    @Unique(value = "UNI_VERSION_NAME", columns = {"version_name"})
     private String versionName;
 }

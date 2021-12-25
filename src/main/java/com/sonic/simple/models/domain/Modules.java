@@ -44,6 +44,7 @@ public class Modules implements Serializable, TypeConverter<Modules, ModulesDTO>
 
     @TableField
     @Column(value = "name", isNull = false, comment = "模块名")
+    @Unique(value = "UNI_NAME", columns = {"name"})
     private String name;
 
     @TableField
