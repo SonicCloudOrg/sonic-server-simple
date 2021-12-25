@@ -48,7 +48,7 @@ public class Results implements Serializable, TypeConverter<Results, ResultsDTO>
     @ApiModelProperty(value = "结束时间", example = "2021-08-15 11:36:00")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    @Column(value = "end_time", type = MySqlTypeConstant.DATETIME, isNull = false, comment = "任务结束时间")
+    @Column(value = "end_time", type = MySqlTypeConstant.DATETIME, comment = "任务结束时间")
     LocalDateTime endTime;
 
     @TableField
