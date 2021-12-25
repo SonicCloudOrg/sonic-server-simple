@@ -30,7 +30,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("jobs")
 @TableComment("定时任务表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
+@TableCharset(MySqlCharsetConstant.DEFAULT)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Jobs implements Serializable, TypeConverter<Jobs, JobsDTO> {
 

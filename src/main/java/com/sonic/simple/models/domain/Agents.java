@@ -30,7 +30,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("agents")
 @TableComment("agents表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
+@TableCharset(MySqlCharsetConstant.DEFAULT)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class Agents implements Serializable, TypeConverter<Agents, AgentsDTO> {
 

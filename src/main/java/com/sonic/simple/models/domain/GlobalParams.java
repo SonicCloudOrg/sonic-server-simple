@@ -30,7 +30,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("global_params")
 @TableComment("全局参数表")
-@TableCharset(MySqlCharsetConstant.UTF8MB4)
+@TableCharset(MySqlCharsetConstant.DEFAULT)
 @TableEngine(MySqlEngineConstant.InnoDB)
 public class GlobalParams implements Serializable, TypeConverter<GlobalParams, GlobalParamsDTO> {
 
