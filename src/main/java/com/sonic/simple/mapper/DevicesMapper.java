@@ -12,10 +12,7 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 /**
- * <p>
  *  Mapper 接口
- * </p>
- *
  * @author JayWenStar
  * @since 2021-12-17
  */
