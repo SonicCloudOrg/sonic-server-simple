@@ -23,10 +23,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 
- * </p>
- *
  * @author JayWenStar
  * @since 2021-12-17
  */

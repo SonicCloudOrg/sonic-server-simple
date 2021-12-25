@@ -19,10 +19,6 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * <p>
- * 
- * </p>
- *
  * @author JayWenStar
  * @since 2021-12-17
  */

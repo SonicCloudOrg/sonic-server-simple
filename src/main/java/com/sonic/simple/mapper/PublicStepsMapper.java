@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
  *  Mapper 接口
- * </p>
- *
  * @author JayWenStar
  * @since 2021-12-17
  */

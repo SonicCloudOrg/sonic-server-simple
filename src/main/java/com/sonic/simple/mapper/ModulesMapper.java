@@ -5,10 +5,7 @@ import com.sonic.simple.models.domain.Modules;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * <p>
  *  Mapper 接口
- * </p>
- *
  * @author JayWenStar
  * @since 2021-12-17
  */

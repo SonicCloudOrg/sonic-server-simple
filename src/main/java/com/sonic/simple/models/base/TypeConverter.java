@@ -10,6 +10,11 @@ import java.util.Objects;
 
 import static com.sonic.simple.tools.BeanTool.updateProperties;
 
+/**
+ * 映射dto与domain关系
+ * @param <CURRENT>
+ * @param <TARGET>
+ */
 
 public interface TypeConverter<CURRENT extends TypeConverter<CURRENT, TARGET>, TARGET> {
 

@@ -19,11 +19,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author JayWenStar
+ * @author JayWenStar,Eason
  * @since 2021-12-17
  */
 @ApiModel(value = "Agents对象", description = "")
@@ -55,7 +51,7 @@ public class Agents implements Serializable, TypeConverter<Agents, AgentsDTO> {
     private Integer port;
 
     @TableField
-    @Column(value = "secret_key", comment = "agent的秘钥", defaultValue = "")
+    @Column(value = "secret_key", comment = "agent的密钥", defaultValue = "")
     private String secretKey;
 
     @TableField
