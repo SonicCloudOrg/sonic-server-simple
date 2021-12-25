@@ -2,10 +2,7 @@ package com.sonic.simple.models.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableCharset;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableComment;
-import com.gitee.sunchenbin.mybatis.actable.annotation.TableEngine;
+import com.gitee.sunchenbin.mybatis.actable.annotation.*;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlCharsetConstant;
 import com.gitee.sunchenbin.mybatis.actable.constants.MySqlEngineConstant;
 import com.sonic.simple.models.base.TypeConverter;
@@ -37,6 +34,7 @@ public class TestSuitesDevices implements Serializable, TypeConverter<TestSuites
 
     @TableField
     @Column(value = "test_suites_id", isNull = false, comment = "测试套件id")
+    @Index(value = "idx_test_suites_id_devices_id", columns = {"test_suites_id", "devices_id"})
     private Integer testSuitesId;
 
     @TableField
