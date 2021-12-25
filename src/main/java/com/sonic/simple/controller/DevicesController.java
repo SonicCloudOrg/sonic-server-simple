@@ -1,11 +1,13 @@
 package com.sonic.simple.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonic.simple.config.WebAspect;
+import com.sonic.simple.models.base.CommentPage;
+import com.sonic.simple.models.domain.Devices;
+import com.sonic.simple.models.http.DeviceDetailChange;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
-import com.sonic.simple.models.Devices;
-import com.sonic.simple.models.http.DeviceDetailChange;
 import com.sonic.simple.models.http.UpdateDeviceImg;
 import com.sonic.simple.services.DevicesService;
 import io.swagger.annotations.Api;
@@ -13,9 +15,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,24 +24,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/controller/devices")
 public class DevicesController {
+
     @Autowired
     private DevicesService devicesService;
 
     @WebAspect
     @ApiOperation(value = "修改设备安装密码", notes = "修改对应设备id的安装密码")
     @PutMapping("/saveDetail")
-    public RespModel saveDetail(@Validated @RequestBody DeviceDetailChange deviceDetailChange) {
+    public RespModel<String> saveDetail(@Validated @RequestBody DeviceDetailChange deviceDetailChange) {
         if (devicesService.saveDetail(deviceDetailChange)) {
-            return new RespModel(RespEnum.UPDATE_OK);
+            return new RespModel<>(RespEnum.UPDATE_OK);
         } else {
-            return new RespModel(3000, "保存异常！");
+            return new RespModel<>(3000, "保存异常！");
         }
     }
 
     @WebAspect
     @ApiOperation(value = "修改设备图片", notes = "修改对应设备id的图片")
     @PutMapping("/updateImg")
-    public RespModel updateImg(@Validated @RequestBody UpdateDeviceImg updateDeviceImg) {
+    public RespModel<String> updateImg(@Validated @RequestBody UpdateDeviceImg updateDeviceImg) {
         devicesService.updateImg(updateDeviceImg);
         return new RespModel(RespEnum.UPDATE_OK);
     }
@@ -62,20 +62,24 @@ public class DevicesController {
             @ApiImplicitParam(name = "pageSize", value = "页数据大小", dataTypeClass = Integer.class)
     })
     @GetMapping("/list")
-    public RespModel<Page<Devices>> findAll(@RequestParam(name = "androidVersion[]", required = false) List<String> androidVersion,
-                                            @RequestParam(name = "iOSVersion[]", required = false) List<String> iOSVersion,
-                                            @RequestParam(name = "manufacturer[]", required = false) List<String> manufacturer,
-                                            @RequestParam(name = "cpu[]", required = false) List<String> cpu,
-                                            @RequestParam(name = "size[]", required = false) List<String> size,
-                                            @RequestParam(name = "agentId[]", required = false) List<Integer> agentId,
-                                            @RequestParam(name = "status[]", required = false) List<String> status,
-                                            @RequestParam(name = "deviceInfo", required = false) String deviceInfo,
-                                            @RequestParam(name = "page") int page,
-                                            @RequestParam(name = "pageSize") int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return new RespModel(RespEnum.SEARCH_OK,
-                devicesService.findAll(iOSVersion, androidVersion, manufacturer, cpu, size,
-                        agentId, status, deviceInfo, pageable));
+    public RespModel<CommentPage<Devices>> findAll(@RequestParam(name = "androidVersion[]", required = false) List<String> androidVersion,
+                                                   @RequestParam(name = "iOSVersion[]", required = false) List<String> iOSVersion,
+                                                   @RequestParam(name = "manufacturer[]", required = false) List<String> manufacturer,
+                                                   @RequestParam(name = "cpu[]", required = false) List<String> cpu,
+                                                   @RequestParam(name = "size[]", required = false) List<String> size,
+                                                   @RequestParam(name = "agentId[]", required = false) List<Integer> agentId,
+                                                   @RequestParam(name = "status[]", required = false) List<String> status,
+                                                   @RequestParam(name = "deviceInfo", required = false) String deviceInfo,
+                                                   @RequestParam(name = "page") int page,
+                                                   @RequestParam(name = "pageSize") int pageSize) {
+        Page<Devices> pageable = new Page<>(page, pageSize);
+        return new RespModel<>(
+                RespEnum.SEARCH_OK,
+                CommentPage.convertFrom(
+                        devicesService.findAll(iOSVersion, androidVersion, manufacturer, cpu, size,
+                                agentId, status, deviceInfo, pageable)
+                )
+        );
     }
 
     @WebAspect
@@ -83,7 +87,7 @@ public class DevicesController {
     @ApiImplicitParam(name = "platform", value = "平台", dataTypeClass = Integer.class)
     @GetMapping("/listAll")
     public RespModel<List<Devices>> listAll(@RequestParam(name = "platform") int platform) {
-        return new RespModel(RespEnum.SEARCH_OK,
+        return new RespModel<>(RespEnum.SEARCH_OK,
                 devicesService.findAll(platform));
     }
 
@@ -92,7 +96,7 @@ public class DevicesController {
     @ApiImplicitParam(name = "ids[]", value = "id列表", dataTypeClass = Integer.class)
     @GetMapping("/findByIdIn")
     public RespModel<List<Devices>> findByIdIn(@RequestParam(name = "ids[]") List<Integer> ids) {
-        return new RespModel(RespEnum.SEARCH_OK,
+        return new RespModel<>(RespEnum.SEARCH_OK,
                 devicesService.findByIdIn(ids));
     }
 
@@ -100,14 +104,7 @@ public class DevicesController {
     @ApiOperation(value = "获取查询条件", notes = "获取现有筛选条件（所有设备有的条件）")
     @GetMapping("/getFilterOption")
     public RespModel<JSONObject> getFilterOption() {
-        return new RespModel(RespEnum.SEARCH_OK, devicesService.getFilterOption());
-    }
-
-    @WebAspect
-    @ApiOperation(value = "获取温度概况", notes = "获取现有温度概况")
-    @GetMapping("/findTemper")
-    public RespModel<Integer> findTemper() {
-        return new RespModel(RespEnum.SEARCH_OK, devicesService.findTemper());
+        return new RespModel<>(RespEnum.SEARCH_OK, devicesService.getFilterOption());
     }
 
 //    @WebAspect
@@ -125,9 +122,9 @@ public class DevicesController {
 
     @WebAspect
     @PutMapping("/deviceStatus")
-    public RespModel deviceStatus(@RequestBody JSONObject jsonObject) {
+    public RespModel<String> deviceStatus(@RequestBody JSONObject jsonObject) {
         devicesService.deviceStatus(jsonObject);
-        return new RespModel(RespEnum.UPDATE_OK);
+        return new RespModel<>(RespEnum.UPDATE_OK);
     }
 
     @WebAspect
@@ -135,9 +132,16 @@ public class DevicesController {
     public RespModel<Devices> findById(@RequestParam(name = "id") int id) {
         Devices devices = devicesService.findById(id);
         if (devices != null) {
-            return new RespModel(RespEnum.SEARCH_OK, devices);
+            return new RespModel<>(RespEnum.SEARCH_OK, devices);
         } else {
-            return new RespModel(3000, "设备不存在！");
+            return new RespModel<>(3000, "设备不存在！");
         }
+    }
+
+    @WebAspect
+    @ApiOperation(value = "获取温度概况", notes = "获取现有温度概况")
+    @GetMapping("/findTemper")
+    public RespModel<Integer> findTemper() {
+        return new RespModel<>(RespEnum.SEARCH_OK, devicesService.findTemper());
     }
 }

@@ -1,19 +1,18 @@
 package com.sonic.simple.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonic.simple.config.WebAspect;
+import com.sonic.simple.models.base.CommentPage;
+import com.sonic.simple.models.domain.ResultDetail;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
-import com.sonic.simple.models.ResultDetail;
 import com.sonic.simple.services.ResultDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,14 +26,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/controller/resultDetail")
 public class ResultDetailController {
+
     @Autowired
     private ResultDetailService resultDetailService;
 
     @WebAspect
     @PostMapping
-    public RespModel save(@RequestBody JSONObject jsonObject) {
+    public RespModel<String> save(@RequestBody JSONObject jsonObject) {
         resultDetailService.saveByTransport(jsonObject);
-        return new RespModel(RespEnum.HANDLE_OK);
+        return new RespModel<>(RespEnum.HANDLE_OK);
     }
 
     @WebAspect
@@ -47,14 +47,16 @@ public class ResultDetailController {
             @ApiImplicitParam(name = "page", value = "页码", dataTypeClass = Integer.class)
     })
     @GetMapping("/list")
-    public RespModel<Page<ResultDetail>> findAll(@RequestParam(name = "caseId") int caseId,
-                                                 @RequestParam(name = "resultId") int resultId,
-                                                 @RequestParam(name = "deviceId") int deviceId,
-                                                 @RequestParam(name = "type") String type,
-                                                 @RequestParam(name = "page") int page) {
-        Pageable pageable = PageRequest.of(page - 1, 20);
-        return new RespModel(RespEnum.SEARCH_OK,
-                resultDetailService.findAll(resultId, caseId, type, deviceId, pageable));
+    public RespModel<CommentPage<ResultDetail>> findAll(@RequestParam(name = "caseId") int caseId,
+                                                        @RequestParam(name = "resultId") int resultId,
+                                                        @RequestParam(name = "deviceId") int deviceId,
+                                                        @RequestParam(name = "type") String type,
+                                                        @RequestParam(name = "page") int page) {
+        Page<ResultDetail> pageable = new Page<>(page, 20);
+        return new RespModel<>(RespEnum.SEARCH_OK,
+                CommentPage.convertFrom(
+                        resultDetailService.findAll(resultId, caseId, type, deviceId, pageable))
+        );
     }
 
     @WebAspect
@@ -70,7 +72,7 @@ public class ResultDetailController {
                                                  @RequestParam(name = "resultId") int resultId,
                                                  @RequestParam(name = "deviceId") int deviceId,
                                                  @RequestParam(name = "type") String type) {
-        return new RespModel(RespEnum.SEARCH_OK,
+        return new RespModel<>(RespEnum.SEARCH_OK,
                 resultDetailService.findAll(resultId, caseId, type, deviceId));
     }
 }

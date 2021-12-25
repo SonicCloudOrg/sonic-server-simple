@@ -1,11 +1,12 @@
 package com.sonic.simple.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonic.simple.config.WebAspect;
+import com.sonic.simple.models.base.CommentPage;
+import com.sonic.simple.models.domain.TestCases;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
-import com.sonic.simple.models.TestCases;
-import com.sonic.simple.models.Users;
 import com.sonic.simple.services.TestCasesService;
 import com.sonic.simple.tools.JWTTokenTool;
 import io.swagger.annotations.Api;
@@ -13,10 +14,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,14 +39,16 @@ public class TestCasesController {
             @ApiImplicitParam(name = "pageSize", value = "页数据大小", dataTypeClass = Integer.class)
     })
     @GetMapping("/list")
-    public RespModel<Page<TestCases>> findAll(@RequestParam(name = "projectId") int projectId,
-                                              @RequestParam(name = "platform") int platform,
-                                              @RequestParam(name = "name") String name,
-                                              @RequestParam(name = "page") int page,
-                                              @RequestParam(name = "pageSize") int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "editTime"));
-        return new RespModel(RespEnum.SEARCH_OK,
-                testCasesService.findAll(projectId, platform, name, pageable));
+    public RespModel<CommentPage<TestCases>> findAll(@RequestParam(name = "projectId") int projectId,
+                                                     @RequestParam(name = "platform") int platform,
+                                                     @RequestParam(name = "name") String name,
+                                                     @RequestParam(name = "page") int page,
+                                                     @RequestParam(name = "pageSize") int pageSize) {
+        Page<TestCases> pageable = new Page<>(page, pageSize);
+        return new RespModel<>(
+                RespEnum.SEARCH_OK,
+                CommentPage.convertFrom(testCasesService.findAll(projectId, platform, name, pageable))
+        );
     }
 
     @WebAspect
@@ -61,7 +60,7 @@ public class TestCasesController {
     @GetMapping("/listAll")
     public RespModel<List<TestCases>> findAll(@RequestParam(name = "projectId") int projectId,
                                               @RequestParam(name = "platform") int platform) {
-        return new RespModel(RespEnum.SEARCH_OK,
+        return new RespModel<>(RespEnum.SEARCH_OK,
                 testCasesService.findAll(projectId, platform));
     }
 
@@ -69,18 +68,19 @@ public class TestCasesController {
     @ApiOperation(value = "删除测试用例", notes = "删除对应用例id，用例下的操作步骤的caseId重置为0")
     @ApiImplicitParam(name = "id", value = "用例id", dataTypeClass = Integer.class)
     @DeleteMapping
-    public RespModel delete(@RequestParam(name = "id") int id) {
+    public RespModel<String> delete(@RequestParam(name = "id") int id) {
         if (testCasesService.delete(id)) {
-            return new RespModel(RespEnum.DELETE_OK);
+            return new RespModel<>(RespEnum.DELETE_OK);
         } else {
-            return new RespModel(RespEnum.ID_NOT_FOUND);
+            return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }
     }
 
+    // todo 需要重点验证下
     @WebAspect
     @ApiOperation(value = "更新测试用例信息", notes = "新增或更改测试用例信息")
     @PutMapping
-    public RespModel save(@Validated @RequestBody TestCases testCases, HttpServletRequest request) {
+    public RespModel<String> save(@Validated @RequestBody TestCases testCases, HttpServletRequest request) {
         if (request.getHeader("SonicToken") != null) {
             String token = request.getHeader("SonicToken");
             String userName = jwtTokenTool.getUserName(token);
@@ -89,7 +89,7 @@ public class TestCasesController {
             }
         }
         testCasesService.save(testCases);
-        return new RespModel(RespEnum.UPDATE_OK);
+        return new RespModel<>(RespEnum.UPDATE_OK);
     }
 
     @WebAspect
@@ -99,9 +99,9 @@ public class TestCasesController {
     public RespModel<TestCases> findById(@RequestParam(name = "id") int id) {
         TestCases testCases = testCasesService.findById(id);
         if (testCases != null) {
-            return new RespModel(RespEnum.SEARCH_OK, testCases);
+            return new RespModel<>(RespEnum.SEARCH_OK, testCases);
         } else {
-            return new RespModel(RespEnum.ID_NOT_FOUND);
+            return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }
     }
 
@@ -110,9 +110,9 @@ public class TestCasesController {
     public RespModel<JSONObject> findSteps(@RequestParam(name = "id") int id) {
         JSONObject jsonObject = testCasesService.findSteps(id);
         if (jsonObject != null) {
-            return new RespModel(RespEnum.SEARCH_OK, jsonObject);
+            return new RespModel<>(RespEnum.SEARCH_OK, jsonObject);
         } else {
-            return new RespModel(-1, "查询出错！");
+            return new RespModel<>(-1, "查询出错！");
         }
     }
 
@@ -121,7 +121,7 @@ public class TestCasesController {
     @ApiImplicitParam(name = "ids[]", value = "id列表", dataTypeClass = Integer.class)
     @GetMapping("/findByIdIn")
     public RespModel<List<TestCases>> findByIdIn(@RequestParam(name = "ids[]") List<Integer> ids) {
-        return new RespModel(RespEnum.SEARCH_OK,
+        return new RespModel<>(RespEnum.SEARCH_OK,
                 testCasesService.findByIdIn(ids));
     }
 }

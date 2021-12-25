@@ -24,14 +24,34 @@ spring:
   datasource:
     initialization-mode: always
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sonic?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&autoReconnect=true&serverTimezone=GMT%2b8
-    username: root
-    password: Sonic!@#123
+    url: jdbc:mysql://81.70.118.76:3306/sonic-test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&autoReconnect=true&serverTimezone=GMT%2b8
+    username: sonic-test
+    password: 123456
+  # 保留配置 ，用于执行resources目录下的data.sql
   jpa:
-    open-in-view: true
     hibernate:
       ddl-auto: update
-    show-sql: true
+# mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath:mapping/*.xml, classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
+  global-config:
+    # 是否显示mybatis-plus图标
+    banner: false
+  configuration:
+    # 关闭二级缓存
+    cache-enabled: false
+    # 关闭一级缓存
+    localCacheScope: STATEMENT
+    # sql日志
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+# 数据库自动生成表
+actable:
+  model:
+    pack: com.sonic.simple.models.domain
+  table:
+    auto: update
+  database:
+    type: mysql
 
 gateway:
   host: "http://localhost:8094"

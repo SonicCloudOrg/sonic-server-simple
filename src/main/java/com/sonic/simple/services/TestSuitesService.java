@@ -1,10 +1,11 @@
 package com.sonic.simple.services;
 
-
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.sonic.simple.models.base.CommentPage;
+import com.sonic.simple.models.domain.TestSuites;
+import com.sonic.simple.models.dto.TestSuitesDTO;
 import com.sonic.simple.models.http.RespModel;
-import com.sonic.simple.models.TestSuites;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,18 +14,20 @@ import java.util.List;
  * @des 测试套件逻辑层
  * @date 2021/8/20 17:51
  */
-public interface TestSuitesService {
-    RespModel runSuite(int id, String strike);
+public interface TestSuitesService extends IService<TestSuites> {
+    RespModel<String> runSuite(int id, String strike);
 
     RespModel<String> forceStopSuite(int id, String strike);
 
-    TestSuites findById(int id);
+    TestSuitesDTO findById(int id);
 
     boolean delete(int id);
 
-    void save(TestSuites testSuites);
+    void saveTestSuites(TestSuitesDTO testSuitesDTO);
 
-    Page<TestSuites> findByProjectId(int projectId, String name, Pageable pageable);
+    CommentPage<TestSuitesDTO> findByProjectId(int projectId, String name, Page<TestSuites> pageable);
 
-    List<TestSuites> findByProjectId(int projectId);
+    List<TestSuitesDTO> findByProjectId(int projectId);
+
+    boolean deleteByProjectId(int projectId);
 }

@@ -1,8 +1,10 @@
 package com.sonic.simple.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonic.simple.config.WebAspect;
 import com.sonic.simple.exception.SonicException;
-import com.sonic.simple.models.Jobs;
+import com.sonic.simple.models.base.CommentPage;
+import com.sonic.simple.models.domain.Jobs;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.services.JobsService;
@@ -11,10 +13,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,14 +25,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/task/jobs")
 public class JobsController {
+
     @Autowired
     private JobsService jobsService;
 
     @WebAspect
     @ApiOperation(value = "更新定时任务信息", notes = "新增或更新定时任务的信息")
     @PutMapping
-    public RespModel save(@Validated @RequestBody Jobs jobs) throws SonicException {
-        return jobsService.save(jobs);
+    public RespModel<String> save(@Validated @RequestBody Jobs jobs) throws SonicException {
+        return jobsService.saveJobs(jobs);
     }
 
     @WebAspect
@@ -44,7 +43,7 @@ public class JobsController {
             @ApiImplicitParam(name = "type", value = "状态类型", dataTypeClass = Integer.class),
     })
     @GetMapping("/updateStatus")
-    public RespModel updateStatus(@RequestParam(name = "id") int id, @RequestParam(name = "type") int type) {
+    public RespModel<String> updateStatus(@RequestParam(name = "id") int id, @RequestParam(name = "type") int type) {
         return jobsService.updateStatus(id, type);
     }
 
@@ -52,7 +51,7 @@ public class JobsController {
     @ApiOperation(value = "删除定时任务", notes = "删除对应id的定时任务")
     @ApiImplicitParam(name = "id", value = "定时任务id", dataTypeClass = Integer.class)
     @DeleteMapping
-    public RespModel delete(@RequestParam(name = "id") int id) {
+    public RespModel<String> delete(@RequestParam(name = "id") int id) {
         return jobsService.delete(id);
     }
 
@@ -64,11 +63,14 @@ public class JobsController {
             @ApiImplicitParam(name = "pageSize", value = "页数据大小", dataTypeClass = Integer.class)
     })
     @GetMapping("/list")
-    public RespModel<Page<Jobs>> findByProjectId(@RequestParam(name = "projectId") int projectId
+    public RespModel<CommentPage<Jobs>> findByProjectId(@RequestParam(name = "projectId") int projectId
             , @RequestParam(name = "page") int page
             , @RequestParam(name = "pageSize") int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "id"));
-        return new RespModel(RespEnum.SEARCH_OK, jobsService.findByProjectId(projectId, pageable));
+        Page<Jobs> pageable = new Page<>(page, pageSize);
+        return new RespModel<>(
+                RespEnum.SEARCH_OK,
+                CommentPage.convertFrom(jobsService.findByProjectId(projectId, pageable))
+        );
     }
 
     @WebAspect
@@ -78,9 +80,9 @@ public class JobsController {
     public RespModel<Jobs> findById(@RequestParam(name = "id") int id) {
         Jobs jobs = jobsService.findById(id);
         if (jobs != null) {
-            return new RespModel(RespEnum.SEARCH_OK, jobs);
+            return new RespModel<>(RespEnum.SEARCH_OK, jobs);
         } else {
-            return new RespModel(RespEnum.ID_NOT_FOUND);
+            return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }
     }
 }

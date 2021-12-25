@@ -1,6 +1,6 @@
 package com.sonic.simple.quartz;
 
-import com.sonic.simple.models.Jobs;
+import com.sonic.simple.models.domain.Jobs;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.models.interfaces.JobType;
 import com.sonic.simple.services.JobsService;
