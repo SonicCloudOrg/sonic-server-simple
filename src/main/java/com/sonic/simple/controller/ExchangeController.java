@@ -2,8 +2,8 @@ package com.sonic.simple.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.sonic.simple.config.WebAspect;
-import com.sonic.simple.models.Agents;
-import com.sonic.simple.models.Devices;
+import com.sonic.simple.models.domain.Agents;
+import com.sonic.simple.models.domain.Devices;
 import com.sonic.simple.models.http.RespEnum;
 import com.sonic.simple.models.http.RespModel;
 import com.sonic.simple.netty.NettyServer;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/transport/exchange")
 public class ExchangeController {
+
     @Autowired
     private DevicesService devicesService;
     @Autowired
@@ -25,7 +26,7 @@ public class ExchangeController {
 
     @WebAspect
     @GetMapping("/reboot")
-    public RespModel reboot(@RequestParam(name = "id") int id) {
+    public RespModel<String> reboot(@RequestParam(name = "id") int id) {
         Devices device = devicesService.findById(id);
         if (device!=null) {
             Agents agent = agentsService.findById(device.getAgentId());
@@ -35,12 +36,12 @@ public class ExchangeController {
                 jsonObject.put("udId", device.getUdId());
                 jsonObject.put("platform", device.getPlatform());
                 NettyServer.getMap().get(agent.getId()).writeAndFlush(jsonObject.toJSONString());
-                return new RespModel(2000, "发送成功！");
+                return new RespModel<>(2000, "发送成功！");
             } else {
-                return new RespModel(RespEnum.ID_NOT_FOUND);
+                return new RespModel<>(RespEnum.ID_NOT_FOUND);
             }
         } else {
-            return new RespModel(RespEnum.ID_NOT_FOUND);
+            return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }
     }
 }

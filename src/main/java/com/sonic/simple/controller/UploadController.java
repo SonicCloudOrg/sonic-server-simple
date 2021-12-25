@@ -37,9 +37,9 @@ public class UploadController {
                                          @RequestParam(name = "type") String type) throws IOException {
         String url = fileTool.upload(type, file);
         if (url != null) {
-            return new RespModel(RespEnum.UPLOAD_OK, url);
+            return new RespModel<>(RespEnum.UPLOAD_OK, url);
         } else {
-            return new RespModel(RespEnum.UPLOAD_ERROR);
+            return new RespModel<>(RespEnum.UPLOAD_ERROR);
         }
     }
 
@@ -67,9 +67,9 @@ public class UploadController {
         RespModel<String> responseModel;
         try {
             file.transferTo(local.getAbsoluteFile());
-            responseModel = new RespModel(RespEnum.UPLOAD_OK);
+            responseModel = new RespModel<>(RespEnum.UPLOAD_OK);
         } catch (FileAlreadyExistsException e) {
-            responseModel = new RespModel(RespEnum.UPLOAD_ERROR);
+            responseModel = new RespModel<>(RespEnum.UPLOAD_ERROR);
         }
         //如果当前是最后一个，就开始合并录像文件
         if (index == total - 1) {

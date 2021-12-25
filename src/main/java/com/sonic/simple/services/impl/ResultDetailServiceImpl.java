@@ -1,21 +1,20 @@
 package com.sonic.simple.services.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sonic.simple.dao.ResultDetailRepository;
-import com.sonic.simple.models.Devices;
-import com.sonic.simple.models.ResultDetail;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sonic.simple.mapper.ResultDetailMapper;
+import com.sonic.simple.models.domain.Devices;
+import com.sonic.simple.models.domain.ResultDetail;
 import com.sonic.simple.services.DevicesService;
 import com.sonic.simple.services.ResultDetailService;
 import com.sonic.simple.services.ResultsService;
+import com.sonic.simple.services.impl.base.SonicServiceImpl;
+import com.sonic.simple.tools.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,18 +23,11 @@ import java.util.List;
  * @date 2021/8/21 20:55
  */
 @Service
-public class ResultDetailServiceImpl implements ResultDetailService {
-    @Autowired
-    private ResultDetailRepository resultDetailRepository;
-    @Autowired
-    private DevicesService devicesService;
-    @Autowired
-    private ResultsService resultsService;
+public class ResultDetailServiceImpl extends SonicServiceImpl<ResultDetailMapper, ResultDetail> implements ResultDetailService {
 
-    @Override
-    public void save(ResultDetail resultDetail) {
-        resultDetailRepository.save(resultDetail);
-    }
+    @Autowired private ResultDetailMapper resultDetailMapper;
+    @Autowired private DevicesService devicesService;
+    @Autowired private ResultsService resultsService;
 
     @Override
     public void saveByTransport(JSONObject jsonMsg) {
@@ -48,7 +40,7 @@ public class ResultDetailServiceImpl implements ResultDetailService {
         resultInfo.setStatus(jsonMsg.getInteger("status"));
         resultInfo.setResultId(jsonMsg.getInteger("rid"));
         resultInfo.setCaseId(jsonMsg.getInteger("cid"));
-        resultInfo.setTime(jsonMsg.getDate("time"));
+        resultInfo.setTime(DateTool.Date2LocalDateTime(jsonMsg.getDate("time")));
         resultInfo.setDeviceId(resultDevice == null ? 0 : resultDevice.getId());
         save(resultInfo);
         if (jsonMsg.getString("msg").equals("status")) {
@@ -57,58 +49,70 @@ public class ResultDetailServiceImpl implements ResultDetailService {
     }
 
     @Override
-    public Page<ResultDetail> findAll(int resultId, int caseId, String type, int deviceId, Pageable pageable) {
-        Specification<ResultDetail> spc = (root, query, cb) -> {
-            List<Order> orders = new ArrayList<>();
-            orders.add(cb.asc(root.get("time")));
-            query.orderBy(orders);
-            List<Predicate> predicateList = new ArrayList<>();
-            if (resultId != 0) {
-                predicateList.add(cb.and(cb.equal(root.get("resultId"), resultId)));
-            }
-            if (caseId != 0) {
-                predicateList.add(cb.and(cb.equal(root.get("caseId"), caseId)));
-            }
-            if (type != null && type.length() > 0) {
-                predicateList.add(cb.and(cb.equal(root.get("type"), type)));
-            }
-            if (deviceId != 0) {
-                predicateList.add(cb.and(cb.equal(root.get("deviceId"), deviceId)));
-            }
-            Predicate[] p = new Predicate[predicateList.size()];
-            return query.where(predicateList.toArray(p)).getRestriction();
-        };
-        return resultDetailRepository.findAll(spc, pageable);
+    public Page<ResultDetail> findAll(int resultId, int caseId, String type, int deviceId, Page<ResultDetail> pageable) {
+
+        LambdaQueryChainWrapper<ResultDetail> lambdaQuery = lambdaQuery();
+
+        if (resultId != 0) {
+            lambdaQuery.eq(ResultDetail::getResultId, resultId);
+        }
+        if (caseId != 0) {
+            lambdaQuery.eq(ResultDetail::getCaseId, caseId);
+        }
+        if (type != null && type.length() > 0) {
+            lambdaQuery.eq(ResultDetail::getType, type);
+        }
+        if (deviceId != 0) {
+            lambdaQuery.eq(ResultDetail::getDeviceId, deviceId);
+        }
+
+        return lambdaQuery.orderByAsc(ResultDetail::getTime)
+                .page(pageable);
     }
 
     @Override
     public List<ResultDetail> findAll(int resultId, int caseId, String type, int deviceId) {
-        Specification<ResultDetail> spc = (root, query, cb) -> {
-            List<Order> orders = new ArrayList<>();
-            orders.add(cb.asc(root.get("time")));
-            query.orderBy(orders);
-            List<Predicate> predicateList = new ArrayList<>();
-            if (resultId != 0) {
-                predicateList.add(cb.and(cb.equal(root.get("resultId"), resultId)));
-            }
-            if (caseId != 0) {
-                predicateList.add(cb.and(cb.equal(root.get("caseId"), caseId)));
-            }
-            if (type != null && type.length() > 0) {
-                predicateList.add(cb.and(cb.equal(root.get("type"), type)));
-            }
-            if (deviceId != 0) {
-                predicateList.add(cb.and(cb.equal(root.get("deviceId"), deviceId)));
-            }
-            Predicate[] p = new Predicate[predicateList.size()];
-            return query.where(predicateList.toArray(p)).getRestriction();
-        };
-        return resultDetailRepository.findAll(spc);
+
+        LambdaQueryChainWrapper<ResultDetail> lambdaQuery = lambdaQuery();
+
+        if (resultId != 0) {
+            lambdaQuery.eq(ResultDetail::getResultId, resultId);
+        }
+        if (caseId != 0) {
+            lambdaQuery.eq(ResultDetail::getCaseId, caseId);
+        }
+        if (type != null && type.length() > 0) {
+            lambdaQuery.eq(ResultDetail::getType, type);
+        }
+        if (deviceId != 0) {
+            lambdaQuery.eq(ResultDetail::getDeviceId, deviceId);
+        }
+        return lambdaQuery.orderByAsc(ResultDetail::getTime).list();
     }
 
 
     @Override
     public void deleteByResultId(int resultId) {
-        resultDetailRepository.deleteByResultId(resultId);
+        baseMapper.delete(new QueryWrapper<ResultDetail>().eq("result_id", resultId));
+    }
+
+    @Override
+    public List<JSONObject> findTimeByResultIdGroupByCaseId(int resultId) {
+        return resultDetailMapper.findTimeByResultIdGroupByCaseId(resultId);
+    }
+
+    @Override
+    public List<JSONObject> findStatusByResultIdGroupByCaseId(int resultId) {
+        return resultDetailMapper.findStatusByResultIdGroupByCaseId(resultId);
+    }
+
+    @Override
+    public List<JSONObject> findTopCases(String startTime, String endTime, int projectId) {
+        return resultDetailMapper.findTopCases(startTime, endTime, projectId);
+    }
+
+    @Override
+    public List<JSONObject> findTopDevices(String startTime, String endTime, int projectId) {
+        return resultDetailMapper.findTopDevices(startTime, endTime, projectId);
     }
 }

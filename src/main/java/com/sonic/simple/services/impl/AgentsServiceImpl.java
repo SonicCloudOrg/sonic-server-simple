@@ -1,30 +1,34 @@
 package com.sonic.simple.services.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sonic.simple.dao.AgentsRepository;
-import com.sonic.simple.dao.DevicesRepository;
-import com.sonic.simple.models.Agents;
-import com.sonic.simple.models.Devices;
+import com.sonic.simple.mapper.AgentsMapper;
+import com.sonic.simple.models.domain.Agents;
+import com.sonic.simple.models.domain.Devices;
 import com.sonic.simple.models.interfaces.AgentStatus;
 import com.sonic.simple.models.interfaces.DeviceStatus;
 import com.sonic.simple.services.AgentsService;
+import com.sonic.simple.services.DevicesService;
+import com.sonic.simple.services.impl.base.SonicServiceImpl;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AgentsServiceImpl implements AgentsService {
+public class AgentsServiceImpl extends SonicServiceImpl<AgentsMapper, Agents> implements AgentsService  {
+
     @Autowired
-    private AgentsRepository agentsRepository;
-    @Autowired
-    private DevicesRepository devicesRepository;
+    private DevicesService devicesService;
+    @Resource
+    private AgentsMapper agentsMapper;
 
     @Override
     public List<Agents> findAgents() {
-        return agentsRepository.findAll();
+        return list();
     }
 
     @Override
@@ -38,53 +42,53 @@ public class AgentsServiceImpl implements AgentsService {
             agents.setPort(0);
             agents.setSystemType("未知");
             agents.setSecretKey(UUID.randomUUID().toString());
-            agentsRepository.save(agents);
+            save(agents);
         } else {
-            if (agentsRepository.existsById(id)) {
-                Agents a = agentsRepository.findById(id).get();
-                a.setName(name);
-                agentsRepository.save(a);
+            Agents ag = findById(id);
+            if (ObjectUtils.isNotEmpty(ag)) {
+                ag.setName(name);
+                save(ag);
             }
         }
     }
 
     public void resetDevice(int id) {
-        List<Devices> devicesList = devicesRepository.findByAgentId(id);
+        List<Devices> devicesList = devicesService.listByAgentId(id);
         for (Devices devices : devicesList) {
             if ((!devices.getStatus().equals(DeviceStatus.OFFLINE))
                     && (!devices.getStatus().equals(DeviceStatus.DISCONNECTED))) {
                 devices.setStatus(DeviceStatus.OFFLINE);
-                devicesRepository.save(devices);
+                devicesService.save(devices);
             }
         }
     }
 
     @Override
-    public void save(JSONObject jsonObject) {
+    public void saveAgents(JSONObject jsonObject) {
         if (jsonObject.getInteger("agentId") != null && jsonObject.getInteger("agentId") != 0) {
-            if (agentsRepository.existsById(jsonObject.getInteger("agentId"))) {
-                Agents oldAgent = agentsRepository.findById(jsonObject.getInteger("agentId")).get();
+            if (existsById(jsonObject.getInteger("agentId"))) {
+                Agents oldAgent = findById(jsonObject.getInteger("agentId"));
                 oldAgent.setStatus(AgentStatus.ONLINE);
                 oldAgent.setHost(jsonObject.getString("host"));
                 oldAgent.setPort(jsonObject.getInteger("port"));
                 oldAgent.setVersion(jsonObject.getString("version"));
                 oldAgent.setSystemType(jsonObject.getString("systemType"));
-                agentsRepository.save(oldAgent);
+                save(oldAgent);
             }
         }
     }
 
     @Override
-    public void save(Agents agents) {
-        agentsRepository.save(agents);
+    public void saveAgents(Agents agents) {
+        save(agents);
     }
 
     @Override
     public boolean offLine(int id) {
-        if (agentsRepository.existsById(id)) {
-            Agents agentOffLine = agentsRepository.findById(id).get();
+        if (existsById(id)) {
+            Agents agentOffLine = findById(id);
             agentOffLine.setStatus(AgentStatus.OFFLINE);
-            agentsRepository.save(agentOffLine);
+            save(agentOffLine);
             resetDevice(agentOffLine.getId());
             return true;
         } else {
@@ -94,7 +98,7 @@ public class AgentsServiceImpl implements AgentsService {
 
     @Override
     public int auth(String key) {
-        Agents agents = agentsRepository.findBySecretKey(key);
+        Agents agents = findBySecretKey(key);
         if (agents == null) {
             return 0;
         } else {
@@ -105,19 +109,17 @@ public class AgentsServiceImpl implements AgentsService {
 
     @Override
     public String findKeyById(int id) {
-        if (agentsRepository.existsById(id)) {
-            return agentsRepository.findById(id).get().getSecretKey();
-        } else {
-            return null;
-        }
+        Optional<Agents> agents = lambdaQuery().eq(Agents::getId, id).select(Agents::getSecretKey).oneOpt();
+        return agents.map(Agents::getSecretKey).orElse(null);
     }
 
     @Override
     public Agents findById(int id) {
-        if (agentsRepository.existsById(id)) {
-            return agentsRepository.findById(id).get();
-        } else {
-            return null;
-        }
+        return baseMapper.selectById(id);
+    }
+
+    @Override
+    public Agents findBySecretKey(String secretKey) {
+        return lambdaQuery().eq(Agents::getSecretKey, secretKey).one();
     }
 }
