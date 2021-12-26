@@ -23,14 +23,12 @@ spring:
       initialize-schema: never
   datasource:
     initialization-mode: always
+    schema:
+      - classpath:data.sql
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://81.70.118.76:3306/sonic-test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&autoReconnect=true&serverTimezone=GMT%2b8
     username: sonic-test
     password: 123456
-  # 保留配置 ，用于执行resources目录下的data.sql
-  jpa:
-    hibernate:
-      ddl-auto: update
 # mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapping/*.xml, classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml

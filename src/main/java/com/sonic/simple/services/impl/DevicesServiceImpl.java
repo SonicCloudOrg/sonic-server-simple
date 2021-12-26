@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonic.simple.mapper.DevicesMapper;
 import com.sonic.simple.models.domain.Devices;
+import com.sonic.simple.models.domain.Users;
 import com.sonic.simple.models.http.DeviceDetailChange;
 import com.sonic.simple.models.http.UpdateDeviceImg;
 import com.sonic.simple.models.interfaces.DeviceStatus;
 import com.sonic.simple.models.params.DevicesSearchParams;
 import com.sonic.simple.services.DevicesService;
+import com.sonic.simple.services.UsersService;
 import com.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
     @Autowired
     private DevicesMapper devicesMapper;
 
+    @Autowired
+    private UsersService usersService;
+
     @Override
     public boolean saveDetail(DeviceDetailChange deviceDetailChange) {
         if (existsById(deviceDetailChange.getId())) {
@@ -41,6 +46,15 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void updateDevicesUser(JSONObject jsonObject) {
+        Users users = usersService.getUserInfo(jsonObject.getString("token"));
+        Devices devices = findByAgentIdAndUdId(jsonObject.getInteger("agentId"),
+                jsonObject.getString("udId"));
+        devices.setUser(users.getUserName());
+        save(devices);
     }
 
     @Override
