@@ -73,7 +73,7 @@ public class ResultDetail implements Serializable, TypeConverter<ResultDetail, R
     @ApiModelProperty(value = "时间", example = "16:00:00")
     @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
     @TableField
-    @Column(type = MySqlTypeConstant.DATETIME, isNull = false, comment = "步骤执行状态")
+    @Column(type = MySqlTypeConstant.TIMESTAMP, isNull = false, comment = "步骤执行状态")
     @Index(value = "IDX_TIME", columns = {"time"})
     private Date time;
 
