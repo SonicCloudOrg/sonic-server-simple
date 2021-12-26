@@ -18,6 +18,8 @@ import java.util.List;
 public interface DevicesService extends IService<Devices> {
     boolean saveDetail(DeviceDetailChange deviceDetailChange);
 
+    void updateDevicesUser(JSONObject jsonObject);
+
     void updateImg(UpdateDeviceImg updateDeviceImg);
 
     Page<Devices> findAll(List<String> iOSVersion, List<String> androidVersion, List<String> manufacturer,

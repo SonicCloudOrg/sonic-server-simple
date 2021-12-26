@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author JayWenStar
@@ -43,13 +43,13 @@ public class Results implements Serializable, TypeConverter<Results, ResultsDTO>
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)
     @Column(value = "create_time", type = MySqlTypeConstant.DATETIME, isNull = false, comment = "任务创建时间")
-    LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty(value = "结束时间", example = "2021-08-15 11:36:00")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @Column(value = "end_time", type = MySqlTypeConstant.DATETIME, comment = "任务结束时间")
-    LocalDateTime endTime;
+    private Date endTime;
 
     @TableField
     @Column(value = "project_id", isNull = false, comment = "所属项目id")

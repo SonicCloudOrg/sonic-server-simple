@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author JayWenStar
@@ -41,7 +41,7 @@ public class Projects implements Serializable, TypeConverter<Projects, ProjectsD
     @TableField(fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(value = "edit_time", type = MySqlTypeConstant.DATETIME, comment = "更改时间")
-    private LocalDateTime editTime;
+    private Date editTime;
 
     @TableField
     @Column(value = "project_des", isNull = false, comment = "项目描述")

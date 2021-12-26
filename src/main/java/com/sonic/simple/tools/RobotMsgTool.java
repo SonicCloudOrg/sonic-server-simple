@@ -1,6 +1,5 @@
 package com.sonic.simple.tools;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.sonic.simple.models.interfaces.RobotType;
 import org.slf4j.Logger;

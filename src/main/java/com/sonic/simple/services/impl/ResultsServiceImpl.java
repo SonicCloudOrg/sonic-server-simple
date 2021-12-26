@@ -14,7 +14,6 @@ import com.sonic.simple.models.interfaces.ResultDetailStatus;
 import com.sonic.simple.models.interfaces.ResultStatus;
 import com.sonic.simple.services.*;
 import com.sonic.simple.services.impl.base.SonicServiceImpl;
-import com.sonic.simple.tools.DateTool;
 import com.sonic.simple.tools.RobotMsgTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +75,7 @@ public class ResultsServiceImpl extends SonicServiceImpl<ResultsMapper, Results>
         long timeMillis = Calendar.getInstance().getTimeInMillis();
         long time = timeMillis - day * 86400000L;
         List<Results> resultsList = lambdaQuery()
-                .lt(Results::getCreateTime, DateTool.Date2LocalDateTime(new Date(time)))
+                .lt(Results::getCreateTime, new Date(time))
                 .list();
         cachedThreadPool.execute(() -> {
             for (Results results : resultsList) {
@@ -313,7 +312,7 @@ public class ResultsServiceImpl extends SonicServiceImpl<ResultsMapper, Results>
             save(results);
             //发收相同的话，表明测试结束了
             if (results.getReceiveMsgCount() == results.getSendMsgCount()) {
-                results.setEndTime(LocalDateTime.now());
+                results.setEndTime(new Date());
                 save(results);
                 Projects projects = projectsService.findById(results.getProjectId());
                 if (projects != null && projects.getRobotType() != 0 && projects.getRobotToken().length() > 0 && projects.getRobotSecret().length() > 0) {

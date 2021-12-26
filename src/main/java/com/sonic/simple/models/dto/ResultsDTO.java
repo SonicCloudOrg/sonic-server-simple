@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @ApiModel("测试结果模型")
 @Data
@@ -48,9 +48,9 @@ public class ResultsDTO implements Serializable, TypeConverter<ResultsDTO, Resul
 
     @ApiModelProperty(value = "创建时间", example = "2021-08-15 11:36:00")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    LocalDateTime createTime;
+    Date createTime;
 
     @ApiModelProperty(value = "结束时间", example = "2021-08-15 11:36:00")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    LocalDateTime endTime;
+    Date endTime;
 }

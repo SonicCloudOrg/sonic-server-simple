@@ -42,19 +42,15 @@ public class TestCasesDTO implements Serializable, TypeConverter<TestCasesDTO, T
     @ApiModelProperty(value = "项目id", required = true, example = "1")
     Integer projectId;
 
-    @NotBlank
     @ApiModelProperty(value = "模块名称", required = true, example = "xxx模块")
     String module;
 
-    @NotBlank
     @ApiModelProperty(value = "项目迭代名称", required = true, example = "v1.0.0需求增加")
     String version;
 
-    @NotBlank
     @ApiModelProperty(value = "用例描述", required = true, example = "xxx测试用例描述")
     String des;
 
-    @NotBlank
     @ApiModelProperty(value = "用例设计人", required = true, example = "YiXunZhou")
     String designer;
 
