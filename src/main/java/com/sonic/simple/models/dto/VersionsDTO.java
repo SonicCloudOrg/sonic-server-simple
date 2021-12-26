@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @ApiModel("版本迭代DTO 模型")
 @Data
@@ -39,5 +39,5 @@ public class VersionsDTO implements Serializable, TypeConverter<VersionsDTO, Ver
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(value = "日期", example = "2021-08-15T16:00:00.000+00:00")
-    LocalDateTime createTime;
+    Date createTime;
 }

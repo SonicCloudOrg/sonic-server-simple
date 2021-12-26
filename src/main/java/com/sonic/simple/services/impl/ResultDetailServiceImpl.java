@@ -11,7 +11,6 @@ import com.sonic.simple.services.DevicesService;
 import com.sonic.simple.services.ResultDetailService;
 import com.sonic.simple.services.ResultsService;
 import com.sonic.simple.services.impl.base.SonicServiceImpl;
-import com.sonic.simple.tools.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class ResultDetailServiceImpl extends SonicServiceImpl<ResultDetailMapper
         resultInfo.setStatus(jsonMsg.getInteger("status"));
         resultInfo.setResultId(jsonMsg.getInteger("rid"));
         resultInfo.setCaseId(jsonMsg.getInteger("cid"));
-        resultInfo.setTime(DateTool.Date2LocalDateTime(jsonMsg.getDate("time")));
+        resultInfo.setTime(jsonMsg.getDate("time"));
         resultInfo.setDeviceId(resultDevice == null ? 0 : resultDevice.getId());
         save(resultInfo);
         if (jsonMsg.getString("msg").equals("status")) {

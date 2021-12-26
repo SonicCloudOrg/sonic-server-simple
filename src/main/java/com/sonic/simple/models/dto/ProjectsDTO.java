@@ -24,28 +24,28 @@ import java.util.Date;
 public class ProjectsDTO implements Serializable, TypeConverter<ProjectsDTO, Projects> {
 
     @ApiModelProperty(value = "id", example = "1")
-    Integer id;
+    private Integer id;
 
     @NotBlank
     @ApiModelProperty(value = "项目名称", required = true, example = "test")
-    String projectName;
+    private String projectName;
 
     @ApiModelProperty(value = "项目描述", required = true, example = "Sonic项目描述")
-    String projectDes;
+    private String projectDes;
 
     @ApiModelProperty(value = "机器人类型", required = true, example = "1")
-    Integer robotType;
+    private Integer robotType;
 
     @ApiModelProperty(value = "机器人token", required = true, example = "http://dingTalk.com?token=*****")
-    String robotToken;
+    private String robotToken;
 
     @ApiModelProperty(value = "机器人加签密钥", required = true, example = "qwe***")
-    String robotSecret;
+    private String robotSecret;
 
     @ApiModelProperty(value = "项目图标", required = true, example = "http://img.jpg")
-    String projectImg;
+    private String projectImg;
 
     @ApiModelProperty(value = "最后修改日期", example = "2021-08-15 11:23:00")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    Date editTime;
+    private Date editTime;
 }

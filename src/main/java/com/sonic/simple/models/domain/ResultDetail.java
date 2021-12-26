@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author JayWenStar
@@ -75,7 +75,7 @@ public class ResultDetail implements Serializable, TypeConverter<ResultDetail, R
     @TableField
     @Column(type = MySqlTypeConstant.DATETIME, isNull = false, comment = "步骤执行状态")
     @Index(value = "IDX_TIME", columns = {"time"})
-    private LocalDateTime time;
+    private Date time;
 
     @TableField
     @Column(comment = "测试结果详情类型", defaultValue = "")

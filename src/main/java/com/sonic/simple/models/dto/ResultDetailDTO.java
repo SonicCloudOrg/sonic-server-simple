@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @ApiModel("测试结果详情DTO 模型")
 @Data
@@ -23,30 +23,30 @@ import java.time.LocalDateTime;
 public class ResultDetailDTO implements Serializable, TypeConverter<ResultDetailDTO, ResultDetail> {
 
     @ApiModelProperty(value = "id", example = "1")
-    Integer id;
+    private Integer id;
 
     @ApiModelProperty(value = "测试用例id", example = "1")
-    Integer caseId;
+    private Integer caseId;
 
     @ApiModelProperty(value = "测试结果id", example = "1")
-    Integer resultId;
+    private Integer resultId;
 
     @ApiModelProperty(value = "测试结果详情类型", example = "step")
-    String type;
+    private String type;
 
     @ApiModelProperty(value = "测试结果详情描述", example = "点击xxx")
-    String des;
+    private String des;
 
     @ApiModelProperty(value = "测试结果详情状态", example = "1")
-    Integer status;
+    private Integer status;
 
     @ApiModelProperty(value = "设备id", example = "1")
-    Integer deviceId;
+    private Integer deviceId;
 
     @ApiModelProperty(value = "测试结果详情详细日志", example = "点击xpath://*[@text()='xxx']")
-    String log;
+    private String log;
 
     @ApiModelProperty(value = "时间", example = "16:00:00")
     @JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
-    LocalDateTime time;
+    private Date time;
 }

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 自动填充
@@ -21,16 +21,16 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         log.debug("start insert fill ....");
-        this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "time", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "editTime", LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, "createTime", Date.class, new Date());
+        this.strictInsertFill(metaObject, "updateTime", Date.class, new Date());
+        this.strictInsertFill(metaObject, "time", Date.class, new Date());
+        this.strictInsertFill(metaObject, "editTime", Date.class, new Date());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         log.debug("start update fill ....");
-        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
-        this.strictUpdateFill(metaObject, "editTime", LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, "updateTime", Date.class, new Date());
+        this.strictUpdateFill(metaObject, "editTime", Date.class, new Date());
     }
 }

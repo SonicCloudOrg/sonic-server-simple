@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author JayWenStar
@@ -43,7 +43,7 @@ public class Versions implements Serializable, TypeConverter<Versions, VersionsD
     @ApiModelProperty(value = "日期", example = "2021-08-15T16:00:00.000+00:00")
     @TableField(fill = FieldFill.INSERT)
     @Column(value = "create_time", type = MySqlTypeConstant.DATETIME, isNull = false, comment = "创建时间内")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @TableField
     @Column(value = "project_id", isNull = false, comment = "所属项目id")
