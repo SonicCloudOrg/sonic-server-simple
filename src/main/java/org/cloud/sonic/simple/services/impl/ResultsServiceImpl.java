@@ -13,7 +13,6 @@ import org.cloud.sonic.simple.models.dto.TestSuitesDTO;
 import org.cloud.sonic.simple.models.interfaces.ResultDetailStatus;
 import org.cloud.sonic.simple.models.interfaces.ResultStatus;
 import org.cloud.sonic.simple.services.*;
-import org.cloud.sonic.simple.services.*;
 import org.cloud.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.cloud.sonic.simple.tools.RobotMsgTool;
 import org.slf4j.Logger;
