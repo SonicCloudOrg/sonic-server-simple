@@ -26,9 +26,9 @@ spring:
     schema:
       - classpath:data.sql
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://81.70.118.76:3306/sonic-test?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&autoReconnect=true&serverTimezone=GMT%2b8
-    username: sonic-test
-    password: 123456
+    url: jdbc:mysql://localhost:3306/sonic?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&autoReconnect=true&serverTimezone=GMT%2b8
+    username: root
+    password: Sonic!@#123
 # mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapping/*.xml, classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
@@ -45,7 +45,7 @@ mybatis-plus:
 # 数据库自动生成表
 actable:
   model:
-    pack: com.sonic.simple.models.domain
+    pack: org.cloud.sonic.simple.models.domain
   table:
     auto: update
   database:
