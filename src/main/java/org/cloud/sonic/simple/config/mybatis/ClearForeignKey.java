@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * 清除历史遗留的外键
+ *
  * @author JayWenStar
  * @date 2021/12/26 1:39 上午
  */
@@ -28,6 +29,7 @@ public class ClearForeignKey implements ApplicationListener<DataSourceSchemaCrea
         String findFKSql = "SELECT CONCAT('ALTER TABLE ', TABLE_NAME,' DROP FOREIGN KEY ',CONSTRAINT_NAME) as ddl " +
                 "FROM information_schema.TABLE_CONSTRAINTS c " +
                 "WHERE c.TABLE_SCHEMA='%s' AND c.CONSTRAINT_TYPE='FOREIGN KEY'";
+        String findFKSql2 = "UPDATE qrtz_job_details set JOB_CLASS_NAME='org.cloud.sonic.simple.quartz.QuartzJob'";
         List<String> deleteSqlList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             try (Statement statement = connection.createStatement()) {
@@ -42,6 +44,12 @@ public class ClearForeignKey implements ApplicationListener<DataSourceSchemaCrea
                 ResultSet resultSet2 = statement.executeQuery(String.format(findFKSql, dataBase));
                 while (resultSet2.next()) {
                     deleteSqlList.add(resultSet2.getString("ddl"));
+                }
+
+                // 版本兼容sql
+                Boolean resultSet3 = statement.execute(String.format(findFKSql2, dataBase));
+                if(!resultSet3){
+                    log.info("迁移数据sql执行失败");
                 }
 
                 // 执行删除外键sql
