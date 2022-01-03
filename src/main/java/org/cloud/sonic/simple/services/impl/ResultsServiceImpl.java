@@ -13,7 +13,6 @@ import org.cloud.sonic.simple.models.dto.TestSuitesDTO;
 import org.cloud.sonic.simple.models.interfaces.ResultDetailStatus;
 import org.cloud.sonic.simple.models.interfaces.ResultStatus;
 import org.cloud.sonic.simple.services.*;
-import org.cloud.sonic.simple.services.*;
 import org.cloud.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.cloud.sonic.simple.tools.RobotMsgTool;
 import org.slf4j.Logger;
@@ -95,6 +94,7 @@ public class ResultsServiceImpl extends SonicServiceImpl<ResultsMapper, Results>
         Results results = findById(id);
         if (results != null) {
             results.setReceiveMsgCount(results.getReceiveMsgCount() + 1);
+            save(results);
             setStatus(results);
         }
     }
@@ -305,11 +305,10 @@ public class ResultsServiceImpl extends SonicServiceImpl<ResultsMapper, Results>
             status = ResultStatus.PASS;
         }
         //状态赋予等级最高的
-        results.setStatus(status > results.getStatus() ? status : results.getStatus());
+        results.setStatus(Math.max(status, results.getStatus()));
         if (results.getSendMsgCount() < 1 && sucCount == 0 && failCount == 0 && warnCount == 0) {
             delete(results.getId());
         } else {
-            save(results);
             //发收相同的话，表明测试结束了
             if (results.getReceiveMsgCount() == results.getSendMsgCount()) {
                 results.setEndTime(new Date());
