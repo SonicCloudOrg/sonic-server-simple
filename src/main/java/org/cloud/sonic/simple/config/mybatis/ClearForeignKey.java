@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 清除历史遗留的外键
+ * 清除历史遗留的外键、版本迁移兼容sql
  *
- * @author JayWenStar
+ * @author JayWenStar, Eason
  * @date 2021/12/26 1:39 上午
  */
 @Component
@@ -26,10 +26,15 @@ public class ClearForeignKey implements ApplicationListener<DataSourceSchemaCrea
     public void onApplicationEvent(DataSourceSchemaCreatedEvent event) {
         DataSource dataSource = (DataSource) event.getSource();
         String dataBase = "";
+        //兼容v1.3.0-beta1及以下版本外键
         String findFKSql = "SELECT CONCAT('ALTER TABLE ', TABLE_NAME,' DROP FOREIGN KEY ',CONSTRAINT_NAME) as ddl " +
                 "FROM information_schema.TABLE_CONSTRAINTS c " +
                 "WHERE c.TABLE_SCHEMA='%s' AND c.CONSTRAINT_TYPE='FOREIGN KEY'";
-        String findFKSql2 = "UPDATE QRTZ_JOB_DETAILS set JOB_CLASS_NAME='org.cloud.sonic.simple.quartz.QuartzJob'";
+        //兼容v1.3.0-beta1及以下版本className更改
+        String transSql1 = "UPDATE QRTZ_JOB_DETAILS set JOB_CLASS_NAME='org.cloud.sonic.simple.quartz.QuartzJob'";
+
+        //兼容v1.2.0-beta3及以下版本element value长度更改
+        String transSql2 = "ALTER TABLE elements MODIFY COLUMN ele_value LONGTEXT";
         List<String> deleteSqlList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             try (Statement statement = connection.createStatement()) {
@@ -47,9 +52,13 @@ public class ClearForeignKey implements ApplicationListener<DataSourceSchemaCrea
                 }
 
                 // 版本兼容sql
-                Boolean resultSet3 = statement.execute(String.format(findFKSql2, dataBase));
-                if(!resultSet3){
-                    log.info("迁移数据sql执行失败");
+                Boolean resultSet3 = statement.execute(String.format(transSql1, dataBase));
+                if (!resultSet3) {
+                    log.info(String.format("迁移数据sql执行失败，%s", transSql1));
+                }
+                Boolean resultSet4 = statement.execute(String.format(transSql2, dataBase));
+                if (!resultSet4) {
+                    log.info(String.format("迁移数据sql执行失败，%s", transSql2));
                 }
 
                 // 执行删除外键sql
