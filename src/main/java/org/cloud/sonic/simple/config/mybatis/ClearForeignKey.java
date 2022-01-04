@@ -34,7 +34,7 @@ public class ClearForeignKey implements ApplicationListener<DataSourceSchemaCrea
         String transSql1 = "UPDATE QRTZ_JOB_DETAILS set JOB_CLASS_NAME='org.cloud.sonic.simple.quartz.QuartzJob'";
 
         //兼容v1.2.0-beta3及以下版本element value长度更改
-        String transSql2 = "ALTER TABLE elements MODIFY COLUMN ele_value LONGTEXT";
+//        String transSql2 = "ALTER TABLE elements MODIFY COLUMN ele_value LONGTEXT";
         List<String> deleteSqlList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             try (Statement statement = connection.createStatement()) {
@@ -56,10 +56,10 @@ public class ClearForeignKey implements ApplicationListener<DataSourceSchemaCrea
                 if (!resultSet3) {
                     log.info(String.format("迁移数据sql执行失败，%s", transSql1));
                 }
-                Boolean resultSet4 = statement.execute(String.format(transSql2, dataBase));
-                if (!resultSet4) {
-                    log.info(String.format("迁移数据sql执行失败，%s", transSql2));
-                }
+//                Boolean resultSet4 = statement.execute(String.format(transSql2, dataBase));
+//                if (!resultSet4) {
+//                    log.info(String.format("迁移数据sql执行失败，%s", transSql2));
+//                }
 
                 // 执行删除外键sql
                 for (String deleteSql : deleteSqlList) {
