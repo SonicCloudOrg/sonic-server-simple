@@ -1,8 +1,10 @@
 package org.cloud.sonic.simple.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacv.FrameRecorder;
 import org.cloud.sonic.simple.config.WebAspect;
 import org.cloud.sonic.simple.cv.*;
+import org.cloud.sonic.simple.models.base.FindResult;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.tools.FileTool;
@@ -18,10 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.List;
+import java.util.UUID;
 
 @Api(tags = "文件上传")
 @RestController
 @RequestMapping("/api/folder/upload")
+@Slf4j
 public class UploadController {
     @Autowired
     private FileTool fileTool;
@@ -90,20 +94,48 @@ public class UploadController {
         return responseModel;
     }
 
-//    @WebAspect
-//    @ApiOperation(value = "上传文件", notes = "上传文件到服务器")
-//    @ApiImplicitParams(value = {
+    @WebAspect
+    @ApiOperation(value = "cv定位", notes = "三种定位方式")
+    @ApiImplicitParams(value = {
 //            @ApiImplicitParam(name = "file", value = "文件", dataTypeClass = MultipartFile.class),
 //            @ApiImplicitParam(name = "type", value = "文件类型(只能为keepFiles、imageFiles、recordFiles、logFiles、packageFiles)", dataTypeClass = String.class),
-//    })
-//    @PostMapping
-//    public RespModel<String> uploadFiles(@RequestParam(name = "file") MultipartFile file,
-//                                         @RequestParam(name = "type") String type) throws IOException {
-//        String url = fileTool.upload(type, file);
-//        if (url != null) {
-//            return new RespModel<>(RespEnum.UPLOAD_OK, url);
-//        } else {
-//            return new RespModel<>(RespEnum.UPLOAD_ERROR);
-//        }
-//    }
+    })
+    @PostMapping("/cv/finder")
+    public RespModel<FindResult> finder(@RequestParam(name = "file1") MultipartFile file1,
+                                        @RequestParam(name = "file2", required = false) MultipartFile file2,
+                                        @RequestParam(name = "type") String type) throws IOException {
+        File local1 = new File("temp" + File.separator +
+                UUID.randomUUID() + file1.getOriginalFilename()
+                .substring(file1.getOriginalFilename().lastIndexOf(".")));
+        try {
+            file1.transferTo(local1.getAbsoluteFile());
+        } catch (FileAlreadyExistsException e) {
+            log.error(e.getMessage());
+        }
+        File local2 = new File("temp" + File.separator +
+                UUID.randomUUID() + file2.getOriginalFilename()
+                .substring(file2.getOriginalFilename().lastIndexOf(".")));
+        try {
+            file2.transferTo(local2.getAbsoluteFile());
+        } catch (FileAlreadyExistsException e) {
+            log.error(e.getMessage());
+        }
+        FindResult findResult = null;
+        switch (type) {
+            case "akaze":
+                findResult = akazeFinder.getAKAZEFindResult(local1, local2);
+                break;
+            case "sift":
+                findResult = siftFinder.getSIFTFindResult(local1, local2);
+                break;
+            case "tem":
+                findResult = temMatcher.getTemMatchResult(local1, local2);
+                break;
+        }
+        if (findResult != null) {
+            return new RespModel(RespEnum.HANDLE_OK, findResult);
+        } else {
+            return new RespModel<>(RespEnum.UNKNOWN_ERROR);
+        }
+    }
 }

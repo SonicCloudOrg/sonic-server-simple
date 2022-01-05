@@ -172,18 +172,96 @@
         <relativePath/>
     </parent>
 
+    <!--  通过这个配置来决定打包使用哪一个环境  -->
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>windows-x86_64</id>
             <properties>
-                <profileActive>dev</profileActive>
+                <profileActive>windows-x86_64</profileActive>
             </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>ffmpeg</artifactId>
+                    <version>4.2.2-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>javacpp</artifactId>
+                    <version>1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>opencv</artifactId>
+                    <version>4.3.0-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>openblas</artifactId>
+                    <version>0.3.9-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>tesseract</artifactId>
+                    <version>4.1.1-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>leptonica</artifactId>
+                    <version>1.79.0-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+            </dependencies>
         </profile>
+
         <profile>
-            <id>prod</id>
+            <id>macosx-x86_64</id>
             <properties>
-                <profileActive>prod</profileActive>
+                <profileActive>macosx-x86_64</profileActive>
             </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>ffmpeg</artifactId>
+                    <version>4.2.2-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>javacpp</artifactId>
+                    <version>1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>opencv</artifactId>
+                    <version>4.3.0-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>openblas</artifactId>
+                    <version>0.3.9-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>tesseract</artifactId>
+                    <version>4.1.1-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>leptonica</artifactId>
+                    <version>1.79.0-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 

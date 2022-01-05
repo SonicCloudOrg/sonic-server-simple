@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -32,7 +33,7 @@ public class SIFTFinder {
     @Autowired
     private FileTool fileTool;
 
-    public FindResult getSIFTFindResult(File temFile, File beforeFile) throws Exception {
+    public FindResult getSIFTFindResult(File temFile, File beforeFile) throws IOException {
         Mat image01 = imread(beforeFile.getAbsolutePath());
         Mat image02 = imread(temFile.getAbsolutePath());
 
