@@ -68,7 +68,7 @@ public class UploadController {
             @ApiImplicitParam(name = "total", value = "index总数", dataTypeClass = Integer.class),
     })
     @PostMapping("/recordFiles")
-    public RespModel<String> uploadRecord(@RequestBody List<byte[]> bytes,
+    public RespModel<String> uploadRecord(@RequestParam(name = "bytes") List<byte[]> bytes,
                                           @RequestParam(name = "uuid") String uuid,
                                           @RequestParam(name = "width") int width,
                                           @RequestParam(name = "height") int height,
@@ -89,7 +89,7 @@ public class UploadController {
         }
         //如果当前是最后一个，就开始合并录像文件
         if (index == total - 1) {
-            responseModel.setData(fileTool.merge(uuid, uuid, total));
+            responseModel.setData(fileTool.merge(uuid, uuid + ".mp4", total));
         }
         return responseModel;
     }
@@ -102,7 +102,7 @@ public class UploadController {
     })
     @PostMapping("/cv/finder")
     public RespModel<FindResult> finder(@RequestParam(name = "file1") MultipartFile file1,
-                                        @RequestParam(name = "file2", required = false) MultipartFile file2,
+                                        @RequestParam(name = "file2") MultipartFile file2,
                                         @RequestParam(name = "type") String type) throws IOException {
         File local1 = new File("temp" + File.separator +
                 UUID.randomUUID() + file1.getOriginalFilename()
