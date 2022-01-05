@@ -22,10 +22,8 @@ import java.util.List;
  */
 @Component
 public class RecordHandler {
-    public static String record(List<byte[]> images, int width, int height, int chunk, int total) throws FrameRecorder.Exception {
+    public void record(File file, List<byte[]> images, int width, int height) throws FrameRecorder.Exception {
         synchronized (RecordHandler.class) {
-            long time = Calendar.getInstance().getTimeInMillis();
-            File file = new File("temp" + File.separator + time + ".mp4");
             FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(file.getAbsoluteFile(), width, height);
             recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
             recorder.setFrameRate(24);
@@ -48,10 +46,6 @@ public class RecordHandler {
                 recorder.stop();
                 recorder.release();
             }
-            if (chunk == total - 1) {
-
-            }
-//            return UploadTools.uploadPatchRecord(file);
         }
     }
 }
