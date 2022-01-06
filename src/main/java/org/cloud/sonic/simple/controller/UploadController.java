@@ -62,34 +62,34 @@ public class UploadController {
     @WebAspect
     @ApiOperation(value = "上传文件（录像分段上传）", notes = "上传文件到服务器")
     @ApiImplicitParams(value = {
-//            @ApiImplicitParam(name = "file", value = "文件", dataTypeClass = MultipartFile.class),
+            @ApiImplicitParam(name = "file", value = "文件", dataTypeClass = MultipartFile.class),
             @ApiImplicitParam(name = "uuid", value = "文件uuid", dataTypeClass = String.class),
             @ApiImplicitParam(name = "index", value = "当前index", dataTypeClass = Integer.class),
             @ApiImplicitParam(name = "total", value = "index总数", dataTypeClass = Integer.class),
     })
     @PostMapping("/recordFiles")
-    public RespModel<String> uploadRecord(@RequestParam(name = "bytes") List<byte[]> bytes,
+    public RespModel<String> uploadRecord(@RequestParam(name = "file") MultipartFile file,
                                           @RequestParam(name = "uuid") String uuid,
-                                          @RequestParam(name = "width") int width,
-                                          @RequestParam(name = "height") int height,
                                           @RequestParam(name = "index") int index,
-                                          @RequestParam(name = "total") int total) {
+                                          @RequestParam(name = "total") int total) throws IOException {
         //先创建对应uuid的文件夹
         File uuidFolder = new File("recordFiles" + File.separator + uuid);
         if (!uuidFolder.exists()) {
             uuidFolder.mkdirs();
         }
-        File local = new File(uuidFolder.getPath() + File.separator + index + ".mp4");
+        String fileName = file.getOriginalFilename();
+        String newName = fileName.substring(0, fileName.indexOf(".mp4")) + "-" + index + ".mp4";
+        File local = new File(uuidFolder.getPath() + File.separator + newName);
         RespModel<String> responseModel;
         try {
-            recordHandler.record(local, bytes, width, height);
+            file.transferTo(local.getAbsoluteFile());
             responseModel = new RespModel<>(RespEnum.UPLOAD_OK);
-        } catch (FrameRecorder.Exception e) {
+        } catch (FileAlreadyExistsException e) {
             responseModel = new RespModel<>(RespEnum.UPLOAD_ERROR);
         }
         //如果当前是最后一个，就开始合并录像文件
-        if (total == 1) {
-            responseModel.setData(fileTool.merge(uuid, uuid + ".mp4", total));
+        if (index == total - 1) {
+            responseModel.setData(fileTool.merge(uuid, file.getOriginalFilename(), total));
         }
         return responseModel;
     }

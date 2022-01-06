@@ -134,7 +134,7 @@ public class FileTool {
             }
             for (int i = 0; i < fileCount; i++) {
                 //开始读取碎片文件
-                String newName =  i + ".mp4";
+                String newName = fileName.substring(0, fileName.indexOf(".mp4")) + "-" + i + ".mp4";
                 File patchFile = new File(uuidFolder.getPath() + File.separator + newName);
                 if (!patchFile.exists()) {
                     continue;
