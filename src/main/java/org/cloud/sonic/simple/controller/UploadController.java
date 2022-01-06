@@ -88,7 +88,7 @@ public class UploadController {
             responseModel = new RespModel<>(RespEnum.UPLOAD_ERROR);
         }
         //如果当前是最后一个，就开始合并录像文件
-        if (index == total - 1) {
+        if (total == 1) {
             responseModel.setData(fileTool.merge(uuid, uuid + ".mp4", total));
         }
         return responseModel;
