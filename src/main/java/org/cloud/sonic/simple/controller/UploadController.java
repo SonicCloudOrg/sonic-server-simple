@@ -30,8 +30,6 @@ public class UploadController {
     @Autowired
     private FileTool fileTool;
     @Autowired
-    private RecordHandler recordHandler;
-    @Autowired
     private AKAZEFinder akazeFinder;
     @Autowired
     private SIFTFinder siftFinder;
@@ -39,8 +37,6 @@ public class UploadController {
     private SimilarityChecker similarityChecker;
     @Autowired
     private TemMatcher temMatcher;
-    @Autowired
-    private TextReader textReader;
 
     @WebAspect
     @ApiOperation(value = "上传文件", notes = "上传文件到服务器")
@@ -97,13 +93,13 @@ public class UploadController {
     @WebAspect
     @ApiOperation(value = "cv定位", notes = "三种定位方式")
     @ApiImplicitParams(value = {
-//            @ApiImplicitParam(name = "file", value = "文件", dataTypeClass = MultipartFile.class),
-//            @ApiImplicitParam(name = "type", value = "文件类型(只能为keepFiles、imageFiles、recordFiles、logFiles、packageFiles)", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "file1", value = "模板文件", dataTypeClass = MultipartFile.class),
+            @ApiImplicitParam(name = "file2", value = "原文件", dataTypeClass = MultipartFile.class)
     })
-    @PostMapping("/cv/finder")
-    public RespModel<FindResult> finder(@RequestParam(name = "file1") MultipartFile file1,
-                                        @RequestParam(name = "file2") MultipartFile file2,
-                                        @RequestParam(name = "type") String type) throws IOException {
+    @PostMapping("/cv")
+    public RespModel cv(@RequestParam(name = "file1") MultipartFile file1,
+                            @RequestParam(name = "file2") MultipartFile file2,
+                            @RequestParam(name = "type") String type) throws IOException {
         File local1 = new File("temp" + File.separator +
                 UUID.randomUUID() + file1.getOriginalFilename()
                 .substring(file1.getOriginalFilename().lastIndexOf(".")));
@@ -120,22 +116,40 @@ public class UploadController {
         } catch (FileAlreadyExistsException e) {
             log.error(e.getMessage());
         }
-        FindResult findResult = null;
         switch (type) {
-            case "akaze":
-                findResult = akazeFinder.getAKAZEFindResult(local1, local2);
-                break;
-            case "sift":
-                findResult = siftFinder.getSIFTFindResult(local1, local2);
-                break;
-            case "tem":
-                findResult = temMatcher.getTemMatchResult(local1, local2);
-                break;
-        }
-        if (findResult != null) {
-            return new RespModel(RespEnum.HANDLE_OK, findResult);
-        } else {
-            return new RespModel<>(RespEnum.UNKNOWN_ERROR);
+            case "finder": {
+                FindResult findResult = null;
+                try {
+                    findResult = siftFinder.getSIFTFindResult(local1, local2);
+                } catch (Exception e) {
+                    log.info("SIFT图像算法出错，切换算法中...");
+                }
+                if (findResult == null) {
+                    try {
+                        findResult = akazeFinder.getAKAZEFindResult(local1, local2);
+                    } catch (Exception e) {
+                        log.info("AKAZE图像算法出错，切换算法中...");
+                    }
+                    if (findResult == null) {
+                        try {
+                            findResult = temMatcher.getTemMatchResult(local1, local2);
+                        } catch (Exception e) {
+                            log.info("模版匹配算法出错");
+                        }
+                    }
+                }
+                if (findResult != null) {
+                    return new RespModel(RespEnum.HANDLE_OK, findResult);
+                } else {
+                    return new RespModel<>(RespEnum.UNKNOWN_ERROR);
+                }
+            }
+            case "checker":{
+                return new RespModel();
+            }
+            default:{
+                return new RespModel(RespEnum.PARAMS_VIOLATE_ERROR);
+            }
         }
     }
 }
