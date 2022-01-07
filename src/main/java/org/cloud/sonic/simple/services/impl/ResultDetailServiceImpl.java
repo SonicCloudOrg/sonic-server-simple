@@ -43,15 +43,15 @@ public class ResultDetailServiceImpl extends SonicServiceImpl<ResultDetailMapper
         resultInfo.setTime(jsonMsg.getDate("time"));
         resultInfo.setDeviceId(resultDevice == null ? 0 : resultDevice.getId());
 
-        // 清除旧的状态
-        if (resultInfo.getType().equals("status")) {
-            baseMapper.delete(new LambdaQueryWrapper<ResultDetail>()
-                    .eq(ResultDetail::getResultId, resultInfo.getResultId())
-                    .eq(ResultDetail::getType, resultInfo.getType())
-                    .eq(ResultDetail::getCaseId, resultInfo.getCaseId())
-                    .eq(ResultDetail::getDeviceId, resultInfo.getDeviceId())
-            );
-        }
+        // 清除旧的状态（如果未来引入新的状态调整可能会需要）
+        // if (resultInfo.getType().equals("status")) {
+        //     baseMapper.delete(new LambdaQueryWrapper<ResultDetail>()
+        //             .eq(ResultDetail::getResultId, resultInfo.getResultId())
+        //             .eq(ResultDetail::getType, resultInfo.getType())
+        //             .eq(ResultDetail::getCaseId, resultInfo.getCaseId())
+        //             .eq(ResultDetail::getDeviceId, resultInfo.getDeviceId())
+        //     );
+        // }
 
         save(resultInfo);
         if (jsonMsg.getString("msg").equals("status")) {
