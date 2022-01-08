@@ -8,6 +8,7 @@ import org.cloud.sonic.simple.models.base.CommentPage;
 import org.cloud.sonic.simple.models.base.TypeConverter;
 import org.cloud.sonic.simple.models.domain.PublicSteps;
 import org.cloud.sonic.simple.models.domain.PublicStepsSteps;
+import org.cloud.sonic.simple.models.domain.Steps;
 import org.cloud.sonic.simple.models.dto.ElementsDTO;
 import org.cloud.sonic.simple.models.dto.PublicStepsDTO;
 import org.cloud.sonic.simple.models.dto.StepsDTO;
@@ -102,6 +103,9 @@ public class PublicStepsServiceImpl extends SonicServiceImpl<PublicStepsMapper, 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean delete(int id) {
+        // 删除用例中的公共步骤
+        stepsMapper.delete(new LambdaQueryWrapper<Steps>().eq(Steps::getText, id));
+        // 删除与步骤的映射关系
         publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
                 .eq(PublicStepsSteps::getPublicStepsId, id));
         return baseMapper.deleteById(id) > 0;
