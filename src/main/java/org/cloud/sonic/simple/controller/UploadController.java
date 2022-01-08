@@ -121,7 +121,6 @@ public class UploadController {
                 FindResult findResult = null;
                 try {
                     findResult = siftFinder.getSIFTFindResult(local1, local2);
-//                    findResult = akazeFinder.getAKAZEFindResult(local1, local2);
                 } catch (Exception e) {
                     log.info("SIFT图像算法出错，切换算法中...");
                 }
