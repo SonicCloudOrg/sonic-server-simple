@@ -98,9 +98,9 @@ public class UploadController {
     })
     @PostMapping("/cv")
     public RespModel cv(@RequestParam(name = "file1") MultipartFile file1,
-                            @RequestParam(name = "file2") MultipartFile file2,
-                            @RequestParam(name = "type") String type) throws IOException {
-        File local1 = new File("temp" + File.separator +
+                        @RequestParam(name = "file2") MultipartFile file2,
+                        @RequestParam(name = "type") String type) throws IOException {
+        File local1 = new File("imageFiles" + File.separator +
                 UUID.randomUUID() + file1.getOriginalFilename()
                 .substring(file1.getOriginalFilename().lastIndexOf(".")));
         try {
@@ -108,7 +108,7 @@ public class UploadController {
         } catch (FileAlreadyExistsException e) {
             log.error(e.getMessage());
         }
-        File local2 = new File("temp" + File.separator +
+        File local2 = new File("imageFiles" + File.separator +
                 UUID.randomUUID() + file2.getOriginalFilename()
                 .substring(file2.getOriginalFilename().lastIndexOf(".")));
         try {
@@ -121,6 +121,7 @@ public class UploadController {
                 FindResult findResult = null;
                 try {
                     findResult = siftFinder.getSIFTFindResult(local1, local2);
+//                    findResult = akazeFinder.getAKAZEFindResult(local1, local2);
                 } catch (Exception e) {
                     log.info("SIFT图像算法出错，切换算法中...");
                 }
@@ -144,10 +145,11 @@ public class UploadController {
                     return new RespModel<>(RespEnum.UNKNOWN_ERROR);
                 }
             }
-            case "checker":{
-                return new RespModel();
+            case "checker": {
+                double score = similarityChecker.getSimilarMSSIMScore(local1, local2);
+                return new RespModel(RespEnum.SEARCH_OK, score);
             }
-            default:{
+            default: {
                 return new RespModel(RespEnum.PARAMS_VIOLATE_ERROR);
             }
         }

@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bytedeco.opencv.global.opencv_calib3d.CV_RANSAC;
@@ -319,10 +321,16 @@ public class AKAZEFinder {
                     new Point(Math.round(pt2.x()), Math.round(pt2.y())),
                     randColor(), 1, CV_AA, 0);
         }
-        long time = Calendar.getInstance().getTimeInMillis();
-        String fileName = "temp" + File.separator + time + ".jpg";
-        cvSaveImage(fileName, correspondColor);
-        findResult.setUrl(fileTool.upload("imageFiles",new File(fileName)));
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        File folder = new File("imageFiles" + File.separator
+                + sf.format(Calendar.getInstance().getTimeInMillis()));
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        File fileName = new File(folder.getPath() + File.separator +
+                UUID.randomUUID() + ".jpg");
+        cvSaveImage(fileName.getAbsolutePath(), correspondColor);
+        findResult.setUrl(fileTool.upload(fileName));
         temFile.delete();
         beforeFile.delete();
         return findResult;

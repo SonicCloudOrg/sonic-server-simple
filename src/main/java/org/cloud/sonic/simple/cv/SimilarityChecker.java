@@ -25,7 +25,7 @@ import static org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur;
 public class SimilarityChecker {
     private final Logger logger = LoggerFactory.getLogger(SimilarityChecker.class);
 
-    public double getSimilarMSSIMScore(File file1, File file2, Boolean isDelete) {
+    public double getSimilarMSSIMScore(File file1, File file2) {
         synchronized (SimilarityChecker.class) {
             Mat i1 = imread(file1.getAbsolutePath());
             Mat i2 = imread(file2.getAbsolutePath());
@@ -67,10 +67,8 @@ public class SimilarityChecker {
             Mat ssim_map = new Mat();
             divide(t3, t1, ssim_map);
             Scalar mSsim = mean(ssim_map);
-            if (isDelete) {
-                file1.delete();
-                file2.delete();
-            }
+            file1.delete();
+            file2.delete();
             return new BigDecimal((mSsim.get(0) + mSsim.get(1) + mSsim.get(2)) / 3).setScale(2, RoundingMode.DOWN).doubleValue();
         }
     }

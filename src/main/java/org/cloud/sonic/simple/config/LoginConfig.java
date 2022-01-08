@@ -21,7 +21,7 @@ public class LoginConfig extends WebMvcConfigurationSupport {
         InterceptorRegistration registration = registry.addInterceptor(getAdminInterceptor());
         registration.addPathPatterns("/**");
         registration.excludePathPatterns("/**/users/login","/**/users/register","/**/swagger-resources"
-                ,"/**/v2/api-docs","/**/folder/upload","/**/folder/recordFiles/**","/**/keepFiles/**","/**/imageFiles/**"
+                ,"/**/v2/api-docs","/**/folder/upload/**","/**/keepFiles/**","/**/imageFiles/**"
                 ,"/**/recordFiles/**","/**/logFiles/**","/**/packageFiles/**");
         super.addInterceptors(registry);
     }

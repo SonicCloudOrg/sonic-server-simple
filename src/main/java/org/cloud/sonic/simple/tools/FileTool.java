@@ -23,6 +23,8 @@ import java.util.UUID;
 @Component
 public class FileTool {
     private final Logger logger = LoggerFactory.getLogger(FileTool.class);
+    @Value("${gateway.host}")
+    private String host;
 
     /**
      * @param folderName 文件夹
@@ -48,7 +50,7 @@ public class FileTool {
         } catch (FileAlreadyExistsException e) {
             logger.error(e.getMessage());
         }
-        return "/folder/" + local.getPath().replaceAll("\\\\", "/");
+        return host + "/api/folder/" + local.getPath().replaceAll("\\\\", "/");
     }
 
     /**
@@ -59,21 +61,8 @@ public class FileTool {
      * @des 上传
      * @date 2021/8/18 20:41
      */
-    public String upload(String folderName, File file) throws IOException {
-        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
-        File folder = new File(folderName + File.separator
-                + sf.format(Calendar.getInstance().getTimeInMillis()));
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-        //防止文件重名
-        File local = new File(folder.getPath() + File.separator +
-                UUID.randomUUID() + file.getName()
-                .substring(file.getName().lastIndexOf(".")));
-        if(!file.renameTo(local.getAbsoluteFile())){
-            logger.info("上传失败！");
-        }
-        return "/folder/" + local.getPath().replaceAll("\\\\", "/");
+    public String upload(File file) throws IOException {
+        return host + "/api/folder/" + file.getPath().replaceAll("\\\\", "/");
     }
 
     /**
@@ -165,6 +154,6 @@ public class FileTool {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        return "/folder/" + file.getPath();
+        return host + "/api/folder/" + file.getPath().replaceAll("\\\\", "/");
     }
 }

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.bytedeco.opencv.global.opencv_core.*;
@@ -48,12 +50,18 @@ public class TemMatcher {
             rectangle(sourceColor, new Rect(max.x(), max.y(), template.cols(), template.rows()), randColor(), 2, 0, 0);
             FindResult findResult = new FindResult();
             findResult.setTime((int) (System.currentTimeMillis() - start));
-            long time = Calendar.getInstance().getTimeInMillis();
-            String fileName = "temp" + File.separator + time + ".jpg";
-            imwrite(fileName, sourceColor);
+            SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+            File folder = new File("imageFiles" + File.separator
+                    + sf.format(Calendar.getInstance().getTimeInMillis()));
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            File fileName = new File(folder.getPath() + File.separator +
+                    UUID.randomUUID() + ".jpg");
+            imwrite(fileName.getAbsolutePath(), sourceColor);
             findResult.setX(max.x() + template.cols() / 2);
             findResult.setY(max.y() + template.rows() / 2);
-            findResult.setUrl(fileTool.upload("imageFiles", new File(fileName)));
+            findResult.setUrl(fileTool.upload(fileName));
             return findResult;
         } finally {
             temFile.delete();

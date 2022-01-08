@@ -12,10 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.bytedeco.opencv.global.opencv_features2d.drawMatchesKnn;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
@@ -91,10 +89,16 @@ public class SIFTFinder {
         findResult.setY(resultY);
         logger.info("结果坐标为（" + resultX + "," + resultY + ")");
         circle(result, new Point(resultX, resultY), 5, Scalar.RED, 10, CV_AA, 0);
-        long time = Calendar.getInstance().getTimeInMillis();
-        String fileName = "temp" + File.separator + time + ".jpg";
-        imwrite(fileName, result);
-        findResult.setUrl(fileTool.upload("imageFiles", new File(fileName)));
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        File folder = new File("imageFiles" + File.separator
+                + sf.format(Calendar.getInstance().getTimeInMillis()));
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        File fileName = new File(folder.getPath() + File.separator +
+                UUID.randomUUID() + ".jpg");
+        imwrite(fileName.getAbsolutePath(), result);
+        findResult.setUrl(fileTool.upload(fileName));
         temFile.delete();
         beforeFile.delete();
         return findResult;
