@@ -1,8 +1,13 @@
 package org.cloud.sonic.simple.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.cloud.sonic.simple.models.domain.TestSuites;
 import org.cloud.sonic.simple.models.domain.TestSuitesTestCases;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  *  Mapper 接口
@@ -12,4 +17,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TestSuitesTestCasesMapper extends BaseMapper<TestSuitesTestCases> {
 
+    @Select("select ts.* from test_suites_test_cases tetc inner join test_suites ts on tetc.test_suites_id = ts.id where ts.id = #{testCasesId}")
+    List<TestSuites> listTestSuitesByTestCasesId(@Param("testCasesId") int testCasesId);
 }
