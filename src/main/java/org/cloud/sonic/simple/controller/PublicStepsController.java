@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.config.WebAspect;
 import org.cloud.sonic.simple.models.base.CommentPage;
 import org.cloud.sonic.simple.models.domain.PublicSteps;
+import org.cloud.sonic.simple.models.domain.TestCases;
 import org.cloud.sonic.simple.models.dto.PublicStepsDTO;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
@@ -12,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.cloud.sonic.simple.services.TestCasesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,8 @@ public class PublicStepsController {
 
     @Autowired
     private PublicStepsService publicStepsService;
+    @Autowired
+    private TestCasesService testCasesService;
 
     @WebAspect
     @ApiOperation(value = "查询公共步骤列表1", notes = "查找对应项目id下的公共步骤列表（分页）")
@@ -75,6 +79,14 @@ public class PublicStepsController {
         } else {
             return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }
+    }
+
+    @WebAspect
+    @ApiOperation(value = "删除公共步骤检查", notes = "返回引用公共步骤的用例")
+    @ApiImplicitParam(name = "id", value = "公共步骤id", dataTypeClass = Integer.class)
+    @GetMapping("deleteCheck")
+    public RespModel<List<TestCases>> deleteCheck(@RequestParam(name = "id") int id) {
+        return new RespModel<>(RespEnum.SEARCH_OK, testCasesService.listByPublicStepsId(id));
     }
 
     @WebAspect
