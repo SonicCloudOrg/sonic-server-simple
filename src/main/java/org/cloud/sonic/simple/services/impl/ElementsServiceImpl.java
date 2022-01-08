@@ -54,24 +54,14 @@ public class ElementsServiceImpl extends SonicServiceImpl<ElementsMapper, Elemen
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RespModel<String> delete(int id) {
+    public RespModel delete(int id) {
         if (existsById(id)) {
-            try {
+            List<Steps> stepsList = stepsService.listStepsByElementsId(id);
+            if (stepsList.size() > 0) {
+                return new RespModel(RespEnum.DELETE_ERROR, stepsList);
+            } else {
                 baseMapper.deleteById(id);
                 return new RespModel<>(RespEnum.DELETE_OK);
-            } catch (Exception e) {
-
-
-                List<Steps> stepsList = stepsService.listStepsByElementsId(id);
-                StringBuilder sList = new StringBuilder();
-                for (Steps s : stepsList) {
-                    if (sList.length() == 0) {
-                        sList.append(s.getId());
-                    } else {
-                        sList.append("，").append(s.getId());
-                    }
-                }
-                return new RespModel<>(-2, "删除失败！控件元素已存在于步骤id：" + sList + "中！");
             }
         } else {
             return new RespModel<>(RespEnum.ID_NOT_FOUND);

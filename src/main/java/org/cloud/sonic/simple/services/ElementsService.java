@@ -10,7 +10,7 @@ import java.util.List;
 public interface ElementsService extends IService<Elements> {
     Page<Elements> findAll(int projectId, String type, List<String> eleTypes, String name, Page<Elements> pageable);
 
-    RespModel<String> delete(int id);
+    RespModel delete(int id);
 
     Elements findById(int id);
 
