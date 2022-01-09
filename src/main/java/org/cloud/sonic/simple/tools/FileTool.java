@@ -54,8 +54,7 @@ public class FileTool {
     }
 
     /**
-     * @param folderName 文件夹
-     * @param file
+     * @param file 文件夹
      * @return java.lang.String
      * @author ZhouYiXun
      * @des 上传
