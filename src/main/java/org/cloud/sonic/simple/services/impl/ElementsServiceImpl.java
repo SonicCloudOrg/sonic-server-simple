@@ -7,6 +7,7 @@ import org.cloud.sonic.simple.mapper.ElementsMapper;
 import org.cloud.sonic.simple.models.domain.Elements;
 import org.cloud.sonic.simple.models.domain.Steps;
 import org.cloud.sonic.simple.models.dto.StepsDTO;
+import org.cloud.sonic.simple.models.dto.TestCasesDTO;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.services.ElementsService;
@@ -61,6 +62,9 @@ public class ElementsServiceImpl extends SonicServiceImpl<ElementsMapper, Elemen
     public List<StepsDTO> findAllStepsByElementsId(int elementsId) {
         return stepsService.listStepsByElementsId(elementsId).stream().map(e -> {
             StepsDTO stepsDTO = e.convertTo();
+            if (0 == stepsDTO.getCaseId()) {
+                return stepsDTO.setTestCasesDTO(new TestCasesDTO().setId(0).setName("无所属用例"));
+            }
             return stepsDTO.setTestCasesDTO(testCasesService.findById(stepsDTO.getCaseId()).convertTo());
         }).collect(Collectors.toList());
     }
