@@ -2,12 +2,15 @@ package org.cloud.sonic.simple.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.config.WebAspect;
+import org.cloud.sonic.simple.mapper.PublicStepsMapper;
 import org.cloud.sonic.simple.models.base.CommentPage;
+import org.cloud.sonic.simple.models.domain.PublicSteps;
 import org.cloud.sonic.simple.models.domain.Steps;
 import org.cloud.sonic.simple.models.dto.StepsDTO;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.models.http.StepSort;
+import org.cloud.sonic.simple.services.PublicStepsService;
 import org.cloud.sonic.simple.services.StepsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,6 +33,8 @@ import java.util.List;
 public class StepsController {
     @Autowired
     private StepsService stepsService;
+    @Autowired
+    private PublicStepsMapper publicStepsMapper;
 
     @WebAspect
     @ApiOperation(value = "查找步骤列表", notes = "查找对应用例id下的步骤列表（分页）")
@@ -78,6 +83,14 @@ public class StepsController {
         } else {
             return new RespModel<>(RespEnum.DELETE_ERROR);
         }
+    }
+
+    @WebAspect
+    @ApiOperation(value = "删除操作步骤检查", notes = "返回步骤所属的公共步骤")
+    @ApiImplicitParam(name = "id", value = "步骤id", dataTypeClass = Integer.class)
+    @GetMapping("deleteCheck")
+    public RespModel<List<PublicSteps>> deleteCheck(@RequestParam(name = "id") int id) {
+        return new RespModel<>(RespEnum.SEARCH_OK, publicStepsMapper.listPubStepsByStepId(id));
     }
 
     @WebAspect

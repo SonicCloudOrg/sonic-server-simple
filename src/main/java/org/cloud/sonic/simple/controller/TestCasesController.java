@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.config.WebAspect;
 import org.cloud.sonic.simple.models.base.CommentPage;
 import org.cloud.sonic.simple.models.domain.TestCases;
+import org.cloud.sonic.simple.models.domain.TestSuites;
 import org.cloud.sonic.simple.models.dto.TestCasesDTO;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.services.TestCasesService;
+import org.cloud.sonic.simple.services.TestSuitesService;
 import org.cloud.sonic.simple.tools.JWTTokenTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,6 +31,8 @@ public class TestCasesController {
     private TestCasesService testCasesService;
     @Autowired
     private JWTTokenTool jwtTokenTool;
+    @Autowired
+    private TestSuitesService testSuitesService;
 
     @WebAspect
     @ApiOperation(value = "查询测试用例列表", notes = "查找对应项目id下的测试用例列表")
@@ -75,6 +79,14 @@ public class TestCasesController {
         } else {
             return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }
+    }
+
+    @WebAspect
+    @ApiOperation(value = "删除测试用例检查", notes = "返回被引用的测试套件")
+    @ApiImplicitParam(name = "id", value = "用例id", dataTypeClass = Integer.class)
+    @GetMapping("deleteCheck")
+    public RespModel<List<TestSuites>> deleteCheck(@RequestParam(name = "id") int id) {
+        return new RespModel<>(RespEnum.SEARCH_OK, testSuitesService.listTestSuitesByTestCasesId(id));
     }
 
     @WebAspect

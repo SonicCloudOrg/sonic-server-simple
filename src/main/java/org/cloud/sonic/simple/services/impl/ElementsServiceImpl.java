@@ -6,16 +6,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.mapper.ElementsMapper;
 import org.cloud.sonic.simple.models.domain.Elements;
 import org.cloud.sonic.simple.models.domain.Steps;
+import org.cloud.sonic.simple.models.dto.StepsDTO;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.services.ElementsService;
 import org.cloud.sonic.simple.services.StepsService;
+import org.cloud.sonic.simple.services.TestCasesService;
 import org.cloud.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ElementsServiceImpl extends SonicServiceImpl<ElementsMapper, Elements> implements ElementsService {
@@ -24,6 +27,8 @@ public class ElementsServiceImpl extends SonicServiceImpl<ElementsMapper, Elemen
     private ElementsMapper elementsMapper;
     @Autowired
     private StepsService stepsService;
+    @Autowired
+    private TestCasesService testCasesService;
 
     @Override
     public Page<Elements> findAll(int projectId, String type, List<String> eleTypes, String name, Page<Elements> pageable) {
@@ -53,16 +58,23 @@ public class ElementsServiceImpl extends SonicServiceImpl<ElementsMapper, Elemen
     }
 
     @Override
+    public List<StepsDTO> findAllStepsByElementsId(int elementsId) {
+        return stepsService.listStepsByElementsId(elementsId).stream().map(e -> {
+            StepsDTO stepsDTO = e.convertTo();
+            return stepsDTO.setTestCasesDTO(testCasesService.findById(stepsDTO.getCaseId()).convertTo());
+        }).collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public RespModel delete(int id) {
         if (existsById(id)) {
-            List<Steps> stepsList = stepsService.listStepsByElementsId(id);
-            if (stepsList.size() > 0) {
-                return new RespModel(RespEnum.DELETE_ERROR, stepsList);
-            } else {
-                baseMapper.deleteById(id);
-                return new RespModel<>(RespEnum.DELETE_OK);
+            List<StepsDTO> stepsList = findAllStepsByElementsId(id);
+            for (StepsDTO steps : stepsList) {
+                stepsService.delete(steps.getId());
             }
+            baseMapper.deleteById(id);
+            return new RespModel<>(RespEnum.DELETE_OK);
         } else {
             return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }

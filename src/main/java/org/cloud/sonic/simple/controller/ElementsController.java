@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.config.WebAspect;
 import org.cloud.sonic.simple.models.base.CommentPage;
 import org.cloud.sonic.simple.models.domain.Elements;
+import org.cloud.sonic.simple.models.domain.Steps;
 import org.cloud.sonic.simple.models.dto.ElementsDTO;
+import org.cloud.sonic.simple.models.dto.StepsDTO;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.services.ElementsService;
@@ -71,6 +73,14 @@ public class ElementsController {
     @DeleteMapping
     public RespModel<String> delete(@RequestParam(name = "id") int id) {
         return elementsService.delete(id);
+    }
+
+    @WebAspect
+    @ApiOperation(value = "删除控件元素前检验", notes = "返回引用控件的步骤")
+    @ApiImplicitParam(name = "id", value = "元素id", dataTypeClass = Integer.class)
+    @GetMapping("deleteCheck")
+    public RespModel<List<StepsDTO>> deleteCheck(@RequestParam(name = "id") int id) {
+        return new RespModel<>(RespEnum.SEARCH_OK, elementsService.findAllStepsByElementsId(id));
     }
 
     @WebAspect

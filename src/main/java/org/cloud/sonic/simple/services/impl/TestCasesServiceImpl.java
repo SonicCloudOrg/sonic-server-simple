@@ -6,12 +6,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.mapper.PublicStepsMapper;
+import org.cloud.sonic.simple.mapper.StepsMapper;
 import org.cloud.sonic.simple.mapper.TestCasesMapper;
 import org.cloud.sonic.simple.mapper.TestSuitesTestCasesMapper;
-import org.cloud.sonic.simple.models.domain.GlobalParams;
-import org.cloud.sonic.simple.models.domain.PublicSteps;
-import org.cloud.sonic.simple.models.domain.TestCases;
-import org.cloud.sonic.simple.models.domain.TestSuitesTestCases;
+import org.cloud.sonic.simple.models.domain.*;
 import org.cloud.sonic.simple.models.dto.StepsDTO;
 import org.cloud.sonic.simple.services.GlobalParamsService;
 import org.cloud.sonic.simple.services.StepsService;
@@ -20,8 +18,10 @@ import org.cloud.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author ZhouYiXun
@@ -162,5 +162,15 @@ public class TestCasesServiceImpl extends SonicServiceImpl<TestCasesMapper, Test
     @Override
     public boolean deleteByProjectId(int projectId) {
         return baseMapper.delete(new LambdaQueryWrapper<>()) > 0;
+    }
+
+    @Override
+    public List<TestCases> listByPublicStepsId(int publicStepsId) {
+        List<Steps> steps = stepsService.lambdaQuery().eq(Steps::getText, publicStepsId).list();
+        if (CollectionUtils.isEmpty(steps)) {
+            return new ArrayList<>();
+        }
+        Set<Integer> caseIdSet = steps.stream().map(Steps::getCaseId).collect(Collectors.toSet());
+        return lambdaQuery().in(TestCases::getId, caseIdSet).list();
     }
 }
