@@ -217,6 +217,33 @@
                 </dependency>
             </dependencies>
         </profile>
+
+        <profile>
+            <id>linux-x86_64</id>
+            <properties>
+                <profileActive>linux-x86_64</profileActive>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>javacpp</artifactId>
+                    <version>1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>opencv</artifactId>
+                    <version>4.3.0-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>org.bytedeco</groupId>
+                    <artifactId>openblas</artifactId>
+                    <version>0.3.9-1.5.3</version>
+                    <classifier>${profileActive}</classifier>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
     <!-- 打包构建配置  -->
