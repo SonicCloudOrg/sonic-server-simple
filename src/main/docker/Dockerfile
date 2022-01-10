@@ -5,9 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /root
 
 RUN apt-get update && apt-get install -y \
-    libxcb-shape0 \
-    libxcb-xfixes0 \
-    wget \
+    pkg-config ccache clang python python3.6-dev python3-pip swig file wget tar patch autoconf-archive autogen automake make cmake libtool bison flex perl nasm curl gfortran libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev zlib1g libffi-dev libbz2-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget -O java.tar.gz https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz && \
