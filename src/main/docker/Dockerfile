@@ -1,13 +1,13 @@
 FROM ubuntu:bionic-20200311
 
 ENV DEBIAN_FRONTEND=noninteractive
-
+RUN sed -i 's@/archive.ubuntu.com/@/mirrors.aliyun.com/@g' /etc/apt/sources.list
 RUN apt-get update && apt-get install -y \
     pkg-config ccache clang python python3.6-dev python3-pip swig file wget tar patch autoconf-archive autogen automake make cmake libtool bison flex perl nasm curl gfortran libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev zlib1g libffi-dev libbz2-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN wget -O java.tar.gz https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz && \
-    tar zxvf java.tar.gz && rm java.tar.gz && \
+ADD /java.tar.gz /
+RUN cd / && tar zxvf java.tar.gz && rm java.tar.gz && \
     chmod a+x -R /jdk-17.0.1 && \
     chown -R root:root /jdk-17.0.1
 
