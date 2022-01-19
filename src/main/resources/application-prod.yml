@@ -5,13 +5,6 @@ spring:
   application:
     name: sonic-server-simple
     des: "Sonic云真机测试平台 - 单机版"
-  tomcat:
-    max-http-post-size: 100M
-  http:
-    multipart:
-      maxFileSize: 3000M
-      maxRequestSize: 3000M
-      maxPostSize: 3000M
   servlet:
     multipart:
       maxFileSize: -1
