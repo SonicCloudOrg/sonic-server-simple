@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.41</version>
+            <version>1.2.79</version>
         </dependency>
         <!-- AOP框架 -->
         <dependency>
@@ -146,63 +146,18 @@
         <relativePath/>
     </parent>
 
-    <!--  通过这个配置来决定打包使用哪一个环境  -->
     <profiles>
         <profile>
             <id>dev</id>
             <properties>
                 <profileActive>dev</profileActive>
             </properties>
-            <dependencies>
-                <!--    视频处理与图像处理    -->
-                <dependency>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>javacv-platform</artifactId>
-                    <version>1.5.3</version>
-                </dependency>
-            </dependencies>
         </profile>
         <profile>
             <id>prod</id>
             <properties>
                 <profileActive>prod</profileActive>
             </properties>
-            <dependencies>
-                <!--    视频处理与图像处理    -->
-                <dependency>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>javacv</artifactId>
-                    <version>1.5.3</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>openblas</artifactId>
-                    <version>0.3.9-1.5.3</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>opencv</artifactId>
-                    <version>4.3.0-1.5.3</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>javacpp</artifactId>
-                    <version>1.5.3</version>
-                    <classifier>linux-x86_64</classifier>
-                </dependency>
-                <dependency>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>opencv</artifactId>
-                    <version>4.3.0-1.5.3</version>
-                    <classifier>linux-x86_64</classifier>
-                </dependency>
-                <dependency>
-                    <groupId>org.bytedeco</groupId>
-                    <artifactId>openblas</artifactId>
-                    <version>0.3.9-1.5.3</version>
-                    <classifier>linux-x86_64</classifier>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
 
@@ -221,41 +176,38 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>com.spotify</groupId>-->
-<!--                <artifactId>docker-maven-plugin</artifactId>-->
-<!--                <version>1.2.2</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>imageBuild</id>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <pushImage>true</pushImage>-->
-<!--                            <imageName>sonicorg/${project.artifactId}:${project.version}</imageName>-->
-<!--                            <baseImage>adoptopenjdk/openjdk15:alpine AS builder</baseImage>-->
-<!--                            <runs>-->
-<!--                                <run>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</run>-->
-<!--                                <run>apt-get update -y &amp;&amp; apt-get install -y \-->
-<!--                                    libxcb-shape0 \-->
-<!--                                    libxcb-xfixes0</run>-->
-<!--                            </runs>-->
-<!--                            <entryPoint>-->
-<!--                                ["java","-server","-Xmx800M","-Xms800M","-Xmn300M","-Xss256K","-XX:-UseGCOverheadLimit","-XX:+DisableExplicitGC","-XX:SurvivorRatio=1","-XX:LargePageSizeInBytes=128M","-XX:SoftRefLRUPolicyMSPerMB=0","-Djava.security.egd=file:/dev/./urandom","-jar","/${project.build.finalName}.jar"]-->
-<!--                            </entryPoint>-->
-<!--                            <resources>-->
-<!--                                <resource>-->
-<!--                                    <targetPath>/</targetPath>-->
-<!--                                    <directory>${project.build.directory}</directory>-->
-<!--                                    <include>${project.build.finalName}.jar</include>-->
-<!--                                </resource>-->
-<!--                            </resources>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <executions>
+                    <execution>
+                        <id>imageBuild</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <pushImage>true</pushImage>
+                            <imageName>sonicorg/${project.artifactId}:${project.version}</imageName>
+                            <baseImage>adoptopenjdk/openjdk15:alpine AS builder</baseImage>
+                            <runs>
+                                <run>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</run>
+                            </runs>
+                            <entryPoint>
+                                ["java","-server","-Xmx800M","-Xms800M","-Xmn300M","-Xss256K","-XX:-UseGCOverheadLimit","-XX:+DisableExplicitGC","-XX:SurvivorRatio=1","-XX:LargePageSizeInBytes=128M","-XX:SoftRefLRUPolicyMSPerMB=0","-Djava.security.egd=file:/dev/./urandom","-jar","/${project.build.finalName}.jar"]
+                            </entryPoint>
+                            <resources>
+                                <resource>
+                                    <targetPath>/</targetPath>
+                                    <directory>${project.build.directory}</directory>
+                                    <include>${project.build.finalName}.jar</include>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
