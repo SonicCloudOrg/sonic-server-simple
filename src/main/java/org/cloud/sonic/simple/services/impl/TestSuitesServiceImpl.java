@@ -64,6 +64,11 @@ public class TestSuitesServiceImpl extends SonicServiceImpl<TestSuitesMapper, Te
         }
 
         List<Devices> devicesList = BeanTool.transformFromInBatch(testSuitesDTO.getDevices(), Devices.class);
+        for (int i = devicesList.size() - 1; i >= 0; i--) {
+            if (devicesList.get(i).getStatus().equals(DeviceStatus.OFFLINE) || devicesList.get(i).getStatus().equals(DeviceStatus.DISCONNECTED)) {
+                devicesList.remove(devicesList.get(i));
+            }
+        }
         if (devicesList.size() == 0) {
             return new RespModel<>(3003, "所选设备暂无可用！");
         }
