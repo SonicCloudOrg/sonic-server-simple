@@ -1,10 +1,10 @@
 package org.cloud.sonic.simple.services.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.cloud.sonic.simple.exception.SonicException;
 import org.cloud.sonic.simple.mapper.ProjectsMapper;
 import org.cloud.sonic.simple.models.domain.Projects;
 import org.cloud.sonic.simple.models.domain.Results;
-import org.cloud.sonic.simple.services.*;
 import org.cloud.sonic.simple.services.*;
 import org.cloud.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import java.util.List;
  * @date 2021/8/21 20:57
  */
 @Service
+@Slf4j
 public class ProjectsServiceImpl extends SonicServiceImpl<ProjectsMapper, Projects> implements ProjectsService {
 
     @Autowired private ElementsService elementsService;
@@ -61,6 +62,7 @@ public class ProjectsServiceImpl extends SonicServiceImpl<ProjectsMapper, Projec
             versionsService.deleteByProjectId(id);
             baseMapper.deleteById(id);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new SonicException("删除出错！请联系管理员！");
         }
     }

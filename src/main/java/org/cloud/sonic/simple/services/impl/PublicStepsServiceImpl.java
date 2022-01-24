@@ -2,7 +2,7 @@ package org.cloud.sonic.simple.services.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.cloud.sonic.simple.mapper.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.cloud.sonic.simple.mapper.*;
 import org.cloud.sonic.simple.models.base.CommentPage;
 import org.cloud.sonic.simple.models.base.TypeConverter;
@@ -136,8 +136,12 @@ public class PublicStepsServiceImpl extends SonicServiceImpl<PublicStepsMapper, 
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteByProjectId(int projectId) {
         PublicSteps publicSteps = lambdaQuery().eq(PublicSteps::getProjectId, projectId).one();
-        publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
-                .eq(PublicStepsSteps::getPublicStepsId, publicSteps.getId()));
-        return delete(publicSteps.getId());
+        if (ObjectUtils.isNotEmpty(publicSteps)) {
+            publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
+                    .eq(PublicStepsSteps::getPublicStepsId, publicSteps.getId()));
+            delete(publicSteps.getId());
+            return true;
+        }
+        return false;
     }
 }
