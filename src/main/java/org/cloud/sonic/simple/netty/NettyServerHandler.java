@@ -2,19 +2,18 @@ package org.cloud.sonic.simple.netty;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.cloud.sonic.simple.models.domain.Agents;
-import org.cloud.sonic.simple.models.domain.Devices;
-import org.cloud.sonic.simple.models.domain.Users;
-import org.cloud.sonic.simple.models.interfaces.AgentStatus;
-import org.cloud.sonic.simple.services.*;
-import org.cloud.sonic.simple.tools.SpringTool;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import org.cloud.sonic.simple.models.domain.Agents;
+import org.cloud.sonic.simple.models.domain.Devices;
+import org.cloud.sonic.simple.models.domain.Users;
+import org.cloud.sonic.simple.models.interfaces.AgentStatus;
 import org.cloud.sonic.simple.services.*;
+import org.cloud.sonic.simple.tools.SpringTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,21 +79,32 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 resultDetailService.saveByTransport(jsonMsg);
                 break;
             case "findSteps":
-                JSONObject j = testCasesService.findSteps(jsonMsg.getInteger("caseId"));
-                if (j != null) {
-                    JSONObject steps = new JSONObject();
-                    steps.put("msg", "runStep");
-                    steps.put("pf", j.get("pf"));
-                    steps.put("steps", j.get("steps"));
-                    steps.put("gp", j.get("gp"));
-                    steps.put("sessionId", jsonMsg.getString("sessionId"));
-                    steps.put("pwd", jsonMsg.getString("pwd"));
-                    steps.put("udId", jsonMsg.getString("udId"));
-                    NettyServer.getMap().get(jsonMsg.getInteger("agentId")).writeAndFlush(steps.toJSONString());
-                }
+                JSONObject steps = findSteps(jsonMsg, "runStep");
+                NettyServer.getMap().get(jsonMsg.getInteger("agentId")).writeAndFlush(steps.toJSONString());
                 break;
         }
     }
+
+    /**
+     * 查找 & 封装步骤对象
+     *
+     * @param jsonMsg   websocket消息
+     * @return          步骤对象
+     */
+    private JSONObject findSteps(JSONObject jsonMsg, String msg) {
+        JSONObject j = testCasesService.findSteps(jsonMsg.getInteger("caseId"));
+        JSONObject steps = new JSONObject();
+        steps.put("cid", jsonMsg.getInteger("caseId"));
+        steps.put("msg", msg);
+        steps.put("pf", j.get("pf"));
+        steps.put("steps", j.get("steps"));
+        steps.put("gp", j.get("gp"));
+        steps.put("sessionId", jsonMsg.getString("sessionId"));
+        steps.put("pwd", jsonMsg.getString("pwd"));
+        steps.put("udId", jsonMsg.getString("udId"));
+        return steps;
+    }
+
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

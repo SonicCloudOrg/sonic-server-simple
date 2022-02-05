@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.mapper.PublicStepsMapper;
-import org.cloud.sonic.simple.mapper.StepsMapper;
 import org.cloud.sonic.simple.mapper.TestCasesMapper;
 import org.cloud.sonic.simple.mapper.TestSuitesTestCasesMapper;
 import org.cloud.sonic.simple.models.domain.*;
@@ -131,6 +130,9 @@ public class TestCasesServiceImpl extends SonicServiceImpl<TestCasesMapper, Test
 
     @Override
     public List<TestCases> findByIdIn(List<Integer> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
         return listByIds(ids);
     }
 
@@ -161,7 +163,7 @@ public class TestCasesServiceImpl extends SonicServiceImpl<TestCasesMapper, Test
 
     @Override
     public boolean deleteByProjectId(int projectId) {
-        return baseMapper.delete(new LambdaQueryWrapper<>()) > 0;
+        return baseMapper.delete(new LambdaQueryWrapper<TestCases>().eq(TestCases::getProjectId, projectId)) > 0;
     }
 
     @Override
