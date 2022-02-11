@@ -3,7 +3,6 @@ package org.cloud.sonic.simple.services.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.cloud.sonic.simple.mapper.*;
-import org.cloud.sonic.simple.mapper.*;
 import org.cloud.sonic.simple.models.base.CommentPage;
 import org.cloud.sonic.simple.models.base.TypeConverter;
 import org.cloud.sonic.simple.models.domain.PublicSteps;
@@ -17,6 +16,7 @@ import org.cloud.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -135,9 +135,14 @@ public class PublicStepsServiceImpl extends SonicServiceImpl<PublicStepsMapper, 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteByProjectId(int projectId) {
-        PublicSteps publicSteps = lambdaQuery().eq(PublicSteps::getProjectId, projectId).one();
-        publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
-                .eq(PublicStepsSteps::getPublicStepsId, publicSteps.getId()));
-        return delete(publicSteps.getId());
+        List<PublicSteps> publicSteps = lambdaQuery().eq(PublicSteps::getProjectId, projectId).list();
+        for (PublicSteps publicStep : publicSteps) {
+            if (!ObjectUtils.isEmpty(publicSteps)) {
+                publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
+                        .eq(PublicStepsSteps::getPublicStepsId, publicStep.getId()));
+                delete(publicStep.getId());
+            }
+        }
+        return true;
     }
 }
