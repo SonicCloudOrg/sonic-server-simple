@@ -10,7 +10,7 @@
 </p>
 <p align="center">
   <a href="#">  
-    <img src="https://img.shields.io/badge/release-v1.2.0-orange">
+    <img src="https://img.shields.io/github/v/release/SonicCloudOrg/sonic-server-simple?include_prereleases">
   </a>
   <a href="https://hub.docker.com/repository/docker/sonicorg/sonic-server-simple">  
     <img src="https://img.shields.io/docker/pulls/sonicorg/sonic-server-simple">
