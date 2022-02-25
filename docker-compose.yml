@@ -1,11 +1,27 @@
 version: '3'
 services:
+  db:
+    image: mysql
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+    volumes:
+      - mysql_db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Sonic!@#123
+      MYSQL_DATABASE: sonic
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3307:3306"
+    networks:
+      - sonic-network
   sonic-server-simple:
     image: "sonicorg/sonic-server-simple:v1.3.1-release"
+    depends_on:
+      - db
     environment:
       #以下为MySql配置，localhost请替换为自己MySql服务的ipv4地址
       - MYSQL_HOST=localhost
-      - MYSQL_PORT=3306
+      - MYSQL_PORT=3307
       - MYSQL_DATABASE=sonic
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=Sonic!@#123
@@ -56,6 +72,7 @@ services:
 
 volumes:
   files:
+  mysql_db:
 
 networks:
   sonic-network:
