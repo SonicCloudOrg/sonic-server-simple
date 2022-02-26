@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.cloud.sonic.simple.models.domain.Devices;
 import org.cloud.sonic.simple.models.http.DeviceDetailChange;
+import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.models.http.UpdateDeviceImg;
 
 import java.io.IOException;
@@ -46,4 +47,6 @@ public interface DevicesService extends IService<Devices> {
     void refreshDevicesTemper(JSONObject jsonObject);
 
     Integer findTemper();
+
+    RespModel<String> delete(int id);
 }
