@@ -152,4 +152,7 @@ public class DevicesController {
         return devicesService.delete(id);
     }
 
+
+
+
 }
