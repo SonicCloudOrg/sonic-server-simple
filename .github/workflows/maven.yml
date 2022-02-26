@@ -15,5 +15,5 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
+    - name: Validate and Compile with Maven
       run: mvn validate compile -Pprod
