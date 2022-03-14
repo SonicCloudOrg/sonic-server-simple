@@ -31,6 +31,9 @@ public class PublicStepsController {
     @Autowired
     private TestCasesService testCasesService;
 
+    /**
+     * todo 递归获取条件下的步骤
+     */
     @WebAspect
     @ApiOperation(value = "查询公共步骤列表1", notes = "查找对应项目id下的公共步骤列表（分页）")
     @ApiImplicitParams(value = {
@@ -88,6 +91,7 @@ public class PublicStepsController {
     public RespModel<List<TestCases>> deleteCheck(@RequestParam(name = "id") int id) {
         return new RespModel<>(RespEnum.SEARCH_OK, testCasesService.listByPublicStepsId(id));
     }
+
 
     @WebAspect
     @ApiOperation(value = "查找公共步骤信息", notes = "查询对应公共步骤的详细信息")
