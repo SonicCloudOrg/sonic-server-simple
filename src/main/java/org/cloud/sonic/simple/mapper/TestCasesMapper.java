@@ -18,6 +18,7 @@ public interface TestCasesMapper extends BaseMapper<TestCases> {
 
     @Select("select tc.* from test_suites_test_cases tstc " +
                 "inner join test_cases tc on tc.id = tstc.test_cases_id " +
-            "where tstc.test_suites_id = #{suiteId}")
+            "where tstc.test_suites_id = #{suiteId} " +
+            "order by tstc.sort asc")
     List<TestCases> listByTestSuitesId(@Param("suiteId") int suiteId);
 }
