@@ -28,9 +28,9 @@ public class ExchangeController {
     @GetMapping("/reboot")
     public RespModel<String> reboot(@RequestParam(name = "id") int id) {
         Devices device = devicesService.findById(id);
-        if (device!=null) {
+        if (device != null) {
             Agents agent = agentsService.findById(device.getAgentId());
-            if (agent!=null) {
+            if (agent != null) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("msg", "reboot");
                 jsonObject.put("udId", device.getUdId());
@@ -40,6 +40,20 @@ public class ExchangeController {
             } else {
                 return new RespModel<>(RespEnum.ID_NOT_FOUND);
             }
+        } else {
+            return new RespModel<>(RespEnum.ID_NOT_FOUND);
+        }
+    }
+
+    @WebAspect
+    @GetMapping("/stop")
+    public RespModel<String> stop(@RequestParam(name = "id") int id) {
+        Agents agent = agentsService.findById(id);
+        if (agent != null) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("msg", "stop");
+            NettyServer.getMap().get(agent.getId()).writeAndFlush(jsonObject.toJSONString());
+            return new RespModel<>(2000, "发送成功！");
         } else {
             return new RespModel<>(RespEnum.ID_NOT_FOUND);
         }
