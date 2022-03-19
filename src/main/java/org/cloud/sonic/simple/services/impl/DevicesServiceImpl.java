@@ -147,6 +147,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
             }
             if (jsonMsg.getString("model") != null) {
                 newDevices.setName(jsonMsg.getString("model"));
+                newDevices.setChiName(getName(jsonMsg.getString("model")));
             }
             newDevices.setNickName("");
             newDevices.setUser("");
@@ -171,6 +172,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
             if (jsonMsg.getString("model") != null) {
                 if (!jsonMsg.getString("model").equals("未知")) {
                     devices.setModel(jsonMsg.getString("model"));
+                    devices.setChiName(getName(jsonMsg.getString("model")));
                 }
             }
             if (jsonMsg.getString("version") != null) {
@@ -188,7 +190,9 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
             if (jsonMsg.getString("manufacturer") != null) {
                 devices.setManufacturer(jsonMsg.getString("manufacturer"));
             }
-            devices.setStatus(jsonMsg.getString("status"));
+            if (jsonMsg.getString("status") != null) {
+                devices.setStatus(jsonMsg.getString("status"));
+            }
             save(devices);
         }
     }
