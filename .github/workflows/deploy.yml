@@ -19,4 +19,4 @@ jobs:
     - name: login docker hub
       run: echo "${{ secrets.ACCESS_TOKEN }}" | docker login -u zhouyixun --password-stdin
     - name: Validate and Compile with Maven
-      run: mvn package
+      run: mvn package -Pprod
