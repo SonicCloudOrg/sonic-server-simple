@@ -32,6 +32,20 @@ services:
       - DAY_CRON=0 0 10 * * ?
       #发送周报定时任务
       - WEEK_CRON=0 0 10 ? * Mon
+      #ldap base dn
+      - LDAP_BASE=ou=system
+      # ldap base dn 管理用户名
+      - LDAP_USERNAME=uid=admin,ou=system
+      # ldap base dn 管理密码
+      - LDAP_PASSWORD=Sonic!@#123
+      # ldap 服务 url
+      - LDAP_URL=ldap://127.0.0.1:10389
+      # 是否启用 ldap 登录验证
+      - LDAP_ENABLE=false
+      # user id 搜索字段
+      - LDAP_USER_ID=cn
+      # user 搜索用户组
+      - LDAP_BASE_DN=ou=users
     networks:
       - sonic-network
     volumes:
