@@ -7,12 +7,17 @@ import org.cloud.sonic.simple.models.http.ChangePwd;
 import org.cloud.sonic.simple.models.http.RespEnum;
 import org.cloud.sonic.simple.models.http.RespModel;
 import org.cloud.sonic.simple.models.http.UserInfo;
+import org.cloud.sonic.simple.models.interfaces.UserLoginType;
 import org.cloud.sonic.simple.services.UsersService;
 import org.cloud.sonic.simple.services.impl.base.SonicServiceImpl;
 import org.cloud.sonic.simple.tools.JWTTokenTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.filter.AndFilter;
+import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -33,6 +38,18 @@ public class UsersServiceImpl extends SonicServiceImpl<UsersMapper, Users> imple
     @Autowired
     private UsersMapper usersMapper;
 
+    @Value("${sonic.ldap.enable}")
+    private boolean ldapEnable;
+
+    @Value("${sonic.ldap.userId}")
+    private String userId;
+
+    @Value("${sonic.ldap.userBaseDN}")
+    private String userBaseDN;
+
+    @Autowired
+    private LdapTemplate ldapTemplate;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(Users users) throws SonicException {
@@ -48,14 +65,50 @@ public class UsersServiceImpl extends SonicServiceImpl<UsersMapper, Users> imple
     @Override
     public String login(UserInfo userInfo) {
         Users users = findByUserName(userInfo.getUserName());
-        if (users != null && DigestUtils.md5DigestAsHex(userInfo.getPassword().getBytes()).equals(users.getPassword())) {
-            String token = jwtTokenTool.getToken(users.getUserName());
+        String token = null;
+        if (users == null) {
+            if (checkLdapAuthenticate(userInfo, true)) {
+                token = jwtTokenTool.getToken(userInfo.getUserName());
+            }
+        }else if (UserLoginType.LOCAL.equals(users.getSource()) && DigestUtils.md5DigestAsHex(userInfo.getPassword().getBytes()).equals(users.getPassword())) {
+            token = jwtTokenTool.getToken(users.getUserName());
             users.setPassword("");
             logger.info("用户：" + userInfo.getUserName() + "登入! token:" + token);
-            return token;
         } else {
-            return null;
+            if (checkLdapAuthenticate(userInfo, false)) {
+                token = jwtTokenTool.getToken(users.getUserName());
+                logger.info("ldap 用户：" + userInfo.getUserName() + "登入! token:" + token);
+            }
         }
+        return token;
+    }
+
+    private boolean checkLdapAuthenticate(UserInfo userInfo, boolean create) {
+        if (!ldapEnable) return false;
+        String username = userInfo.getUserName();
+        String password = userInfo.getPassword();
+        logger.info("login check content username {}", username);
+        AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectclass", "person")).and(new EqualsFilter(userId, username));
+        try {
+            boolean authResult = ldapTemplate.authenticate(userBaseDN, filter.toString(), password);
+            if (create) {
+                save(buildUser(userInfo));
+            }
+            return authResult;
+        } catch (Exception e) {
+            logger.error("ldap 登录异常，{}", e);
+            return false;
+        }
+    }
+
+    private Users buildUser(UserInfo userInfo) {
+        Users users = new Users();
+        users.setUserName(userInfo.getUserName());
+        users.setPassword("");
+        users.setRole(2);
+        users.setSource(UserLoginType.LDAP);
+        return users;
     }
 
     @Override
