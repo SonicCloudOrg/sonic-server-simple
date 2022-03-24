@@ -52,6 +52,6 @@ public class Users implements Serializable, TypeConverter<Users, UsersDTO> {
     private String userName;
 
     @TableField
-    @Column(value = "source", isNull = false, comment = "用户来源")
+    @Column(value = "source", isNull = false, defaultValue = UserLoginType.LOCAL, comment = "用户来源")
     String source = UserLoginType.LOCAL;
 }
