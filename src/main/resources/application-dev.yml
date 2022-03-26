@@ -29,6 +29,11 @@ spring:
     url: jdbc:mysql://localhost:3306/sonic?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&autoReconnect=true&serverTimezone=GMT%2b8
     username: root
     password: Sonic!@#123
+  ldap:
+    base: ou=system
+    username: 'uid=admin,ou=system'
+    password: 'password'
+    urls: ldap://127.0.0.1:10389
 # mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapping/*.xml, classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
@@ -66,6 +71,10 @@ sonic:
     weekReportCron: 0 0 10 ? * Mon
     filesKeepDay: 60
     resultsKeepDay: 60
+  ldap:
+    enable: false
+    userId: cn
+    userBaseDN: ou=users
 
 robot:
   client:
