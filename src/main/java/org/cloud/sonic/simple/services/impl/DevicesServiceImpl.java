@@ -161,6 +161,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
             newDevices.setPassword("");
             newDevices.setImgUrl("");
             newDevices.setTemperature(0);
+            newDevices.setLevel(0);
             save(newDevices);
         } else {
             devices.setAgentId(jsonMsg.getInteger("agentId"));
@@ -226,13 +227,14 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
     }
 
     @Override
-    public void refreshDevicesTemper(JSONObject jsonObject) {
+    public void refreshDevicesBattery(JSONObject jsonObject) {
         int agentId = jsonObject.getInteger("agentId");
         List<JSONObject> deviceTemList = jsonObject.getJSONArray("detail").toJavaList(JSONObject.class);
         for (JSONObject d : deviceTemList) {
             Devices devices = findByAgentIdAndUdId(agentId, d.getString("udId"));
             if (devices != null) {
                 devices.setTemperature(d.getInteger("tem"));
+                devices.setLevel(d.getInteger("level"));
                 save(devices);
             }
         }
@@ -240,7 +242,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
 
     @Override
     public Integer findTemper() {
-        return devicesMapper.findTemper(Arrays.asList(DeviceStatus.ONLINE
+        return devicesMapper.findBattery(Arrays.asList(DeviceStatus.ONLINE
                 ,DeviceStatus.DEBUGGING,DeviceStatus.TESTING));
     }
 
