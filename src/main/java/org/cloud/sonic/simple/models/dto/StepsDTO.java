@@ -2,15 +2,13 @@ package org.cloud.sonic.simple.models.dto;
 
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
-import lombok.*;
-import org.cloud.sonic.simple.models.base.TypeConverter;
-import org.cloud.sonic.simple.models.domain.Steps;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import lombok.experimental.Accessors;
+import org.cloud.sonic.simple.models.base.TypeConverter;
+import org.cloud.sonic.simple.models.domain.Steps;
 import org.cloud.sonic.simple.models.enums.ConditionEnum;
 
 import javax.validation.constraints.NotBlank;
@@ -68,7 +66,7 @@ public class StepsDTO implements Serializable, TypeConverter<StepsDTO, Steps> {
      * @see ConditionEnum
      */
     @ApiModelProperty(value = "步骤条件类型，0：非条件  1：if  2：else if  3：else  4：while", example = "0")
-    private Integer conditionType = 0;
+    private Integer conditionType;
 
     @ApiModelProperty(value = "包含元素列表")
     List<ElementsDTO> elements;
