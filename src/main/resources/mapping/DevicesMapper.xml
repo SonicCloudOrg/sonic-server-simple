@@ -75,8 +75,8 @@
     </select>
 
 
-    <select id="findBattery" resultType="java.lang.Integer">
-        select avg(temperature) as avgT,avg(level) as avgL from devices
+    <select id="findTemper" resultType="java.lang.Integer">
+        select avg(temperature) as avg from devices
         where temperature &lt;&gt; 0 and status in
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
             #{id}

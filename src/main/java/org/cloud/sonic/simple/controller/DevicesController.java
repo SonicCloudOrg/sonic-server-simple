@@ -140,8 +140,8 @@ public class DevicesController {
 
     @WebAspect
     @ApiOperation(value = "获取电池概况", notes = "获取现有电池概况")
-    @GetMapping("/findBattery")
-    public RespModel<Integer> findBattery() {
+    @GetMapping("/findTemper")
+    public RespModel<Integer> findTemper() {
         return new RespModel<>(RespEnum.SEARCH_OK, devicesService.findTemper());
     }
 

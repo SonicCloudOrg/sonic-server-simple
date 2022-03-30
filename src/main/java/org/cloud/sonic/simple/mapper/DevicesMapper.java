@@ -31,7 +31,7 @@ public interface DevicesMapper extends BaseMapper<Devices> {
             "order by tsd.sort asc")
     List<Devices> listByTestSuitesId(@Param("TestSuitesId") int TestSuitesId);
 
-    Integer findBattery(@Param("ids") List<String> ids);
+    Integer findTemper(@Param("ids") List<String> ids);
 
     Page<Devices> findByParams(@NonNull Page<Devices> page, @Param("params") DevicesSearchParams params);
 }
