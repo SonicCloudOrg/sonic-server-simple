@@ -165,6 +165,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
             newDevices.setImgUrl("");
             newDevices.setTemperature(0);
             newDevices.setLevel(0);
+            newDevices.setHubNum(0);
             save(newDevices);
         } else {
             devices.setAgentId(jsonMsg.getInteger("agentId"));
