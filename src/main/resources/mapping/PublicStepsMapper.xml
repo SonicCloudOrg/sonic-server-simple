@@ -9,5 +9,6 @@
         <foreach collection="publicStepsIds" item="publicStepsId" open="(" close=")" separator=",">
             #{publicStepsId}
         </foreach>
+        order by pss.public_steps_id asc
     </select>
 </mapper>

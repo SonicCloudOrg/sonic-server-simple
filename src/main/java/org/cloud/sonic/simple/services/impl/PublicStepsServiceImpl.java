@@ -75,11 +75,15 @@ public class PublicStepsServiceImpl extends SonicServiceImpl<PublicStepsMapper, 
         save(publicSteps);
         List<StepsDTO> steps = publicStepsDTO.getSteps();
         // 先删除旧的数据
-        publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
+        int delete = publicStepsStepsMapper.delete(new LambdaQueryWrapper<PublicStepsSteps>()
                 .eq(PublicStepsSteps::getPublicStepsId, publicStepsDTO.getId()));
+
+        // 获取当中最小的sort
+        int minSort = steps.stream().mapToInt(StepsDTO::getSort).min().getAsInt();
+
         // 重新填充新数据
         for (StepsDTO step : steps) {
-            // 保存 public_step 与 step 映射关系
+            // 保存 public_step 与 最外层step 映射关系
             publicStepsStepsMapper.insert(
                     new PublicStepsSteps()
                             .setPublicStepsId(publicSteps.getId())
