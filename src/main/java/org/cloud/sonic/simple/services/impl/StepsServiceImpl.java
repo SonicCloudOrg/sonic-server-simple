@@ -130,6 +130,8 @@ public class StepsServiceImpl extends SonicServiceImpl<StepsMapper, Steps> imple
         if (!existsById(stepsDTO.getId())) {
             stepsDTO.setSort(stepsMapper.findMaxSort() + 1);
         }
+        // 子步骤的caseId跟随父步骤的
+        stepsDTO.setCaseId(getById(stepsDTO.getParentId()).getCaseId());
         Steps steps = stepsDTO.convertTo();
         save(steps);
 
