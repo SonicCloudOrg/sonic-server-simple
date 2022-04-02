@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -131,7 +132,12 @@ public class StepsServiceImpl extends SonicServiceImpl<StepsMapper, Steps> imple
             stepsDTO.setSort(stepsMapper.findMaxSort() + 1);
         }
         // 子步骤的caseId跟随父步骤的
-        stepsDTO.setCaseId(getById(stepsDTO.getParentId()).getCaseId());
+        Steps parent = getById(stepsDTO.getParentId());
+        if (ObjectUtils.isEmpty(parent)) {
+            stepsDTO.setCaseId(0);
+        } else {
+            stepsDTO.setCaseId(parent.getCaseId());
+        }
         Steps steps = stepsDTO.convertTo();
         save(steps);
 
