@@ -71,10 +71,15 @@ sonic:
     weekReportCron: 0 0 10 ? * Mon
     filesKeepDay: 60
     resultsKeepDay: 60
-  ldap:
-    enable: false
-    userId: cn
-    userBaseDN: ou=users
+  user:
+    register:
+      enable: false
+    normal:
+      enable: false
+    ldap:
+      enable: true
+      userId: cn
+      userBaseDN: ou=users
 
 robot:
   client:
