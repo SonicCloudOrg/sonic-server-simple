@@ -35,20 +35,13 @@ spring:
     password: ${LDAP_PASSWORD:Sonic!@#123}
     urls: ${LDAP_URL:ldap://127.0.0.1:10389}
 
-# mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:mapping/*.xml, classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
   global-config:
-    # 是否显示mybatis-plus图标
     banner: false
   configuration:
-    # 关闭二级缓存
     cache-enabled: false
-    # 关闭一级缓存
     localCacheScope: STATEMENT
-    # sql日志
-    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-# 数据库自动生成表
 actable:
   model:
     pack: org.cloud.sonic.simple.models.domain
@@ -72,10 +65,15 @@ sonic:
     weekReportCron: ${WEEK_CRON:0 0 10 ? * Mon}
     filesKeepDay: ${FILE_KEEP_DAY:60}
     resultsKeepDay: ${RESULT_KEEP_DAY:60}
-  ldap:
-    enable: ${LDAP_ENABLE:false}
-    userId: ${LDAP_USER_ID:cn}
-    userBaseDN: ${LDAP_BASE_DN:ou=users}
+  user:
+    register:
+      enable: ${REGISTER_ENABLE:true}
+    normal:
+      enable: ${NORMAL_ENABLE:true}
+    ldap:
+      enable: ${LDAP_ENABLE:false}
+      userId: ${LDAP_USER_ID:cn}
+      userBaseDN: ${LDAP_BASE_DN:ou=users}
 
 robot:
   client:
