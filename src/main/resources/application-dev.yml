@@ -73,9 +73,9 @@ sonic:
     resultsKeepDay: 60
   user:
     register:
-      enable: false
+      enable: true
     normal:
-      enable: false
+      enable: true
     ldap:
       enable: true
       userId: cn
