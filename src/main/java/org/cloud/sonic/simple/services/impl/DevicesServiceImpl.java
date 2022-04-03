@@ -38,10 +38,13 @@ import static org.cloud.sonic.simple.models.http.RespEnum.*;
 @Service
 public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices> implements DevicesService {
 
-    @Autowired private DevicesMapper devicesMapper;
+    @Autowired
+    private DevicesMapper devicesMapper;
 
-    @Autowired private UsersService usersService;
-    @Autowired private TestSuitesDevicesMapper testSuitesDevicesMapper;
+    @Autowired
+    private UsersService usersService;
+    @Autowired
+    private TestSuitesDevicesMapper testSuitesDevicesMapper;
 
     @Override
     public boolean saveDetail(DeviceDetailChange deviceDetailChange) {
@@ -161,6 +164,8 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
             newDevices.setPassword("");
             newDevices.setImgUrl("");
             newDevices.setTemperature(0);
+            newDevices.setLevel(0);
+            newDevices.setHubNum(0);
             save(newDevices);
         } else {
             devices.setAgentId(jsonMsg.getInteger("agentId"));
@@ -226,13 +231,14 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
     }
 
     @Override
-    public void refreshDevicesTemper(JSONObject jsonObject) {
+    public void refreshDevicesBattery(JSONObject jsonObject) {
         int agentId = jsonObject.getInteger("agentId");
         List<JSONObject> deviceTemList = jsonObject.getJSONArray("detail").toJavaList(JSONObject.class);
         for (JSONObject d : deviceTemList) {
             Devices devices = findByAgentIdAndUdId(agentId, d.getString("udId"));
             if (devices != null) {
                 devices.setTemperature(d.getInteger("tem"));
+                devices.setLevel(d.getInteger("level"));
                 save(devices);
             }
         }
@@ -241,7 +247,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
     @Override
     public Integer findTemper() {
         return devicesMapper.findTemper(Arrays.asList(DeviceStatus.ONLINE
-                ,DeviceStatus.DEBUGGING,DeviceStatus.TESTING));
+                , DeviceStatus.DEBUGGING, DeviceStatus.TESTING));
     }
 
     @Override
@@ -249,7 +255,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
     public RespModel<String> delete(int id) {
         Devices devices = devicesMapper.selectById(id);
         if (ObjectUtils.isEmpty(devices)) {
-            return new RespModel<>(DELETE_ERROR, "设备已被删除过");
+            return new RespModel<>(3004, "设备已被删除过");
         }
         if (devices.getStatus().equals(DeviceStatus.OFFLINE) || devices.getStatus().equals(DeviceStatus.DISCONNECTED)) {
             devicesMapper.deleteById(id);
@@ -257,7 +263,7 @@ public class DevicesServiceImpl extends SonicServiceImpl<DevicesMapper, Devices>
                     new LambdaQueryWrapper<TestSuitesDevices>().eq(TestSuitesDevices::getDevicesId, id)
             );
         } else {
-            return new RespModel<>(DELETE_ERROR, "设备不处于离线状态");
+            return new RespModel<>(3005, "设备不处于离线状态");
         }
         return new RespModel<>(DELETE_OK);
     }
