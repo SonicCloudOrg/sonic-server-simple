@@ -20,7 +20,7 @@ public class LoginConfig extends WebMvcConfigurationSupport {
         //注册TestInterceptor拦截器
         InterceptorRegistration registration = registry.addInterceptor(getAdminInterceptor());
         registration.addPathPatterns("/**");
-        registration.excludePathPatterns("/**/users/login","/**/users/register","/**/swagger-resources"
+        registration.excludePathPatterns("/**/users/login", "/**/users/loginConfig","/**/users/register","/**/swagger-resources"
                 ,"/**/v2/api-docs","/**/folder/upload/**","/**/keepFiles/**","/**/imageFiles/**"
                 ,"/**/recordFiles/**","/**/logFiles/**","/**/packageFiles/**");
         super.addInterceptors(registry);
