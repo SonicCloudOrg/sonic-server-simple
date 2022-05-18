@@ -1,3 +1,5 @@
+# Starting from version 1.4.0-beta, this warehouse is no longer maintained. For subsequent versions, please visit [sonic-server](https://github.com/SonicCloudOrg/sonic-server).
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/SonicCloudOrg/sonic-server/main/logo.png">
 </p>
