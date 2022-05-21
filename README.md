@@ -6,7 +6,7 @@
 <p align="center">🎉Sonic Cloud Real Machine Testing Platform</p>
 <p align="center">
   <span>English |</span>
-  <a href="https://github.com/SonicCloudOrg/sonic-server/blob/main/README_CN.md">  
+  <a href="https://github.com/SonicCloudOrg/sonic-server-simple/blob/main/README_CN.md">  
      简体中文
   </a>
 </p>
